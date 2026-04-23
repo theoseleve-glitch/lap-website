@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="404 — Page not found · LAP"
+  description="The page you are looking for isn't here. Head back to the LAP homepage."
+>
+  <main class="flex min-h-screen flex-col items-center justify-center px-6 text-center">
+    <h1 class="font-display text-h1">404 · Page not found</h1>
+    <p class="text-steel text-body mt-6 max-w-prose">
+      The page you were looking for isn&apos;t here. It may have moved, or it may never have
+      existed. Either way, the racing line is back home.
+    </p>
+    <a
+      href="/"
+      class="text-chalk border-steel/40 hover:border-chalk text-body mt-10 inline-block border px-6 py-3 transition"
+    >
+      Return to LAP
+    </a>
+  </main>
+</BaseLayout>

@@ -28,6 +28,7 @@ coverage/
 .playwright/
 playwright-report/
 test-results/
+.lighthouseci/
 
 # Claude Code harness (runtime only)
 .claude/scheduled_tasks.lock

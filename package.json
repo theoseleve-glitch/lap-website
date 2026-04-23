@@ -12,8 +12,10 @@
     "astro": "astro"
   },
   "devDependencies": {
-    "astro": "5.18.1",
     "@astrojs/check": "0.9.8",
+    "@tailwindcss/vite": "4.2.4",
+    "astro": "5.18.1",
+    "tailwindcss": "4.2.4",
     "typescript": "5.9.3"
   },
   "engines": {

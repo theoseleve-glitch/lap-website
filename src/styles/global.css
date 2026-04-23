@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+/*
+ * LAP design tokens — ported from Analysis/V2_claude_ai/lap-website/src/styles/tokens.css
+ * Exposed as Tailwind utilities via @theme (v4). Raw CSS variables in :root remain
+ * available for hand-authored CSS that needs values outside Tailwind's utility surface.
+ */
+
+@theme {
+  /* Base surfaces */
+  --color-asphalt: #000000;
+  --color-concrete: #141414;
+  --color-chalk: #f0ede5;
+  --color-steel: #949494;
+
+  /* Accents */
+  --color-acid-green: #22c55e;
+  --color-safety-red: #ff2a2a;
+  --color-marshal-yellow: #facc15;
+  --color-pit-orange: #c9a84c;
+  --color-racing-purple: #8b5cf6;
+  --color-racing-red: #dc2626;
+
+  /* Semantic */
+  --color-brand: #c9a84c;
+  --color-success: #22c55e;
+  --color-warning: #facc15;
+  --color-error: #ff2a2a;
+  --color-info: #8b5cf6;
+  --color-muted: #9ca3af;
+
+  /* Font families. Actual webfont loading lands in T003; web-safe stacks until then. */
+  --font-display: "Space Grotesk", "Arial Black", sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Space Mono", "Fira Code", "Courier New", monospace;
+
+  /* Type scale — fluid via clamp(). Names mirror the old token set so T022+ markup
+     can use `text-h1` / `text-body` etc. verbatim. */
+  --text-monument-xl: clamp(3.75rem, 12vw, 12.25rem);
+  --text-h1: clamp(3rem, 6vw, 5.25rem);
+  --text-h2: clamp(2.25rem, 4vw, 3.5rem);
+  --text-h3: clamp(1.5rem, 2.5vw, 2rem);
+  --text-h4: clamp(1.25rem, 2vw, 1.5rem);
+  --text-h5: clamp(1.0625rem, 1.5vw, 1.25rem);
+  --text-h6: 1rem;
+  --text-body: clamp(1.0625rem, 1.3vw, 1.25rem);
+  --text-caption: 0.8125rem;
+  --text-overline: 0.6875rem;
+  --text-telemetry: 0.6875rem;
+  --text-tiny: 0.5625rem;
+
+  /* Border radius */
+  --radius-1: 4px;
+  --radius-2: 8px;
+  --radius-3: 12px;
+  --radius-4: 16px;
+
+  /* Elevation */
+  --shadow-e1: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-e2: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.35);
+  --shadow-e3: 0 8px 24px rgba(0, 0, 0, 0.55), 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-e4: 0 16px 48px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.35);
+}
+
+/*
+ * Raw variables for values that do not map to a Tailwind utility surface.
+ * Consumed directly via var() in component styles added later in the sprint.
+ */
+:root {
+  --accent: var(--color-chalk);
+
+  --lh-display: 0.85;
+  --lh-heading: 1.15;
+  --lh-body: 1.72;
+  --lh-label: 1.2;
+
+  --ls-display: -0.02em;
+  --ls-wide: 0.12em;
+  --ls-medium: 0.08em;
+  --ls-xwide: 0.15em;
+
+  --max-prose: 65ch;
+  --max-wide: 90ch;
+
+  --grid-columns: 12;
+  --grid-gutter: clamp(20px, 2vw, 32px);
+  --grid-margin: clamp(16px, 6vw, 8vw);
+
+  --border-color-default: rgba(148, 148, 148, 0.2);
+  --border-color-muted: rgba(148, 148, 148, 0.1);
+
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--accent);
+
+  --touch-min: 44px;
+}
+
+/* Accent overrides applied per section via data-accent — kept from the old system
+   so T029+ section markup can set `data-accent="green"` (etc.) to swap the accent. */
+[data-accent="none"] { --accent: var(--color-chalk); }
+[data-accent="green"] { --accent: var(--color-acid-green); }
+[data-accent="red"] { --accent: var(--color-safety-red); }
+[data-accent="yellow"] { --accent: var(--color-marshal-yellow); }
+[data-accent="orange"] { --accent: var(--color-pit-orange); }
+[data-accent="purple"] { --accent: var(--color-racing-purple); }
+[data-accent="racing-red"] { --accent: var(--color-racing-red); }
+
+html {
+  background: var(--color-asphalt);
+  color: var(--color-chalk);
+  font-family: var(--font-body);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

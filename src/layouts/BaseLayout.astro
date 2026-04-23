@@ -4,9 +4,39 @@ import '../styles/global.css';
 
 interface Props {
   title: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
 }
 
-const { title } = Astro.props;
+// Strategic-doctrine-aligned default description. No LLM / AI-coach claims
+// (ADR-004 principle 4 — "No LLM in coaching text — ever, in this 6-month plan").
+// The sim/real framing and "driver-development plan" language mirror the mission
+// statement in 01-STRATEGIC-DOCTRINE.md §1.
+const DEFAULT_DESCRIPTION =
+  'LAP is the cross-platform Driver OS — it turns every sim and real-world session into a personalised driver-development plan you can execute.';
+
+const {
+  title,
+  description = DEFAULT_DESCRIPTION,
+  ogImage = '/og-default.png',
+  ogType = 'website',
+} = Astro.props;
+
+// Astro.site is pinned to https://lap.com/ in astro.config.mjs; in any test or
+// SSR surface without a configured site we fall back to the pathname only so
+// the absolute-URL assertions remain deterministic.
+const siteURL = Astro.site ?? new URL('https://lap.com/');
+const pageURL = new URL(Astro.url.pathname, siteURL).toString();
+const ogImageURL = new URL(ogImage, siteURL).toString();
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'LAP',
+  url: siteURL.toString(),
+  description,
+};
 ---
 
 <!doctype html>
@@ -16,9 +46,26 @@ const { title } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={pageURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:site_name" content="LAP" />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
     <Font cssVariable="--font-inter" preload />
     <Font cssVariable="--font-space-grotesk" preload />
     <Font cssVariable="--font-jetbrains-mono" />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body class="bg-asphalt text-chalk min-h-screen">
     <slot />

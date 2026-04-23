@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /*
  * LAP design tokens — ported from Analysis/V2_claude_ai/lap-website/src/styles/tokens.css
@@ -102,13 +102,27 @@
 
 /* Accent overrides applied per section via data-accent — kept from the old system
    so T029+ section markup can set `data-accent="green"` (etc.) to swap the accent. */
-[data-accent="none"] { --accent: var(--color-chalk); }
-[data-accent="green"] { --accent: var(--color-acid-green); }
-[data-accent="red"] { --accent: var(--color-safety-red); }
-[data-accent="yellow"] { --accent: var(--color-marshal-yellow); }
-[data-accent="orange"] { --accent: var(--color-pit-orange); }
-[data-accent="purple"] { --accent: var(--color-racing-purple); }
-[data-accent="racing-red"] { --accent: var(--color-racing-red); }
+[data-accent='none'] {
+  --accent: var(--color-chalk);
+}
+[data-accent='green'] {
+  --accent: var(--color-acid-green);
+}
+[data-accent='red'] {
+  --accent: var(--color-safety-red);
+}
+[data-accent='yellow'] {
+  --accent: var(--color-marshal-yellow);
+}
+[data-accent='orange'] {
+  --accent: var(--color-pit-orange);
+}
+[data-accent='purple'] {
+  --accent: var(--color-racing-purple);
+}
+[data-accent='racing-red'] {
+  --accent: var(--color-racing-red);
+}
 
 html {
   background: var(--color-asphalt);

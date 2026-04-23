@@ -29,10 +29,14 @@
   --color-info: #8b5cf6;
   --color-muted: #9ca3af;
 
-  /* Font families. Actual webfont loading lands in T003; web-safe stacks until then. */
-  --font-display: "Space Grotesk", "Arial Black", sans-serif;
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "Space Mono", "Fira Code", "Courier New", monospace;
+  /* Font families. The Astro Fonts API (astro.config.mjs → experimental.fonts)
+     emits --font-inter / --font-space-grotesk / --font-jetbrains-mono at :root
+     with @font-face + fallbacks baked in; we alias them to the semantic tokens
+     used in markup so swapping a typeface (e.g. Space Grotesk → PP Monument
+     Extended once licensed) is a one-line change here. */
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
 
   /* Type scale — fluid via clamp(). Names mirror the old token set so T022+ markup
      can use `text-h1` / `text-body` etc. verbatim. */

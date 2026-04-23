@@ -10,13 +10,17 @@
     "typecheck": "astro check",
     "lint": "astro check && eslint . && prettier --check .",
     "format": "prettier --write .",
-    "test": "echo \"no tests yet — Vitest lands in T006\" && exit 0",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "astro": "astro"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.8",
     "@eslint/js": "10.0.1",
+    "@playwright/test": "1.59.1",
     "@tailwindcss/vite": "4.2.4",
+    "@types/node": "25.6.0",
     "astro": "5.18.1",
     "astro-eslint-parser": "1.4.0",
     "eslint": "10.2.1",
@@ -27,7 +31,8 @@
     "prettier-plugin-tailwindcss": "0.7.3",
     "tailwindcss": "4.2.4",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.59.0"
+    "typescript-eslint": "8.59.0",
+    "vitest": "4.1.5"
   },
   "engines": {
     "node": ">=22.0.0",

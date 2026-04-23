@@ -23,10 +23,10 @@ const {
   ogType = 'website',
 } = Astro.props;
 
-// Astro.site is pinned to https://lap.com/ in astro.config.mjs; in any test or
-// SSR surface without a configured site we fall back to the pathname only so
-// the absolute-URL assertions remain deterministic.
-const siteURL = Astro.site ?? new URL('https://lap.com/');
+// Astro.site is pinned to https://lap-coach.racing/ in astro.config.mjs; in any
+// test or SSR surface without a configured site we fall back to that URL so the
+// absolute-URL assertions remain deterministic.
+const siteURL = Astro.site ?? new URL('https://lap-coach.racing/');
 const pageURL = new URL(Astro.url.pathname, siteURL).toString();
 const ogImageURL = new URL(ogImage, siteURL).toString();
 
@@ -47,6 +47,7 @@ const jsonLd = {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={pageURL} />
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

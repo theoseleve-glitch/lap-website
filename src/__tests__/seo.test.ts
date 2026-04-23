@@ -37,8 +37,10 @@ test('emits Open Graph title + description + type + site_name + locale', async (
 
 test('emits og:url and og:image as absolute URLs on the configured site', async () => {
   const html = await render({ title: 'x' });
-  expect(html).toMatch(/<meta\s+property="og:url"\s+content="https:\/\/lap\.com\/[^"]*"/);
-  expect(html).toMatch(/<meta\s+property="og:image"\s+content="https:\/\/lap\.com\/[^"]+"/);
+  expect(html).toMatch(/<meta\s+property="og:url"\s+content="https:\/\/lap-coach\.racing\/[^"]*"/);
+  expect(html).toMatch(
+    /<meta\s+property="og:image"\s+content="https:\/\/lap-coach\.racing\/[^"]+"/,
+  );
 });
 
 test('emits Twitter summary_large_image card with title + description + image', async () => {
@@ -46,17 +48,40 @@ test('emits Twitter summary_large_image card with title + description + image', 
   expect(html).toMatch(/<meta\s+name="twitter:card"\s+content="summary_large_image"/);
   expect(html).toMatch(/<meta\s+name="twitter:title"\s+content="Home — LAP"/);
   expect(html).toMatch(/<meta\s+name="twitter:description"\s+content="the driver OS"/);
-  expect(html).toMatch(/<meta\s+name="twitter:image"\s+content="https:\/\/lap\.com\/[^"]+"/);
+  expect(html).toMatch(
+    /<meta\s+name="twitter:image"\s+content="https:\/\/lap-coach\.racing\/[^"]+"/,
+  );
 });
 
 test('emits a JSON-LD WebSite block with name / url / description', async () => {
   const html = await render({ title: 'x', description: 'the driver OS' });
-  const match = html.match(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  const match = html.match(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/);
   expect(match).not.toBeNull();
   const payload = JSON.parse(match![1]);
   expect(payload['@context']).toBe('https://schema.org');
   expect(payload['@type']).toBe('WebSite');
   expect(payload.name).toBe('LAP');
-  expect(payload.url).toBe('https://lap.com/');
+  expect(payload.url).toBe('https://lap-coach.racing/');
   expect(payload.description).toBe('the driver OS');
+});
+
+test('emits <link rel="canonical"> for the current page URL', async () => {
+  const html = await render({ title: 'x' });
+  expect(html).toMatch(
+    /<link\s+rel="canonical"\s+href="https:\/\/lap-coach\.racing\/[^"]*"\s*\/?>/,
+  );
+});
+
+test('per-page absolute ogImage passes through unchanged', async () => {
+  const customOg = 'https://cdn.example.com/custom-og-image.png';
+  const html = await render({ title: 'x', ogImage: customOg });
+  expect(html).toContain(`<meta property="og:image" content="${customOg}">`);
+  expect(html).toContain(`<meta name="twitter:image" content="${customOg}">`);
+});
+
+test('per-page relative ogImage resolves against the configured site', async () => {
+  const html = await render({ title: 'x', ogImage: '/pricing-og.png' });
+  expect(html).toContain(
+    '<meta property="og:image" content="https://lap-coach.racing/pricing-og.png">',
+  );
 });

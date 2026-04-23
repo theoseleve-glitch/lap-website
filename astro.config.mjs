@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import robotsTxt from 'astro-robots-txt';
 
 export default defineConfig({
-  site: 'https://lap.com',
+  site: 'https://lap-coach.racing',
   integrations: [sitemap(), robotsTxt()],
   experimental: {
     fonts: [

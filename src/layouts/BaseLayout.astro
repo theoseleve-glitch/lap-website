@@ -67,6 +67,10 @@ const jsonLd = {
     <Font cssVariable="--font-jetbrains-mono" />
 
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <script>
+      import '../scripts/posthog';
+    </script>
   </head>
   <body class="bg-asphalt text-chalk min-h-screen">
     <slot />

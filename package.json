@@ -41,6 +41,7 @@
   "packageManager": "pnpm@9.15.9",
   "dependencies": {
     "@astrojs/sitemap": "3.7.2",
-    "astro-robots-txt": "1.0.0"
+    "astro-robots-txt": "1.0.0",
+    "posthog-js": "1.371.2"
   }
 }

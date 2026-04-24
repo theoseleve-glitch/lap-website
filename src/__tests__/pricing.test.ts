@@ -100,3 +100,18 @@ test('T060: the founder-waitlist offer is mounted after the checklist', async ()
   expect(includedIdx).toBeGreaterThan(-1);
   expect(founderIdx).toBeGreaterThan(includedIdx);
 });
+
+test('T061: the FAQ accordion is mounted after the founder offer', async () => {
+  // Integration check: FAQ lands at the bottom of the page's
+  // decision arc. Reader has seen price → inventory → founder
+  // offer, and arrives at "what about X?" objections. The
+  // <details>/<summary> accordion shows the questions as
+  // scannable summaries with answers hidden behind a click —
+  // no JS required.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Common questions/);
+  const founderIdx = html.indexOf('Signed up before launch');
+  const faqIdx = html.indexOf('Common questions');
+  expect(founderIdx).toBeGreaterThan(-1);
+  expect(faqIdx).toBeGreaterThan(founderIdx);
+});

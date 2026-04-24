@@ -54,3 +54,14 @@ test('CTA copy stays doctrine-aligned — no AI-coach / LLM claims', async () =>
   expect(html.toLowerCase()).not.toMatch(/\bai coach\b/);
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
 });
+
+test('tags the headline, subhead, and CTA row with data-hero-animate for T027 motion', async () => {
+  // The motion module (src/scripts/hero-motion.ts) animates any element
+  // with data-hero-animate. Losing any of these attributes would silently
+  // break the staggered entrance — lock them at the markup layer so a
+  // class refactor can't drift away from the choreography.
+  const html = await render();
+  expect(html).toMatch(/<h1[^>]*\sdata-hero-animate(\s|>)/);
+  expect(html).toMatch(/<p[^>]*\sdata-hero-animate(\s|>)/);
+  expect(html).toMatch(/<div[^>]*\sdata-hero-animate(\s|>)/);
+});

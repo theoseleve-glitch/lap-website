@@ -8,7 +8,7 @@ Marketing site. Static-first. Must be fast, accessible, SEO-strong.
 ## Conventions
 - Astro + Tailwind + TypeScript strict.
 - Every page has: title, description, OG image, JSON-LD structured data.
-- LCP <1.8s on homepage (tighter than webapp's 2.5s).
+- LCP <1.5s on mobile 4G (homepage, enforced in lighthouserc.json; tighter than webapp's 2.5s).
 - Total JS per page <150KB gzip. Prefer no JS unless interactivity needed.
 - GSAP only for above-the-fold motion; defer below-fold.
 - Copy governance: every claim traceable to a shippable feature (no AI-coach-now claims).

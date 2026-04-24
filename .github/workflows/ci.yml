@@ -45,7 +45,7 @@ jobs:
         run: pnpm test
 
   lighthouse:
-    name: Lighthouse CI / LCP <1.8s
+    name: Lighthouse CI / LCP <1.5s (mobile 4G)
     runs-on: ubuntu-latest
     needs: verify
     timeout-minutes: 10

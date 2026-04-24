@@ -5,13 +5,12 @@
       "numberOfRuns": 3,
       "url": ["http://localhost/index.html"],
       "settings": {
-        "onlyCategories": ["performance"],
-        "preset": "desktop"
+        "onlyCategories": ["performance"]
       }
     },
     "assert": {
       "assertions": {
-        "largest-contentful-paint": ["error", { "maxNumericValue": 1800 }]
+        "largest-contentful-paint": ["error", { "maxNumericValue": 1500 }]
       }
     },
     "upload": {

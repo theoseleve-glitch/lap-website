@@ -129,3 +129,18 @@ test('T062: the B2B teaser lands after the FAQ', async () => {
   expect(faqIdx).toBeGreaterThan(-1);
   expect(b2bIdx).toBeGreaterThan(faqIdx);
 });
+
+test('T064: the coach value-anchor lands after the B2B teaser', async () => {
+  // Integration check: value-anchor sits at the bottom of the
+  // decision arc, framing LAP's price against the only other
+  // option a serious sim racer might be considering — booking
+  // hours with a human coach. Doctrine §7 Bet #3 makes this the
+  // primary competitive price frame; showing it at the close
+  // leaves the reader with the math, not the category doubt.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*A year of LAP is one hour with a human coach/);
+  const b2bIdx = html.indexOf('Running a racing academy');
+  const valueIdx = html.indexOf('A year of LAP is one hour with a human coach');
+  expect(b2bIdx).toBeGreaterThan(-1);
+  expect(valueIdx).toBeGreaterThan(b2bIdx);
+});

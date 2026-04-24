@@ -1,0 +1,38 @@
+---
+// T064 — price-comparison value-anchor per 01-STRATEGIC-DOCTRINE.md
+// §7 Bet #3: "€15/month single tier is 3-5x below per-sim coaching
+// (€80-150/hr human coach)." The comparison is honest math: a year
+// of LAP at €150 equals roughly 1-2 hours of human coaching depending
+// on the coach's rate.
+//
+// Copy respects 01-STRATEGIC-DOCTRINE.md §3 anti-persona ("Pro
+// drivers with dedicated coaches → we are not trying to replace
+// Driver61") — closes with the explicit "not a replacement" clause
+// so readers who already have a coach see LAP as additive rather
+// than displacing, and readers considering a coach understand LAP
+// is not a substitute.
+
+const HEADING_ID = 'pricing-value-anchor-heading';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto mt-24 w-full max-w-6xl border-t pt-24 sm:mt-32 sm:pt-32"
+>
+  <article class="mx-auto flex max-w-2xl flex-col">
+    <p class="text-steel text-caption tracking-wide uppercase">By comparison</p>
+    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+      A year of LAP is one hour with a human coach, or two.
+    </h2>
+    <p class="text-steel text-body leading-body mt-6">
+      Per-hour sim coaching runs €80 to €150 depending on who you book. A year of LAP at €150 —
+      every session captured, every drill prescribed, every outcome checked against your baseline —
+      costs roughly what one hour of coaching costs.
+    </p>
+    <p class="text-steel text-body leading-body mt-4">
+      LAP is not a replacement for a human coach; it is the always-on layer underneath. If you
+      already work with a coach, LAP gives them the data; if you don&rsquo;t, LAP is the daily
+      practice log that makes hiring one worth it later.
+    </p>
+  </article>
+</section>

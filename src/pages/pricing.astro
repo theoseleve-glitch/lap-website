@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// T057 — shell for the /pricing page. The homepage T034 FinalCta
+// (and its /how-it-works mirror via T052) links to /pricing via
+// "See full pricing →"; shipping this shell means that link
+// resolves to a real page instead of 404ing. T058 lands the tier
+// card with €15/mo + €150/yr prices; T059 is the "what's included"
+// checklist; T060 is the founder-waitlist offer; T061 the FAQ;
+// T062 the B2B teaser; T063 wires the checkout CTA; T064 the
+// value-anchor comparison vs human coaches; T065-T070 cover the
+// refund link, contact sales, currency, perf, SEO, and e2e.
+
+const TITLE = 'Pricing — LAP';
+const DESCRIPTION =
+  '€15 a month or €150 a year. 14-day full-feature trial, no card at signup. Cancel anytime from the dashboard.';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-steel text-caption tracking-wide uppercase">Pricing</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        One tier. Clear price.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        A single monthly or yearly plan with a 14-day free trial. Cancel anytime from the dashboard.
+      </p>
+    </header>
+  </main>
+</BaseLayout>

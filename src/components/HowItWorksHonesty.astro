@@ -1,0 +1,107 @@
+---
+// T049 — "today vs year 2" honesty section. Condenses the doctrine's
+// §5 DOES / DOES NOT list and §9 launch calendar into a user-facing
+// trust statement. Mirrors T035 (no-testimonials placeholder) in
+// stance: we would rather under-promise than ship a claim we can't
+// back. Items in both columns come straight from doctrine — no
+// invented capabilities on the Today side, no marketing-vaporware
+// on the Year 2 side.
+
+interface HorizonItem {
+  body: string;
+}
+
+const TODAY: HorizonItem[] = [
+  { body: 'Sim capture across iRacing, ACC, AMS2, rFactor 2, LMU, Rennsport, and F1 titles.' },
+  { body: 'Real-world capture via RaceBox plus an iPhone on the dash.' },
+  {
+    body: 'Server-side weakness detection and rule-based drills from a coaching library we curate by hand.',
+  },
+  {
+    body: 'Next-session plans with measurable targets and three-verdict outcomes (closed / improving / still open).',
+  },
+  { body: 'Sim↔real pairing on matching tracks, with shape and intensity compared side by side.' },
+];
+
+const YEAR_TWO: HorizonItem[] = [
+  { body: 'Android app — ships with the V1 release in autumn 2026.' },
+  { body: 'Apple Watch and Wear OS companion — V1.' },
+  { body: 'Peer benchmarking against driver cohorts — opens once cohort data exists.' },
+  {
+    body: 'Social features (leaderboards, friend-compare, sharing) — deferred to Q1 2027 at the earliest.',
+  },
+  {
+    body: 'Full endurance driver-swap workflow — sprint and endurance events ship today, dedicated endurance UX is deferred.',
+  },
+];
+
+const HEADING_ID = 'how-it-works-honesty-heading';
+const TODAY_HEADING_ID = 'how-it-works-honesty-today';
+const YEAR_TWO_HEADING_ID = 'how-it-works-honesty-year-two';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto mt-24 w-full max-w-6xl border-t pt-24 sm:mt-32 sm:pt-32"
+>
+  <header class="max-w-prose">
+    <p class="text-steel text-caption tracking-wide uppercase">Honest disclosure</p>
+    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+      What ships today, and what is still roadmap.
+    </h2>
+    <p class="text-steel text-body mt-5">
+      We would rather under-promise than ship a claim we cannot back. Here is what you get when you
+      start the trial this week — and here is what is on the roadmap but not yet in the product.
+    </p>
+  </header>
+
+  <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+    <article
+      aria-labelledby={TODAY_HEADING_ID}
+      class="border-steel/15 bg-concrete/40 rounded-2 flex flex-col border p-7"
+    >
+      <h3
+        id={TODAY_HEADING_ID}
+        class="font-display text-h4 text-chalk tracking-display text-balance"
+      >
+        Today
+      </h3>
+      <ul class="text-steel text-body leading-body mt-4 flex flex-col gap-3">
+        {
+          TODAY.map((item) => (
+            <li class="flex gap-3">
+              <span class="text-chalk shrink-0" aria-hidden="true">
+                ✓
+              </span>
+              <span>{item.body}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+
+    <article
+      aria-labelledby={YEAR_TWO_HEADING_ID}
+      class="border-steel/10 bg-concrete/20 rounded-2 flex flex-col border p-7"
+    >
+      <h3
+        id={YEAR_TWO_HEADING_ID}
+        class="font-display text-h4 text-chalk tracking-display text-balance"
+      >
+        Year 2 and beyond
+      </h3>
+      <ul class="text-steel text-body leading-body mt-4 flex flex-col gap-3">
+        {
+          YEAR_TWO.map((item) => (
+            <li class="flex gap-3">
+              <span class="text-steel shrink-0" aria-hidden="true">
+                →
+              </span>
+              <span>{item.body}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+  </div>
+</section>

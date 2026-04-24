@@ -115,3 +115,17 @@ test('T048: the "Improve" section lands after Plan — four-step loop complete',
   expect(planIdx).toBeGreaterThan(-1);
   expect(improveIdx).toBeGreaterThan(planIdx);
 });
+
+test('T049: the "honesty" section (today vs Year 2) lands after Improve', async () => {
+  // Integration check: honesty disclosure lands after the four-step
+  // loop, so a reader who has just consumed the full capability arc
+  // (T045-T048) arrives at "here is what actually ships today vs
+  // what is roadmap." Placing honesty before the loop sections
+  // would read as apologetic; after them, it reads as grounded.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*What ships today, and what is still roadmap[\s\S]*<\/h2>/);
+  const improveIdx = html.indexOf('Every target either hits or misses');
+  const honestyIdx = html.indexOf('What ships today, and what is still roadmap');
+  expect(improveIdx).toBeGreaterThan(-1);
+  expect(honestyIdx).toBeGreaterThan(improveIdx);
+});

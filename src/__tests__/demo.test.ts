@@ -90,3 +90,30 @@ test('T085: trial CTA renders after the walkthrough placeholder', async () => {
   expect(walkthroughIdx).toBeGreaterThan(-1);
   expect(ctaIdx).toBeGreaterThan(walkthroughIdx);
 });
+
+test('T086: SocialProof testimonials placeholder is mounted on /demo', async () => {
+  // Integration check: the T035 SocialProof placeholder — the
+  // doctrine-aligned "no testimonials until the beta opens"
+  // message — renders on /demo. Reusing the same component as the
+  // homepage means the "no testimonials yet" posture stays in
+  // exactly one place. When real beta quotes land (2026-07-23),
+  // swapping SocialProof's internals updates every page at once
+  // instead of leaving a stale /demo-specific placeholder behind.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*No testimonials until the beta opens[\s\S]*<\/h2>/);
+});
+
+test('T086: testimonials section renders between walkthrough and CTA', async () => {
+  // Reader flow post-T086: header → walkthrough → testimonials →
+  // CTA. The classic conversion sequence: watch the artefact →
+  // see what other sim racers say → decide to trial. Dropping
+  // testimonials AFTER the CTA would reverse the social-proof
+  // nudge right when it matters most.
+  const html = await render();
+  const walkthroughIdx = html.search(/three-minute walkthrough/i);
+  const testimonialsIdx = html.indexOf('No testimonials until the beta opens');
+  const ctaIdx = html.indexOf('Start 14-day trial');
+  expect(walkthroughIdx).toBeGreaterThan(-1);
+  expect(testimonialsIdx).toBeGreaterThan(walkthroughIdx);
+  expect(ctaIdx).toBeGreaterThan(testimonialsIdx);
+});

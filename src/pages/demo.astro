@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import DemoWalkthrough from '../components/DemoWalkthrough.astro';
+import SocialProof from '../components/SocialProof.astro';
 import FinalCta from '../components/FinalCta.astro';
 
 // T072 — shell for /demo. The route is referenced from the sprint brief
@@ -10,7 +11,10 @@ import FinalCta from '../components/FinalCta.astro';
 // DemoWalkthrough.astro), T074 lands the 3-minute walkthrough, T077
 // pre-seeds the sample session, T085 wires the post-demo trial CTA
 // (done — reuses the shared T034 FinalCta so the signup href stays in
-// exactly one place), and T079-T090 cover perf, SEO, a11y, and e2e.
+// exactly one place), T086 mounts the testimonials placeholder between
+// the walkthrough and the CTA (reuses the T035 SocialProof so the
+// "no testimonials until beta" posture stays in one component), and
+// T079-T090 cover perf, SEO, a11y, and e2e.
 
 // Doctrine-aligned scent: the <title> + description set expectations
 // before the visitor decides to watch. "Session walkthrough" matches
@@ -37,6 +41,7 @@ const DESCRIPTION =
     </header>
 
     <DemoWalkthrough />
+    <SocialProof />
     <FinalCta />
   </main>
 </BaseLayout>

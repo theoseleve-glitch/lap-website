@@ -54,6 +54,31 @@ test('T057: meta description names the 14-day trial', async () => {
   expect(descMatch![1].toLowerCase()).toMatch(/14[- ]?day/);
 });
 
+test('T069: <title> carries the "sim racing coaching price" target keyword', async () => {
+  // Sprint T069 targets "sim racing coaching price" for /pricing.
+  // Putting the exact noun phrase in the <title> is the single
+  // strongest ranking signal. The loop rules forbid keyword soup
+  // — the phrasing "Sim racing coaching price — LAP" reads as a
+  // natural SERP title rather than an SEO artifact.
+  const html = await render();
+  const titleMatch = html.match(/<title>([^<]+)<\/title>/);
+  expect(titleMatch).not.toBeNull();
+  expect(titleMatch![1].toLowerCase()).toContain('sim racing coaching price');
+});
+
+test('T069: meta description carries the "sim racing coaching" noun phrase', async () => {
+  // Description is the SERP snippet below the title. Leading with
+  // (or prominently featuring) the target noun phrase rewards the
+  // query match and tells the reader within the first few words
+  // that they are on the right page. The exact tail "price" is in
+  // the title; the description naturally carries "sim racing
+  // coaching" near the €15 anchor.
+  const html = await render();
+  const descMatch = html.match(/<meta\s+name="description"\s+content="([^"]+)"/);
+  expect(descMatch).not.toBeNull();
+  expect(descMatch![1].toLowerCase()).toContain('sim racing coaching');
+});
+
 test('T057: copy stays doctrine-aligned — no AI-coach / LLM / generative', async () => {
   const html = await render();
   expect(html.toLowerCase()).not.toMatch(/\bai coach\b/);

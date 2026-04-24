@@ -17,9 +17,16 @@ import PricingValueAnchor from '../components/PricingValueAnchor.astro';
 // value-anchor comparison vs human coaches; T065-T070 cover the
 // refund link, contact sales, currency, perf, SEO, and e2e.
 
-const TITLE = 'Pricing — LAP';
+// T069 — SEO meta tuned for the long-tail keyword "sim racing
+// coaching price". Title leads with the exact noun phrase so SERP
+// snippets carry the match near the click. Description pairs the
+// phrase with the concrete anchors (€15 / €150 / 14-day trial) so
+// a visitor who clicked on the price query arrives with the answer
+// already visible. Loop rule enforced: natural prose, not keyword
+// soup.
+const TITLE = 'Sim racing coaching price — LAP';
 const DESCRIPTION =
-  '€15 a month or €150 a year. 14-day full-feature trial, no card at signup. Cancel anytime from the dashboard.';
+  'One tier, clear price: €15 a month or €150 a year for sim racing coaching. 14-day full-feature trial, no card at signup. Cancel anytime.';
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>

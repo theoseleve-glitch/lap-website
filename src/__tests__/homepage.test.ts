@@ -178,3 +178,17 @@ test('T033 "Not for you if" anti-persona disclosure lands after T032', async () 
   expect(t032Idx).toBeGreaterThan(-1);
   expect(t033Idx).toBeGreaterThan(t032Idx);
 });
+
+test('T034 final CTA section lands after T033 as the page close', async () => {
+  // Integration check: the pricing snippet + trial CTA is the last
+  // section on the homepage. The qualification arc (T031-T033) lands
+  // in T034's ask ("Ready to make your next session count?"). Any
+  // section inserted after T034 would push the CTA off the close and
+  // break the funnel's final conversion surface.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Ready to make your next session count\?[\s\S]*<\/h2>/);
+  const t033Idx = html.indexOf('Not for you if');
+  const t034Idx = html.indexOf('Ready to make your next session count');
+  expect(t033Idx).toBeGreaterThan(-1);
+  expect(t034Idx).toBeGreaterThan(t033Idx);
+});

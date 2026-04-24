@@ -1,0 +1,63 @@
+---
+// T046 — Step 02 of the four-step loop. The Brain section paraphrases
+// 01-STRATEGIC-DOCTRINE.md §4 principle 1 ("Server owns the brain")
+// and §7 Bet #1 ("Coaching library is a moat — no generative AI").
+// Three beats map 1:1 to ADR-005 backend objects:
+//   Weaknesses    → §5.2 WeaknessEpisode
+//   Prescriptions → §5.3 ActionPrescription
+//   The bridge    → §5.5 TransferLink
+// Bridge beat reuses the shape-vs-intensity framework from the
+// homepage T030 section — same framework, different scope (here
+// it lives inside the "Brain" step of the loop).
+
+interface BrainBeat {
+  heading: string;
+  body: string;
+}
+
+const BEATS: BrainBeat[] = [
+  {
+    heading: 'Weaknesses',
+    body: 'Every session is scanned for patterns that recur — late braking into T1 at Spa, early throttle on exit at Silverstone. LAP groups them by car, track, and conditions, then stores each as a weakness with a severity score that moves as you practise.',
+  },
+  {
+    heading: 'Prescriptions',
+    body: 'Each open weakness pairs with a drill from a rule-based coaching library we curate by hand — a target metric, a target value, a session count. Every drill traces back to a specific rule; nothing is generated on the fly.',
+  },
+  {
+    heading: 'The bridge',
+    body: 'Paired sessions on the same track get compared by the server: the shape of your inputs (the lines in a brake trace, the curve of a throttle pickup) versus their intensity (peak pressures, slip angles, steering rates). Shape transfers across worlds; intensity is often calibrated to the wrong one.',
+  },
+];
+
+const HEADING_ID = 'how-it-works-brain-heading';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto mt-24 w-full max-w-6xl border-t pt-24 sm:mt-32 sm:pt-32"
+>
+  <header class="max-w-prose">
+    <p class="text-steel text-caption tracking-wide uppercase">Step 02</p>
+    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+      The brain lives on the server.
+    </h2>
+    <p class="text-steel text-body mt-5">
+      Weaknesses, prescriptions, and the sim↔real bridge — three things the server computes so the
+      desktop and mobile apps stay thin.
+    </p>
+  </header>
+
+  <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-6">
+    {
+      BEATS.map((beat) => (
+        <article class="border-steel/15 bg-concrete/40 rounded-2 flex flex-col border p-7">
+          <h3 class="font-display text-h4 text-chalk tracking-display text-balance">
+            {beat.heading}
+          </h3>
+          <p class="text-steel text-body leading-body mt-4">{beat.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

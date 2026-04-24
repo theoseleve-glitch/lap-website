@@ -78,3 +78,16 @@ test('T045: the "Capture" section is mounted after the diagram', async () => {
   expect(diagramIdx).toBeGreaterThan(-1);
   expect(captureIdx).toBeGreaterThan(diagramIdx);
 });
+
+test('T046: the "Brain" section lands after Capture (step 02 follows 01)', async () => {
+  // Integration check: the Brain section (step 02) follows Capture
+  // (step 01), mirroring the clockwise arrow in the T044 diagram.
+  // Ordering matters — the coaching loop only makes sense in
+  // sequence.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*The brain lives on the server[\s\S]*<\/h2>/);
+  const captureIdx = html.indexOf('Capture every session, sim or real');
+  const brainIdx = html.indexOf('The brain lives on the server');
+  expect(captureIdx).toBeGreaterThan(-1);
+  expect(brainIdx).toBeGreaterThan(captureIdx);
+});

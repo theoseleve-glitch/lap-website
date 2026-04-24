@@ -154,3 +154,15 @@ test('T065: /pricing links to /refund-policy', async () => {
   const html = await render();
   expect(html).toMatch(/<a[^>]+href="\/refund-policy"[^>]*>[\s\S]*Refund policy[\s\S]*<\/a>/);
 });
+
+test('T066: /pricing exposes a "Contact sales" mailto to sales@lap-coach.racing', async () => {
+  // Sprint T066 accepts "email form or Calendly". A mailto is the
+  // cheapest honest option today — zero external dependency, works
+  // on every mail client, no spam-form infrastructure to maintain.
+  // T204 names sales@lap-coach.racing as the canonical B2B inbox;
+  // mailto-with-subject pre-fills "Sales inquiry" for triage.
+  const html = await render();
+  expect(html).toMatch(
+    /<a[^>]+href="mailto:sales@lap-coach\.racing[^"]*"[^>]*>[\s\S]*Contact sales[\s\S]*<\/a>/,
+  );
+});

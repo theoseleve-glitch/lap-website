@@ -77,3 +77,67 @@ for (const section of MULTI_COLUMN_SECTIONS) {
     }
   });
 }
+
+// T053 mirrors the same gates on /how-it-works. Every loop-step
+// section (Capture/Brain/Plan/Improve) plus the Honesty comparison
+// uses `grid grid-cols-1 md:grid-cols-N` — at 360 px the md: prefix
+// drops out and the sections must stack top-to-bottom.
+test('T053: /how-it-works has no horizontal overflow at 360 px', async ({ page }) => {
+  await page.goto('/how-it-works');
+  const { scrollWidth, clientWidth } = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  expect(
+    scrollWidth,
+    `document.documentElement.scrollWidth (${scrollWidth}) exceeds clientWidth (${clientWidth}) ` +
+      `— some element on /how-it-works renders wider than the 360 px viewport.`,
+  ).toBeLessThanOrEqual(clientWidth);
+});
+
+const HOW_IT_WORKS_MULTI_COLUMN_SECTIONS = [
+  {
+    label: 'T045 Capture',
+    locator: 'section[aria-labelledby="how-it-works-capture-heading"] article',
+    minItems: 2,
+  },
+  {
+    label: 'T046 Brain',
+    locator: 'section[aria-labelledby="how-it-works-brain-heading"] article',
+    minItems: 3,
+  },
+  {
+    label: 'T047 Plan',
+    locator: 'section[aria-labelledby="how-it-works-plan-heading"] article',
+    minItems: 2,
+  },
+  {
+    label: 'T048 Improve',
+    locator: 'section[aria-labelledby="how-it-works-improve-heading"] article',
+    minItems: 2,
+  },
+  {
+    label: 'T049 Honesty',
+    locator: 'section[aria-labelledby="how-it-works-honesty-heading"] article',
+    minItems: 2,
+  },
+];
+
+for (const section of HOW_IT_WORKS_MULTI_COLUMN_SECTIONS) {
+  test(`T053: "${section.label}" cards stack vertically at 360 px`, async ({ page }) => {
+    await page.goto('/how-it-works');
+    const boxes = await page.locator(section.locator).evaluateAll((els) =>
+      els.map((el) => {
+        const r = el.getBoundingClientRect();
+        return { top: r.top, height: r.height };
+      }),
+    );
+    expect(boxes.length).toBeGreaterThanOrEqual(section.minItems);
+    for (let i = 1; i < boxes.length; i++) {
+      expect(
+        boxes[i].top,
+        `card[${i}].top (${boxes[i].top}) must be strictly below card[${i - 1}].top (${boxes[i - 1].top}) in ${section.label}`,
+      ).toBeGreaterThan(boxes[i - 1].top + 1);
+    }
+  });
+}

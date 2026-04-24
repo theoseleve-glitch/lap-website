@@ -1,0 +1,64 @@
+---
+// T031 — persona-fit bullets. Copy is tuned to the primary persona in
+// 01-STRATEGIC-DOCTRINE.md §3 ("The Serious Sim Racer"): 3-8 sim
+// sessions/week, already competitive in split, multi-sim, has cycled
+// through a couple of telemetry apps, wants a practice plan rather
+// than another lap report. Competitor naming belongs in T032 and
+// anti-persona disclosure in T033 — this section *only* affirms fit.
+
+interface FitBullet {
+  lead: string;
+  body: string;
+}
+
+const BULLETS: FitBullet[] = [
+  {
+    lead: 'You race 3 to 8 sim sessions a week.',
+    body: 'Practice mid-week, something competitive on Saturday, maybe a private league on Sunday.',
+  },
+  {
+    lead: "You're already in the top third of your split.",
+    body: "The gap to the leaders isn't commitment — it's a handful of tenths you can feel but can't always explain.",
+  },
+  {
+    lead: 'You live across multiple sims.',
+    body: 'An iRacing week here, an ACC endurance there, AMS2 when the mood shifts. One driver profile that follows you makes the week make sense.',
+  },
+  {
+    lead: "You've already tried a couple of telemetry apps.",
+    body: 'The shallow ones felt patronizing; the deep ones turned you into a race engineer instead of a faster driver. You want something that keeps you driving.',
+  },
+  {
+    lead: 'You want an answer to "what should I practice Thursday?"',
+    body: 'Not another turn-by-turn lap report. A plan sized to the next session, with a measurable outcome.',
+  },
+];
+
+const HEADING_ID = 'built-for-serious-sim-racers-heading';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="text-steel text-caption tracking-wide uppercase">Who this is for</p>
+    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+      Built for serious sim racers.
+    </h2>
+    <p class="text-steel text-body mt-5">
+      If most of these describe you, you're the driver LAP was built for.
+    </p>
+  </header>
+
+  <ul class="mt-14 flex flex-col gap-5">
+    {
+      BULLETS.map((b) => (
+        <li class="border-steel/15 bg-concrete/40 rounded-2 border p-6 md:p-7">
+          <p class="text-chalk text-body font-medium">{b.lead}</p>
+          <p class="text-steel text-body leading-body mt-2">{b.body}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

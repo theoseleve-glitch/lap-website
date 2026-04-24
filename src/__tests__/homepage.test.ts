@@ -133,3 +133,18 @@ test('T030 "Sim and real" bridge section lands on the homepage, after T029', asy
   expect(t029Idx).toBeGreaterThan(-1);
   expect(t030Idx).toBeGreaterThan(t029Idx);
 });
+
+test('T031 "Built for serious sim racers" persona section lands after T030', async () => {
+  // Integration check: persona-fit bullets follow the bridge narrative
+  // so a reader who has just been told "sim and real are one profile"
+  // arrives at "and here's why you, specifically, are the driver we're
+  // building for." Ordering matters — the persona section before the
+  // bridge would read as "here's who you are, now here's the product",
+  // which inverts the product-first-then-persona narrative.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Built for serious sim racers[\s\S]*<\/h2>/);
+  const t030Idx = html.indexOf('Sim and real, one driver profile');
+  const t031Idx = html.indexOf('Built for serious sim racers');
+  expect(t030Idx).toBeGreaterThan(-1);
+  expect(t031Idx).toBeGreaterThan(t030Idx);
+});

@@ -1,14 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import DemoWalkthrough from '../components/DemoWalkthrough.astro';
+import FinalCta from '../components/FinalCta.astro';
 
 // T072 — shell for /demo. The route is referenced from the sprint brief
 // (Block E) as the "watch it work before you sign up" on-ramp. Shipping
 // the shell means the secondary CTA path (hero → /demo) resolves to a
 // real page instead of 404ing while T073 decided format (video; see
 // DemoWalkthrough.astro), T074 lands the 3-minute walkthrough, T077
-// pre-seeds the sample session, T078 wires the post-demo trial CTA,
-// and T079-T090 cover perf, SEO, a11y, and e2e.
+// pre-seeds the sample session, T085 wires the post-demo trial CTA
+// (done — reuses the shared T034 FinalCta so the signup href stays in
+// exactly one place), and T079-T090 cover perf, SEO, a11y, and e2e.
 
 // Doctrine-aligned scent: the <title> + description set expectations
 // before the visitor decides to watch. "Session walkthrough" matches
@@ -35,5 +37,6 @@ const DESCRIPTION =
     </header>
 
     <DemoWalkthrough />
+    <FinalCta />
   </main>
 </BaseLayout>

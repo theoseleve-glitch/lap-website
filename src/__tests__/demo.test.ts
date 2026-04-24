@@ -66,3 +66,27 @@ test('T073: DemoWalkthrough placeholder is mounted on /demo below the shell head
   expect(headerIdx).toBeGreaterThan(-1);
   expect(walkthroughIdx).toBeGreaterThan(headerIdx);
 });
+
+test('T085: /demo closes with the shared trial CTA (href + rel locked)', async () => {
+  // Integration check: /demo ends with the same T034 trial contract
+  // that closes the homepage and /how-it-works. Reusing FinalCta
+  // (rather than a new demo-specific CTA) keeps the href +
+  // rel=noopener wiring in exactly one component — the signup URL
+  // + attribution hooks can't drift between pages silently.
+  const html = await render();
+  expect(html).toMatch(
+    /<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]+rel="noopener"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
+  );
+});
+
+test('T085: trial CTA renders after the walkthrough placeholder', async () => {
+  // Reader flow: intro → watch the walkthrough → decide to trial.
+  // If a refactor ever swaps ordering so the CTA lands before the
+  // walkthrough, this fails with a clear signal — the visitor
+  // should see the artefact they came for before the ask.
+  const html = await render();
+  const walkthroughIdx = html.search(/three-minute walkthrough/i);
+  const ctaIdx = html.indexOf('Start 14-day trial');
+  expect(walkthroughIdx).toBeGreaterThan(-1);
+  expect(ctaIdx).toBeGreaterThan(walkthroughIdx);
+});

@@ -144,3 +144,13 @@ test('T064: the coach value-anchor lands after the B2B teaser', async () => {
   expect(b2bIdx).toBeGreaterThan(-1);
   expect(valueIdx).toBeGreaterThan(b2bIdx);
 });
+
+test('T065: /pricing links to /refund-policy', async () => {
+  // Integration check: the refund policy is one click away from
+  // the pricing page. Shipping a dedicated /refund-policy route
+  // (not a site-footer inline snippet) matches how readers expect
+  // to find legal/policy content — under a named link, on its
+  // own page.
+  const html = await render();
+  expect(html).toMatch(/<a[^>]+href="\/refund-policy"[^>]*>[\s\S]*Refund policy[\s\S]*<\/a>/);
+});

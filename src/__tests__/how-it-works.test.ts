@@ -14,26 +14,30 @@ test('T042: /how-it-works renders a single <main> landmark', async () => {
   expect(mainMatches.length).toBe(1);
 });
 
-test('T042: /how-it-works renders an <h1> titled "How LAP works"', async () => {
-  // The shell ships with a minimal working H1 so the T026 secondary
-  // CTA (/how-it-works) resolves to a real page today. T043 will
-  // replace this with the full hero copy ("The whole driver
-  // improvement loop, in one place") — this test flags the
-  // transition point rather than locking forever.
+test('T043: /how-it-works renders the locked hero H1 verbatim', async () => {
+  // T043 sprint task specifies this exact H1 string: "The whole
+  // driver improvement loop, in one place." The H1 is the page-level
+  // equivalent of the homepage's T023 headline — any copy drift
+  // here fractures the category framing ("loop") that T045-T048
+  // build on.
   const html = await render();
-  expect(html).toMatch(/<h1[^>]*>[\s\S]*How LAP works[\s\S]*<\/h1>/);
+  expect(html).toMatch(
+    /<h1[^>]*>[\s\S]*The whole driver improvement loop, in one place[\s\S]*<\/h1>/,
+  );
 });
 
-test('T042: /how-it-works introduces the page with a descriptive paragraph', async () => {
-  // The intro paragraph is the second most visible copy surface on
-  // the page and carries the "what this page covers" scent for
-  // readers who followed T026's "See how it works" CTA from the
-  // homepage. It must name the three pillars this page will build
-  // out (coaching loop, sim↔real bridge, data model) so a returning
-  // reader doesn't wonder whether they landed on the right page.
+test('T043: hero subhead names the four-step loop (capture, brain, plan, improve)', async () => {
+  // The subhead previews the sprint-mapped sections T045 (Capture)
+  // → T046 (Brain) → T047 (Plan) → T048 (Improve). Locking the
+  // four step-words at the HTML surface means any future copy
+  // edit that silently drops one of them fails CI — the four-step
+  // loop IS the page's narrative scaffold.
   const html = await render();
-  expect(html.toLowerCase()).toMatch(/coaching loop/);
-  expect(html.toLowerCase()).toMatch(/bridge/);
+  const lower = html.toLowerCase();
+  expect(lower).toMatch(/\bcapture\b/);
+  expect(lower).toMatch(/\bbrain\b/);
+  expect(lower).toMatch(/\bplan\b/);
+  expect(lower).toMatch(/\bimprove\b/);
 });
 
 test('T042: /how-it-works copy stays doctrine-aligned — no AI-coach / LLM / generative', async () => {

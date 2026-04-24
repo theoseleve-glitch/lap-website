@@ -1,0 +1,45 @@
+---
+interface CallToAction {
+  text: string;
+  href: string;
+}
+
+interface Props {
+  headline: string;
+  subhead: string;
+  primaryCta: CallToAction;
+  secondaryCta: CallToAction;
+}
+
+const { headline, subhead, primaryCta, secondaryCta } = Astro.props;
+
+// The primary CTA links to app.lap-coach.racing; treat any app-subdomain
+// link as an external origin so we get rel=noopener for safety without
+// giving up same-tab flow (target stays default, matching Fitts' Law for
+// trial-signup conversion).
+const primaryIsExternal = /^https?:\/\//.test(primaryCta.href);
+const secondaryIsExternal = /^https?:\/\//.test(secondaryCta.href);
+---
+
+<section
+  class="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-6 py-24 text-center sm:py-32"
+>
+  <h1 class="font-display text-h1 max-w-wide tracking-display text-balance">{headline}</h1>
+  <p class="text-steel text-body mt-6 max-w-prose">{subhead}</p>
+  <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:gap-5">
+    <a
+      href={primaryCta.href}
+      rel={primaryIsExternal ? 'noopener' : undefined}
+      class="bg-chalk text-asphalt hover:bg-chalk/90 focus-visible:outline-chalk text-body inline-flex items-center justify-center px-7 py-3 font-medium transition"
+    >
+      {primaryCta.text}
+    </a>
+    <a
+      href={secondaryCta.href}
+      rel={secondaryIsExternal ? 'noopener' : undefined}
+      class="text-chalk border-steel/40 hover:border-chalk focus-visible:outline-chalk text-body inline-flex items-center justify-center border px-7 py-3 transition"
+    >
+      {secondaryCta.text}
+    </a>
+  </div>
+</section>

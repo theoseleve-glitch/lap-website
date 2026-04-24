@@ -3,15 +3,26 @@
     "collect": {
       "staticDistDir": "./dist",
       "numberOfRuns": 3,
-      "url": ["http://localhost/index.html"],
+      "url": ["http://localhost/index.html", "http://localhost/demo/index.html"],
       "settings": {
         "onlyCategories": ["performance"]
       }
     },
     "assert": {
-      "assertions": {
-        "largest-contentful-paint": ["error", { "maxNumericValue": 1500 }]
-      }
+      "assertMatrix": [
+        {
+          "matchingUrlPattern": "^http://localhost/index\\.html$",
+          "assertions": {
+            "largest-contentful-paint": ["error", { "maxNumericValue": 1500 }]
+          }
+        },
+        {
+          "matchingUrlPattern": "^http://localhost/demo/index\\.html$",
+          "assertions": {
+            "largest-contentful-paint": ["error", { "maxNumericValue": 2000 }]
+          }
+        }
+      ]
     },
     "upload": {
       "target": "temporary-public-storage"

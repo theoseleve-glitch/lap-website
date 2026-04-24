@@ -81,6 +81,42 @@ test('T063: /pricing "Start yearly" CTA navigates to /signup?plan=yearly', async
   expect(page.url()).toMatch(/\/signup\?plan=yearly$/);
 });
 
+test('T070: home → /pricing → consume sections → monthly CTA → /signup?plan=monthly', async ({
+  page,
+}) => {
+  // Three-stage /pricing journey the sprint task calls out:
+  // navigate → consume → CTA. Exercises the T034 FinalCta link to
+  // /pricing (which exists on the homepage AND /how-it-works), the
+  // T057 page shell, the T058 tier card with both plan CTAs, and
+  // the T059/T061 structural sections in between.
+  await stubSignup(page);
+
+  // Navigate: click "See full pricing" on the homepage. The text
+  // is rendered as "See full pricing →" (with a right-arrow);
+  // regex matching sidesteps trailing-character flakiness across
+  // character encodings.
+  await page.goto('/');
+  await page.getByRole('link', { name: /See full pricing/ }).click();
+  await expect(page).toHaveURL(/\/pricing\/?$/);
+
+  // Consume: the page-level H1 renders (post-T069 SEO tune, it
+  // still reads "One tier. Clear price.") and the two structural
+  // H2s a reader must reach before the CTA — "What's included"
+  // (T059) and "Common questions" (T061) — are present. If a
+  // future refactor silently unmounts either section, the
+  // assertion catches it.
+  await expect(page.locator('h1')).toContainText('One tier');
+  await expect(page.locator('h2').filter({ hasText: /What.{0,3}s included/ })).toBeVisible();
+  await expect(page.locator('h2').filter({ hasText: /Common questions/ })).toBeVisible();
+
+  // CTA: click "Start monthly" (T058 tier card) — a stand-in for
+  // either plan CTA, since T063 already tests both independently.
+  // Verifies the full home → /pricing → signup arc completes.
+  await page.getByRole('link', { name: 'Start monthly' }).click();
+  await page.waitForURL(/\/signup\?plan=monthly$/);
+  expect(page.url()).toMatch(/\/signup\?plan=monthly$/);
+});
+
 test('T055: home → /how-it-works → consume sections → trial CTA → /signup', async ({ page }) => {
   // Three-stage journey the sprint task calls out: navigate →
   // consume → CTA. Exercises the T026 secondary CTA (/how-it-works

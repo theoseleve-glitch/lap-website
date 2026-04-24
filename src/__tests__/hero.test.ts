@@ -65,3 +65,24 @@ test('tags the headline, subhead, and CTA row with data-hero-animate for T027 mo
   expect(html).toMatch(/<p[^>]*\sdata-hero-animate(\s|>)/);
   expect(html).toMatch(/<div[^>]*\sdata-hero-animate(\s|>)/);
 });
+
+test('T028 exposes a named "visual" slot for the hero visual', async () => {
+  // Slot composition lets the caller drop DriverProfilePreview (or a
+  // future alternative visual) into the hero without rewriting Hero.
+  const container = await AstroContainer.create();
+  const html = await container.renderToString(Hero, {
+    props: SAMPLE_PROPS,
+    slots: { visual: '<aside data-test-visual>placeholder visual</aside>' },
+  });
+  expect(html).toContain('<aside data-test-visual>');
+  expect(html).toContain('placeholder visual');
+});
+
+test('T028 visual slot is wrapped in a data-hero-animate container', async () => {
+  // The wrapper carries the stagger attribute so whatever visual the
+  // caller passes joins the T027 entrance animation; we also want the
+  // wrapper to exist even when no slot content is passed so layout
+  // doesn't shift if a page toggles the visual on/off.
+  const html = await render();
+  expect(html).toMatch(/<div[^>]*\sdata-hero-animate[^>]*>\s*(<slot|<)/);
+});

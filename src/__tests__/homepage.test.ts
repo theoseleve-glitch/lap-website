@@ -97,3 +97,12 @@ test('T026 secondary CTA omits rel="noopener" on same-origin href', async () => 
   const html = await render();
   expect(html).not.toMatch(/<a[^>]+href="\/how-it-works"[^>]+rel="noopener"/);
 });
+
+test('T028 renders the DriverProfilePreview inside the hero visual slot', async () => {
+  // Integration check: the Hero visual slot is filled by
+  // DriverProfilePreview, which is the T028 above-the-fold visual.
+  // Checking for the component's aria-label rather than specific
+  // Tailwind classes keeps the test resilient to styling refactors.
+  const html = await render();
+  expect(html).toMatch(/role="img"[^>]+aria-label="Driver Profile preview/);
+});

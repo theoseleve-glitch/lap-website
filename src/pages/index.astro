@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import DriverProfilePreview from '../components/DriverProfilePreview.astro';
 
 // Hero copy + CTAs locked by the T022-T026 staged sequence:
 //   T023 — headline (Option B from 01-STRATEGIC-DOCTRINE.md §2)
@@ -29,6 +30,8 @@ const SECONDARY_CTA = {
       subhead={SUBHEAD}
       primaryCta={PRIMARY_CTA}
       secondaryCta={SECONDARY_CTA}
-    />
+    >
+      <DriverProfilePreview slot="visual" />
+    </Hero>
   </main>
 </BaseLayout>

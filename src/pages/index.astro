@@ -2,13 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 
-// T023 locks the headline to Option B from 01-STRATEGIC-DOCTRINE.md §2.
-// T024 locks the subhead below — the "ecosystem pitch" beat that
-// stacks under the headline and delivers the doctrine's category claim
-// ("Driver OS"), the cross-platform promise, and the progression echo.
-// T025 locks the primary CTA: "Start 14-day trial" →
-// https://app.lap-coach.racing/signup (cross-origin to the webapp).
-// The secondary CTA href remains a placeholder refined in T026.
+// Hero copy + CTAs locked by the T022-T026 staged sequence:
+//   T023 — headline (Option B from 01-STRATEGIC-DOCTRINE.md §2)
+//   T024 — subhead (ecosystem pitch: category + cross-platform + progression)
+//   T025 — primary CTA → https://app.lap-coach.racing/signup
+//   T026 — secondary CTA → /how-it-works (same-origin; route lands in T042)
+// Every constant below is covered by Vitest + Playwright regression tests
+// in src/__tests__/homepage.test.ts and tests/e2e/home.spec.ts.
 const HEADLINE = 'Every lap, one step better.';
 const SUBHEAD =
   'The cross-platform Driver OS that turns every sim and real-world session into measurable progress.';

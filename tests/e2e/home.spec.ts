@@ -18,3 +18,11 @@ test('T025 primary CTA points at the app.lap-coach.racing /signup route', async 
   await expect(trialCta).toHaveAttribute('href', 'https://app.lap-coach.racing/signup');
   await expect(trialCta).toHaveAttribute('rel', 'noopener');
 });
+
+test('T026 secondary CTA points at /how-it-works (same-origin, no rel)', async ({ page }) => {
+  await page.goto('/');
+  const howItWorksCta = page.getByRole('link', { name: 'See how it works' });
+  await expect(howItWorksCta).toHaveAttribute('href', '/how-it-works');
+  // Same-origin link — rel should NOT be present.
+  await expect(howItWorksCta).not.toHaveAttribute('rel', /.*/);
+});

@@ -79,3 +79,21 @@ test('T025 primary CTA carries rel="noopener" for the cross-origin hand-off', as
   const html = await render();
   expect(html).toMatch(/<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]+rel="noopener"/);
 });
+
+test('T026 secondary CTA: "See how it works" → /how-it-works (same-origin)', async () => {
+  // The secondary CTA is the low-commitment path for visitors not yet
+  // ready to start a trial. /how-it-works is built by T042 in block C;
+  // locking the href here means T042 can land the page without having
+  // to also rewire the homepage.
+  const html = await render();
+  expect(html).toMatch(/<a[^>]+href="\/how-it-works"[^>]*>[\s\S]*See how it works[\s\S]*<\/a>/);
+});
+
+test('T026 secondary CTA omits rel="noopener" on same-origin href', async () => {
+  // Hero.astro's rel derivation only fires for absolute http(s):// URLs;
+  // same-origin routes should render a clean <a> without rel, since the
+  // attribute is only meaningful (and the performance/tab-focus cost
+  // only justified) for cross-origin navigations.
+  const html = await render();
+  expect(html).not.toMatch(/<a[^>]+href="\/how-it-works"[^>]+rel="noopener"/);
+});

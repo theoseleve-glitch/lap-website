@@ -116,3 +116,20 @@ test('T029 "After every session" section lands below the hero', async () => {
   expect(html).toMatch(/Prescription issued/);
   expect(html).toMatch(/Outcome measured/);
 });
+
+test('T030 "Sim and real" bridge section lands on the homepage, after T029', async () => {
+  // Integration check: homepage mounts the SimAndReal section with its
+  // locked heading, both H3 sub-beats, and the shape-vs-intensity
+  // framework vocabulary (ADR-005 §5.5 TransferLink). Also asserts the
+  // T030 section appears AFTER the T029 "After every session" section
+  // so the page flows hero → coaching loop → bridge, not bridge →
+  // coaching loop.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Sim and real, one driver profile[\s\S]*<\/h2>/);
+  expect(html).toMatch(/One session format/);
+  expect(html).toMatch(/Shape vs intensity/);
+  const t029Idx = html.indexOf('After every session');
+  const t030Idx = html.indexOf('Sim and real, one driver profile');
+  expect(t029Idx).toBeGreaterThan(-1);
+  expect(t030Idx).toBeGreaterThan(t029Idx);
+});

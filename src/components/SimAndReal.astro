@@ -1,0 +1,56 @@
+---
+// T030 — sim↔real bridge narrative. Principle 7 of 01-STRATEGIC-DOCTRINE.md
+// §4 mandates that the bridge is a data model before a marketing claim;
+// this section paraphrases ADR-005 §5.5 TransferLink (shape_match_score,
+// intensity_match_score, transferred_skills, non_transferred_skills)
+// in reader-facing language without inventing mechanics. No LLM / AI
+// coach framing — ADR-004 §4 principle 4.
+
+interface BridgeBeat {
+  heading: string;
+  body: string;
+}
+
+const BEATS: BridgeBeat[] = [
+  {
+    heading: 'One session format',
+    body: 'iRacing, ACC, AMS2, rFactor 2, RaceBox on your phone — every capture emits the same bundle, scored on the same dimensions. Your Braking score on a wet Silverstone GT3 means the same thing whether the throttle trace came from a load cell on a real pedal or a hall sensor on your home rig.',
+  },
+  {
+    heading: 'Shape vs intensity',
+    body: 'When LAP pairs a sim session with a real-world session on the same track, it separates two things: the shape of your inputs — the lines in a brake trace, the curve of a throttle pickup — and their intensity — peak pressures, slip angles, steering rates. What holds its shape transfers. What diverges in intensity is a habit calibrated to the wrong world.',
+  },
+];
+
+const HEADING_ID = 'sim-and-real-heading';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="text-steel text-caption tracking-wide uppercase">The bridge</p>
+    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+      Sim and real, one driver profile.
+    </h2>
+    <p class="text-steel text-body mt-5">
+      The sim lap you drove last night and the real-world lap you drove last Sunday both land in the
+      same profile. Same manifest, same dimensions, same scoring — the bridge is built at the data
+      layer before it surfaces as a side-by-side.
+    </p>
+  </header>
+
+  <div class="mt-14 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-6">
+    {
+      BEATS.map((beat) => (
+        <article class="border-steel/15 bg-concrete/40 rounded-2 flex flex-col border p-7">
+          <h3 class="font-display text-h4 text-chalk tracking-display text-balance">
+            {beat.heading}
+          </h3>
+          <p class="text-steel text-body leading-body mt-4">{beat.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

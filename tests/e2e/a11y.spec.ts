@@ -74,3 +74,22 @@ test('T053: /how-it-works has zero WCAG 2.1 A/AA axe violations', async ({ page 
     results.violations.length ? `axe violations:\n  - ${summary}` : 'clean',
   ).toEqual([]);
 });
+
+test('T068: /pricing has zero WCAG 2.1 A/AA axe violations', async ({ page }) => {
+  // /pricing is static (no GSAP) so no opacity-wait is needed.
+  // Axe gates the tier-card structure (trial-badge contrast,
+  // CTA button contrast), the native <details>/<summary> FAQ
+  // (browser-owned ARIA), the acid-green ✓ markers on the 12-bullet
+  // checklist (aria-hidden so no text-alt is needed), and the
+  // value-anchor section's plain-prose paragraphs.
+  await page.goto('/pricing');
+  const results = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze();
+
+  const summary = buildSummary(results.violations);
+  expect(
+    results.violations,
+    results.violations.length ? `axe violations:\n  - ${summary}` : 'clean',
+  ).toEqual([]);
+});

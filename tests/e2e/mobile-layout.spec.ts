@@ -141,3 +141,53 @@ for (const section of HOW_IT_WORKS_MULTI_COLUMN_SECTIONS) {
     }
   });
 }
+
+// T068 mirrors T039/T053 on /pricing: no horizontal overflow at
+// 360 px, and every multi-column grid must stack. Covers the
+// T058 tier-card inner grid (monthly/yearly prices), the T059
+// 12-bullet checklist, and the FAQ is inherently stacked so
+// doesn't need a separate check.
+test('T068: /pricing has no horizontal overflow at 360 px', async ({ page }) => {
+  await page.goto('/pricing');
+  const { scrollWidth, clientWidth } = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  expect(
+    scrollWidth,
+    `document.documentElement.scrollWidth (${scrollWidth}) exceeds clientWidth (${clientWidth}) ` +
+      `— some element on /pricing renders wider than the 360 px viewport.`,
+  ).toBeLessThanOrEqual(clientWidth);
+});
+
+const PRICING_MULTI_COLUMN_SECTIONS = [
+  {
+    label: 'T058 tier card price grid',
+    locator: 'section[aria-labelledby="pricing-tier-heading"] article > div > div',
+    minItems: 2,
+  },
+  {
+    label: 'T059 included checklist',
+    locator: 'section[aria-labelledby="pricing-included-heading"] li',
+    minItems: 12,
+  },
+];
+
+for (const section of PRICING_MULTI_COLUMN_SECTIONS) {
+  test(`T068: "${section.label}" cards stack vertically at 360 px`, async ({ page }) => {
+    await page.goto('/pricing');
+    const boxes = await page.locator(section.locator).evaluateAll((els) =>
+      els.map((el) => {
+        const r = el.getBoundingClientRect();
+        return { top: r.top, height: r.height };
+      }),
+    );
+    expect(boxes.length).toBeGreaterThanOrEqual(section.minItems);
+    for (let i = 1; i < boxes.length; i++) {
+      expect(
+        boxes[i].top,
+        `card[${i}].top (${boxes[i].top}) must be strictly below card[${i - 1}].top (${boxes[i - 1].top}) in ${section.label}`,
+      ).toBeGreaterThan(boxes[i - 1].top + 1);
+    }
+  });
+}

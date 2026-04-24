@@ -86,3 +86,17 @@ test('T059: the "What\'s included" checklist is mounted after the tier card', as
   expect(tierIdx).toBeGreaterThan(-1);
   expect(includedIdx).toBeGreaterThan(tierIdx);
 });
+
+test('T060: the founder-waitlist offer is mounted after the checklist', async () => {
+  // Integration check: grandfathered-rate offer lands below the
+  // inventory. Reader arc: price → what's included → "and if you
+  // signed up early, it's €3 cheaper." Reversing the order would
+  // make the offer a banner the trial-ready visitor has to scroll
+  // past to reach the inventory.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Signed up before launch/);
+  const includedIdx = html.search(/What(?:'|&#39;|&apos;|&rsquo;)s included/);
+  const founderIdx = html.indexOf('Signed up before launch');
+  expect(includedIdx).toBeGreaterThan(-1);
+  expect(founderIdx).toBeGreaterThan(includedIdx);
+});

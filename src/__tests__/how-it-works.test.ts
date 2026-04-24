@@ -129,3 +129,21 @@ test('T049: the "honesty" section (today vs Year 2) lands after Improve', async 
   expect(improveIdx).toBeGreaterThan(-1);
   expect(honestyIdx).toBeGreaterThan(improveIdx);
 });
+
+test('T052: /how-it-works closes with the shared trial CTA (href + rel locked)', async () => {
+  // Integration check: the page ends with the same T025/T034 trial
+  // contract. Reusing the FinalCta component (rather than a new
+  // /how-it-works-specific CTA) keeps the href + rel=noopener
+  // wiring in exactly one component — any future CTA-contract edit
+  // propagates site-wide instead of drifting between pages.
+  const html = await render();
+  expect(html).toMatch(
+    /<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]+rel="noopener"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
+  );
+  // Ordering: CTA appears after the honesty section so the reader
+  // closes with "here's what today gives you" → "start the trial".
+  const honestyIdx = html.indexOf('What ships today, and what is still roadmap');
+  const ctaIdx = html.indexOf('Start 14-day trial');
+  expect(honestyIdx).toBeGreaterThan(-1);
+  expect(ctaIdx).toBeGreaterThan(honestyIdx);
+});

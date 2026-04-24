@@ -148,3 +148,18 @@ test('T031 "Built for serious sim racers" persona section lands after T030', asy
   expect(t030Idx).toBeGreaterThan(-1);
   expect(t031Idx).toBeGreaterThan(t030Idx);
 });
+
+test('T032 "Coming from Garage61 or MoTeC" comparison lands after T031', async () => {
+  // Integration check: the competitive comparison sits AFTER the
+  // persona-fit affirmation. A reader who has already said "yes, that
+  // sounds like me" arrives at "here's how this fits alongside the
+  // tools you've tried." Placing T032 before T031 would have readers
+  // evaluating competitors before they've been told this is for them
+  // — a sequencing mistake that weakens both sections.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Coming from Garage61 or MoTeC[\s\S]*<\/h2>/);
+  const t031Idx = html.indexOf('Built for serious sim racers');
+  const t032Idx = html.indexOf('Coming from Garage61 or MoTeC');
+  expect(t031Idx).toBeGreaterThan(-1);
+  expect(t032Idx).toBeGreaterThan(t031Idx);
+});

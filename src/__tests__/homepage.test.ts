@@ -106,3 +106,13 @@ test('T028 renders the DriverProfilePreview inside the hero visual slot', async 
   const html = await render();
   expect(html).toMatch(/role="img"[^>]+aria-label="Driver Profile preview/);
 });
+
+test('T029 "After every session" section lands below the hero', async () => {
+  // Integration check: homepage includes the three-tile coaching-loop
+  // section with its <h2> and the three beat headings.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*After every session[\s\S]*<\/h2>/);
+  expect(html).toMatch(/Weakness detected/);
+  expect(html).toMatch(/Prescription issued/);
+  expect(html).toMatch(/Outcome measured/);
+});

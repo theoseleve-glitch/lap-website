@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// T042 — shell for the "How LAP works" ecosystem page. The T026
+// secondary CTA on the homepage points here; shipping even a minimal
+// shell means that link resolves instead of 404ing. T043 through
+// T055 fill this page in with the hero ("The whole driver improvement
+// loop, in one place"), the capture → brain → plan → improve
+// narrative, screenshots, and the "where we are today vs year 2"
+// honesty section. SEO retuning per targeted keyword lands in T054.
+
+const TITLE = 'How LAP works — LAP';
+const DESCRIPTION =
+  'The coaching loop, the sim↔real bridge, and the data model behind them — how LAP turns every sim and real-world session into a plan for the next one.';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <h1 class="font-display text-h1 text-chalk tracking-display text-balance">How LAP works</h1>
+    <p class="text-steel text-body mt-6 max-w-prose">
+      The coaching loop, the sim↔real bridge, and the data model behind them — one page to explain
+      how every session you capture turns into a plan for the next one.
+    </p>
+  </main>
+</BaseLayout>

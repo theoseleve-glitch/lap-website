@@ -1,0 +1,56 @@
+---
+// T045 — Step 01 of the four-step loop T043 framed. Covers the two
+// capture surfaces from 01-STRATEGIC-DOCTRINE.md §5: desktop captures
+// sim sessions, mobile captures real-world sessions, both finalise
+// to one canonical session bundle. Principle 5 ("offline-first on
+// capture") is the trust signal — track-day LTE is unreliable, and
+// a logger that loses a session to a dropped connection is the
+// single biggest reason RaceChrono users get burned.
+
+interface Surface {
+  heading: string;
+  body: string;
+}
+
+const SURFACES: Surface[] = [
+  {
+    heading: 'Desktop',
+    body: 'The desktop app runs alongside the game — iRacing, ACC, AMS2, rFactor 2, LMU, Rennsport, F1 — capturing as you drive, with live overlays and lightweight coaching prompts. It works offline: a lost network never loses a session.',
+  },
+  {
+    heading: 'Mobile',
+    body: 'At a real track, pair a RaceBox and drop the phone on the dash. Sessions finalise safely even if the phone sleeps or the LTE drops mid-stint. The iPhone app ships first; Android follows with the V1 release.',
+  },
+];
+
+const HEADING_ID = 'how-it-works-capture-heading';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto mt-24 w-full max-w-6xl border-t pt-24 sm:mt-32 sm:pt-32"
+>
+  <header class="max-w-prose">
+    <p class="text-steel text-caption tracking-wide uppercase">Step 01</p>
+    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+      Capture every session, sim or real.
+    </h2>
+    <p class="text-steel text-body mt-5">
+      Two surfaces, one canonical bundle. Every lap — at your rig, on your phone, or on a RaceBox
+      clipped to the dash — finalises into the same schema before it ever reaches the backend.
+    </p>
+  </header>
+
+  <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-6">
+    {
+      SURFACES.map((surface) => (
+        <article class="border-steel/15 bg-concrete/40 rounded-2 flex flex-col border p-7">
+          <h3 class="font-display text-h4 text-chalk tracking-display text-balance">
+            {surface.heading}
+          </h3>
+          <p class="text-steel text-body leading-body mt-4">{surface.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

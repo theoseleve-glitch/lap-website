@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HowItWorksDiagram from '../components/HowItWorksDiagram.astro';
+import HowItWorksCapture from '../components/HowItWorksCapture.astro';
 
 // T042 set up the shell; T043 lands the real hero. H1 copy is locked
 // by the sprint task and mirrors the doctrine's category framing
@@ -31,5 +32,7 @@ const DESCRIPTION =
     <div class="mt-16 sm:mt-20">
       <HowItWorksDiagram />
     </div>
+
+    <HowItWorksCapture />
   </main>
 </BaseLayout>

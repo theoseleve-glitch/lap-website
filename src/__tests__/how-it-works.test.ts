@@ -64,3 +64,17 @@ test('T044: the annotated SVG diagram is mounted on the page', async () => {
   expect(html).toMatch(/<figure[^>]+role="img"/);
   expect(html).toMatch(/<svg[^>]+viewBox=/);
 });
+
+test('T045: the "Capture" section is mounted after the diagram', async () => {
+  // Integration check: the first of four loop-step sections
+  // (T045-T048) renders below the diagram. Ordering locked so the
+  // page flow stays hero → diagram → capture → ... matching the
+  // reader's mental model established by the diagram's clockwise
+  // arrows.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Capture every session, sim or real[\s\S]*<\/h2>/);
+  const diagramIdx = html.indexOf('The four-step loop');
+  const captureIdx = html.indexOf('Capture every session, sim or real');
+  expect(diagramIdx).toBeGreaterThan(-1);
+  expect(captureIdx).toBeGreaterThan(diagramIdx);
+});

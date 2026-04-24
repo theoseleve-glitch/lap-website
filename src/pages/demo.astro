@@ -1,11 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DemoWalkthrough from '../components/DemoWalkthrough.astro';
 
 // T072 — shell for /demo. The route is referenced from the sprint brief
 // (Block E) as the "watch it work before you sign up" on-ramp. Shipping
 // the shell means the secondary CTA path (hero → /demo) resolves to a
-// real page instead of 404ing while T073 decides format (video vs.
-// annotated screenshots), T074 lands the 3-minute walkthrough, T077
+// real page instead of 404ing while T073 decided format (video; see
+// DemoWalkthrough.astro), T074 lands the 3-minute walkthrough, T077
 // pre-seeds the sample session, T078 wires the post-demo trial CTA,
 // and T079-T090 cover perf, SEO, a11y, and e2e.
 
@@ -32,5 +33,7 @@ const DESCRIPTION =
         next session plan looks like. No sign-up required.
       </p>
     </header>
+
+    <DemoWalkthrough />
   </main>
 </BaseLayout>

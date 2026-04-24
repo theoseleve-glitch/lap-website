@@ -1,0 +1,63 @@
+---
+// T073 — format decision: the /demo page shows the walkthrough as an
+// embedded video (YouTube/Vimeo, lazy-loaded), not as an inline grid
+// of static screenshots. This component ships the placeholder the
+// video will land inside so the layout is stable now and T074's
+// iframe is a zero-shift drop-in later.
+//
+// Why video over screenshots (recorded here so `git blame` carries
+// the rationale when T074 lands):
+//
+//   1. The demo narrative is time-based. The loop "capture → brain
+//      → plan → improve" (01-STRATEGIC-DOCTRINE.md §1, reinforced
+//      in T042 /how-it-works) is a flow, not four discrete moments.
+//      A 3-minute video renders the flow; a 4-up screenshot grid
+//      freezes it.
+//   2. Lazy-loaded privacy-mode embeds (iframe loading="lazy" +
+//      youtube-nocookie) ship zero bytes on initial paint, so the
+//      format choice stays inside the homepage/demo 150 kB JS budget
+//      (CLAUDE.md) and preserves the LCP <1500 ms target (T036).
+//   3. T075 already covers static key-screen cards below the video
+//      as a supplement for users with embeds blocked or JS disabled.
+//      Screens aren't the lost option — they're the second tier.
+//   4. The alternative (animated annotated screenshots / GIFs) would
+//      cost more bandwidth than a video embed without the narrative
+//      rewind/pause controls a cold visitor wants.
+//
+// Placeholder posture: the real 3-minute video depends on an
+// actually-shipped session flow to film, which lands in the public
+// beta (01-STRATEGIC-DOCTRINE.md §9, 2026-07-23). Until then the
+// placeholder reserves the 16:9 footprint so T074 is a single-prop
+// drop-in. Same honesty discipline the site applies to T035
+// SocialProof and T062 B2B teaser: label the slot "Reserved" with
+// a concrete resolution date.
+
+const HEADING_ID = 'demo-walkthrough-heading';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto mt-16 w-full max-w-6xl border-t py-24 sm:mt-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="text-steel text-caption tracking-wide uppercase">Walkthrough</p>
+    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+      A three-minute walkthrough — video, not a screenshot tour.
+    </h2>
+    <p class="text-steel text-body mt-5">
+      The demo is a recording of one real session, start to finish — what gets captured, what the
+      brain finds, and what the next session plan looks like. Static screens follow below.
+    </p>
+  </header>
+
+  <div
+    class="border-steel/10 bg-concrete/20 rounded-2 mt-14 flex aspect-[16/9] w-full items-center justify-center border"
+  >
+    <div class="max-w-prose px-8 text-center">
+      <p class="text-steel text-caption tracking-wide uppercase">Reserved</p>
+      <p class="text-steel text-body mt-4">
+        Three-minute walkthrough · lands alongside the public beta in July 2026
+      </p>
+    </div>
+  </div>
+</section>

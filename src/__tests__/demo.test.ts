@@ -52,3 +52,17 @@ test('T072: copy stays doctrine-aligned — no AI-coach / LLM / generative', asy
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
   expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
 });
+
+test('T073: DemoWalkthrough placeholder is mounted on /demo below the shell header', async () => {
+  // Integration check: the T073 decision ships as a component that
+  // actually lives on the page. The 16:9 aspect placeholder lands
+  // after the header so T074 can swap in the iframe without
+  // restructuring the shell. If a refactor silently unmounts the
+  // section, this catches it before the visual surface drifts.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*three-minute walkthrough[\s\S]*<\/h2>/i);
+  const headerIdx = html.search(/See LAP in action\./);
+  const walkthroughIdx = html.search(/three-minute walkthrough/i);
+  expect(headerIdx).toBeGreaterThan(-1);
+  expect(walkthroughIdx).toBeGreaterThan(headerIdx);
+});

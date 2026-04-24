@@ -117,3 +117,30 @@ test('T086: testimonials section renders between walkthrough and CTA', async () 
   expect(testimonialsIdx).toBeGreaterThan(walkthroughIdx);
   expect(ctaIdx).toBeGreaterThan(testimonialsIdx);
 });
+
+test('T088: <title> carries the "sim racing telemetry demo" target keyword', async () => {
+  // Sprint T088 targets "sim racing telemetry demo" for /demo.
+  // Putting the exact noun phrase in the <title> is the single
+  // strongest ranking signal; the loop rules forbid keyword soup,
+  // so the phrasing "Sim racing telemetry demo — LAP" reads as a
+  // natural SERP title rather than an SEO artefact. Mirrors the
+  // T069 /pricing pattern.
+  const html = await render();
+  const titleMatch = html.match(/<title>([^<]+)<\/title>/);
+  expect(titleMatch).not.toBeNull();
+  expect(titleMatch![1].toLowerCase()).toContain('sim racing telemetry demo');
+});
+
+test('T088: meta description carries the "sim racing telemetry" noun phrase', async () => {
+  // Description is the SERP snippet below the title. Pairing the
+  // target phrase with the concrete scent (3-min walkthrough, no
+  // sign-up) rewards the query match and tells the reader in the
+  // first few words that they landed on the right page. The exact
+  // tail "demo" is in the title; the description carries
+  // "sim racing telemetry" alongside the existing session/no-signup
+  // anchors locked by T072.
+  const html = await render();
+  const descMatch = html.match(/<meta\s+name="description"\s+content="([^"]+)"/);
+  expect(descMatch).not.toBeNull();
+  expect(descMatch![1].toLowerCase()).toContain('sim racing telemetry');
+});

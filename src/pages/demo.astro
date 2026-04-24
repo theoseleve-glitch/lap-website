@@ -22,9 +22,18 @@ import FinalCta from '../components/FinalCta.astro';
 // "no sign-up required" names the friction we've removed, which is
 // the single most relevant decision point for a cold visitor. Loop
 // rule enforced: natural prose, not keyword soup.
-const TITLE = 'Demo — LAP';
+//
+// T088 — target keyword "sim racing telemetry demo". The title leads
+// with the exact noun phrase so SERP snippets carry the match near
+// the click; the description pairs "sim racing telemetry" with the
+// concrete scent (three-minute walkthrough, one real session, no
+// sign-up) so a visitor who clicked on the query arrives with the
+// answer already visible. Natural prose — the phrase is used
+// because it describes the page, not because the ranking function
+// wanted it there.
+const TITLE = 'Sim racing telemetry demo — LAP';
 const DESCRIPTION =
-  'A three-minute session walkthrough — what gets captured, what the brain finds, what the next session plan looks like. No sign-up required.';
+  'A three-minute sim racing telemetry demo: watch one real session get captured, reviewed by the brain, and turned into the next session plan. No sign-up required.';
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>

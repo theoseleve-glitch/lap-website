@@ -12,9 +12,12 @@ import { test, expect } from '@playwright/test';
 // to the locked /signup URL.
 
 const SIGNUP_URL = 'https://app.lap-coach.racing/signup';
+// Regex matches /signup AND /signup?plan=monthly / /signup?plan=yearly —
+// a single stub covers T040 trial CTAs and T063 plan-parametrised CTAs.
+const SIGNUP_URL_PATTERN = /^https:\/\/app\.lap-coach\.racing\/signup/;
 
 function stubSignup(page: import('@playwright/test').Page) {
-  return page.route(SIGNUP_URL, (route) =>
+  return page.route(SIGNUP_URL_PATTERN, (route) =>
     route.fulfill({
       status: 200,
       contentType: 'text/html',
@@ -52,6 +55,30 @@ test('T040: final-CTA trial button (below the fold) navigates to /signup after s
   await page.waitForURL(new RegExp(`^${SIGNUP_URL.replaceAll('.', '\\.')}`));
 
   expect(page.url()).toMatch(new RegExp(`^${SIGNUP_URL.replaceAll('.', '\\.')}`));
+});
+
+test('T063: /pricing "Start monthly" CTA navigates to /signup?plan=monthly', async ({ page }) => {
+  // T058 locks the tier-card href at the unit layer; T063 gates
+  // the click-and-navigate behaviour end-to-end. The ?plan=monthly
+  // query parameter is what the lap-webapp signup handler reads to
+  // pre-select billing cadence — dropping it silently would route
+  // the user to a cadence picker they've already chosen.
+  await stubSignup(page);
+  await page.goto('/pricing');
+  await page.getByRole('link', { name: 'Start monthly' }).click();
+  await page.waitForURL(/\/signup\?plan=monthly$/);
+  expect(page.url()).toMatch(/\/signup\?plan=monthly$/);
+});
+
+test('T063: /pricing "Start yearly" CTA navigates to /signup?plan=yearly', async ({ page }) => {
+  // Same contract as monthly — verbatim "yearly" vocabulary from
+  // the sprint brief (not "annual") so the lap-webapp handler and
+  // attribution sees one consistent identifier across marketing.
+  await stubSignup(page);
+  await page.goto('/pricing');
+  await page.getByRole('link', { name: 'Start yearly' }).click();
+  await page.waitForURL(/\/signup\?plan=yearly$/);
+  expect(page.url()).toMatch(/\/signup\?plan=yearly$/);
 });
 
 test('T055: home → /how-it-works → consume sections → trial CTA → /signup', async ({ page }) => {

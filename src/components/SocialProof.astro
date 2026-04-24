@@ -1,0 +1,42 @@
+---
+// T035 — social-proof section, SCAFFOLDED. Public beta opens
+// 2026-07-23 (01-STRATEGIC-DOCTRINE.md §9), so no real beta-user
+// quotes exist yet. Doctrine §10 bullet 4 makes trust the
+// differentiator — inventing placeholder testimonials would
+// contradict the positioning. Instead, three explicitly "Reserved"
+// slots signal "intentionally empty" rather than "broken markup".
+// When real quotes land, the slot rendering swaps for real <blockquote>
+// content and the H2 / lead rewrite accordingly.
+
+const RESERVED_SLOTS = 3;
+const HEADING_ID = 'social-proof-heading';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="text-steel text-caption tracking-wide uppercase">Early feedback</p>
+    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+      No testimonials until the beta opens.
+    </h2>
+    <p class="text-steel text-body mt-5">
+      Public beta opens at the end of July 2026. Until a real beta user has something specific to
+      say, these three slots stay reserved.
+    </p>
+  </header>
+
+  <ul class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-6">
+    {
+      Array.from({ length: RESERVED_SLOTS }).map(() => (
+        <li class="border-steel/10 bg-concrete/20 rounded-2 flex flex-col border p-7">
+          <p class="text-steel text-caption tracking-wide uppercase">Reserved</p>
+          <p class="text-steel/70 text-body leading-body mt-4">
+            First three beta users &middot; July 2026
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

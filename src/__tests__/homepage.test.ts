@@ -179,16 +179,32 @@ test('T033 "Not for you if" anti-persona disclosure lands after T032', async () 
   expect(t033Idx).toBeGreaterThan(t032Idx);
 });
 
-test('T034 final CTA section lands after T033 as the page close', async () => {
-  // Integration check: the pricing snippet + trial CTA is the last
-  // section on the homepage. The qualification arc (T031-T033) lands
-  // in T034's ask ("Ready to make your next session count?"). Any
-  // section inserted after T034 would push the CTA off the close and
-  // break the funnel's final conversion surface.
+test('T034 final CTA section lands after T033', async () => {
+  // Integration check: the pricing snippet + trial CTA follows T033's
+  // anti-persona close. The qualification arc (T031-T033) lands in
+  // T034's ask ("Ready to make your next session count?"). T035's
+  // social-proof placeholder renders after it as a scaffolded
+  // postscript.
   const html = await render();
   expect(html).toMatch(/<h2[^>]*>[\s\S]*Ready to make your next session count\?[\s\S]*<\/h2>/);
   const t033Idx = html.indexOf('Not for you if');
   const t034Idx = html.indexOf('Ready to make your next session count');
   expect(t033Idx).toBeGreaterThan(-1);
   expect(t034Idx).toBeGreaterThan(t033Idx);
+});
+
+test('T035 social-proof placeholder lands after T034 as a scaffolded postscript', async () => {
+  // Integration check: the social-proof section is explicitly a
+  // scaffold today (no real quotes exist pre-beta); landing it below
+  // the T034 primary CTA keeps the conversion surface unblocked and
+  // treats the placeholder as a trust postscript rather than a
+  // testimony wall. When real quotes land, the section will likely
+  // migrate above the CTA — this test documents the current
+  // scaffolded position.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*No testimonials until the beta opens[\s\S]*<\/h2>/);
+  const t034Idx = html.indexOf('Ready to make your next session count');
+  const t035Idx = html.indexOf('No testimonials until the beta opens');
+  expect(t034Idx).toBeGreaterThan(-1);
+  expect(t035Idx).toBeGreaterThan(t034Idx);
 });

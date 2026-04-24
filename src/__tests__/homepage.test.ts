@@ -60,3 +60,22 @@ test('homepage copy forbids AI-coach / LLM vocabulary (ADR-004 §4)', async () =
   expect(html.toLowerCase()).not.toMatch(/\bai coach\b/);
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
 });
+
+test('T025 primary CTA: "Start 14-day trial" → https://app.lap-coach.racing/signup', async () => {
+  // Decision: the primary CTA is the single conversion surface on the
+  // homepage; href and text are locked here so any drift (typo, domain
+  // migration, A/B wrapper) trips CI before it ships. Text is per
+  // 01-STRATEGIC-DOCTRINE.md §8 "14-day full-feature free trial".
+  const html = await render();
+  expect(html).toMatch(
+    /<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
+  );
+});
+
+test('T025 primary CTA carries rel="noopener" for the cross-origin hand-off', async () => {
+  // Cross-origin security posture. Hero.astro auto-derives this from the
+  // http(s):// prefix; locking it at the homepage layer catches any
+  // future change that accidentally strips the attribute.
+  const html = await render();
+  expect(html).toMatch(/<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]+rel="noopener"/);
+});

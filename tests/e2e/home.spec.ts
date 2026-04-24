@@ -11,3 +11,10 @@ test('homepage exposes the dual CTA pair', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Start 14-day trial' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'See how it works' })).toBeVisible();
 });
+
+test('T025 primary CTA points at the app.lap-coach.racing /signup route', async ({ page }) => {
+  await page.goto('/');
+  const trialCta = page.getByRole('link', { name: 'Start 14-day trial' });
+  await expect(trialCta).toHaveAttribute('href', 'https://app.lap-coach.racing/signup');
+  await expect(trialCta).toHaveAttribute('rel', 'noopener');
+});

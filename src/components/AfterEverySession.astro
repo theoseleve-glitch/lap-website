@@ -50,13 +50,15 @@ const HEADING_ID = 'after-every-session-heading';
   <ol class="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
     {
       BEATS.map((beat) => (
-        <article class="border-steel/15 bg-concrete/40 rounded-2 flex flex-col border p-7">
-          <span class="text-steel/70 text-caption font-mono tracking-widest">{beat.index}</span>
-          <h3 class="font-display text-h4 text-chalk tracking-display mt-4 text-balance">
-            {beat.heading}
-          </h3>
-          <p class="text-steel text-body leading-body mt-4">{beat.body}</p>
-        </article>
+        <li class="flex">
+          <article class="border-steel/15 bg-concrete/40 rounded-2 flex flex-1 flex-col border p-7">
+            <span class="text-steel text-caption font-mono tracking-widest">{beat.index}</span>
+            <h3 class="font-display text-h4 text-chalk tracking-display mt-4 text-balance">
+              {beat.heading}
+            </h3>
+            <p class="text-steel text-body leading-body mt-4">{beat.body}</p>
+          </article>
+        </li>
       ))
     }
   </ol>

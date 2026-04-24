@@ -1,0 +1,57 @@
+---
+// T048 — Step 04 of the four-step loop. Covers the ActionOutcome
+// mechanism from ADR-005 §5.4: the next session's measured value is
+// compared against the driver's own baseline and the prescription
+// resolves to one of three verdicts (closed / improving / still
+// open). No partial credit, no subjective judgement — the loop's
+// closure condition is a number, not an opinion. Principle 6 of
+// 01-STRATEGIC-DOCTRINE.md §4 mandates this falsifiability: "every
+// coaching insight ships with a measurable success condition."
+
+interface ImproveBeat {
+  heading: string;
+  body: string;
+}
+
+const BEATS: ImproveBeat[] = [
+  {
+    heading: 'Measured against your baseline',
+    body: "The next session's numbers are compared to your own baseline — not a pro driver's, not a cohort average. Your baseline moves as you improve, so the target for the same weakness gets harder over time.",
+  },
+  {
+    heading: 'Three verdicts, never "kind of"',
+    body: 'Every line of the plan gets one of three outcomes: closed, improving, or still open. No partial credit — either the number moved or it did not. Closed patterns give up their spot on the plan; open patterns get a revised drill next session.',
+  },
+];
+
+const HEADING_ID = 'how-it-works-improve-heading';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto mt-24 w-full max-w-6xl border-t pt-24 sm:mt-32 sm:pt-32"
+>
+  <header class="max-w-prose">
+    <p class="text-steel text-caption tracking-wide uppercase">Step 04</p>
+    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+      Every target either hits or misses.
+    </h2>
+    <p class="text-steel text-body mt-5">
+      After you drive the planned session, LAP compares the new telemetry to the targets the plan
+      set — and writes a verdict on every drill before your next practice slot opens.
+    </p>
+  </header>
+
+  <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-6">
+    {
+      BEATS.map((beat) => (
+        <article class="border-steel/15 bg-concrete/40 rounded-2 flex flex-col border p-7">
+          <h3 class="font-display text-h4 text-chalk tracking-display text-balance">
+            {beat.heading}
+          </h3>
+          <p class="text-steel text-body leading-body mt-4">{beat.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

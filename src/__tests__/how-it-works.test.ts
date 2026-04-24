@@ -102,3 +102,16 @@ test('T047: the "Plan" section lands after Brain (step 03 follows 02)', async ()
   expect(brainIdx).toBeGreaterThan(-1);
   expect(planIdx).toBeGreaterThan(brainIdx);
 });
+
+test('T048: the "Improve" section lands after Plan — four-step loop complete', async () => {
+  // Integration check: Improve (step 04) is the last of the four
+  // loop-step sections. With this in place the page walks the reader
+  // through all four steps T043's hero subhead names, in the same
+  // clockwise order as the T044 diagram.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Every target either hits or misses[\s\S]*<\/h2>/);
+  const planIdx = html.indexOf('A plan sized to the next session');
+  const improveIdx = html.indexOf('Every target either hits or misses');
+  expect(planIdx).toBeGreaterThan(-1);
+  expect(improveIdx).toBeGreaterThan(planIdx);
+});

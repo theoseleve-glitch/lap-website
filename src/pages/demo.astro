@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// T072 — shell for /demo. The route is referenced from the sprint brief
+// (Block E) as the "watch it work before you sign up" on-ramp. Shipping
+// the shell means the secondary CTA path (hero → /demo) resolves to a
+// real page instead of 404ing while T073 decides format (video vs.
+// annotated screenshots), T074 lands the 3-minute walkthrough, T077
+// pre-seeds the sample session, T078 wires the post-demo trial CTA,
+// and T079-T090 cover perf, SEO, a11y, and e2e.
+
+// Doctrine-aligned scent: the <title> + description set expectations
+// before the visitor decides to watch. "Session walkthrough" matches
+// T074's 3-min video content (one real session from capture → plan);
+// "no sign-up required" names the friction we've removed, which is
+// the single most relevant decision point for a cold visitor. Loop
+// rule enforced: natural prose, not keyword soup.
+const TITLE = 'Demo — LAP';
+const DESCRIPTION =
+  'A three-minute session walkthrough — what gets captured, what the brain finds, what the next session plan looks like. No sign-up required.';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-steel text-caption tracking-wide uppercase">Demo</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        See LAP in action.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        A three-minute session walkthrough — what gets captured, what the brain finds, and what the
+        next session plan looks like. No sign-up required.
+      </p>
+    </header>
+  </main>
+</BaseLayout>

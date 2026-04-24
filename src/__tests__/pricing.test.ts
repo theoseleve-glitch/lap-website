@@ -60,3 +60,16 @@ test('T057: copy stays doctrine-aligned — no AI-coach / LLM / generative', asy
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
   expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
 });
+
+test('T058: the tier card is mounted on /pricing below the header', async () => {
+  // Integration check: the PricingTierCard ships the €15/€150
+  // prices + trial badge + CTAs. Its mount on /pricing is what
+  // makes this page do its job — without it, the shell from T057
+  // is just text. Match the tier card's unique wiring (the
+  // ?plan=monthly CTA href) rather than price strings, since the
+  // shell's subhead already contains "14-day free trial" + price
+  // anchors and would false-pass a content-only check.
+  const html = await render();
+  expect(html).toMatch(/<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup\?plan=monthly"/);
+  expect(html).toMatch(/<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup\?plan=yearly"/);
+});

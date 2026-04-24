@@ -163,3 +163,18 @@ test('T032 "Coming from Garage61 or MoTeC" comparison lands after T031', async (
   expect(t031Idx).toBeGreaterThan(-1);
   expect(t032Idx).toBeGreaterThan(t031Idx);
 });
+
+test('T033 "Not for you if" anti-persona disclosure lands after T032', async () => {
+  // Integration check: the anti-persona disclosure closes the
+  // qualification arc (persona-fit → competitive frame → mis-fit
+  // disclosure) before the page hands off to the pricing CTA in T034.
+  // Ordering matters — revealing who the product ISN'T for before
+  // comparing to competitors would read defensively; after, it reads
+  // as the honest close.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Not for you if[\s\S]*<\/h2>/);
+  const t032Idx = html.indexOf('Coming from Garage61 or MoTeC');
+  const t033Idx = html.indexOf('Not for you if');
+  expect(t032Idx).toBeGreaterThan(-1);
+  expect(t033Idx).toBeGreaterThan(t032Idx);
+});

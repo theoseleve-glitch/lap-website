@@ -1,0 +1,41 @@
+---
+// T062 — B2B inbound teaser. Doctrine §8 scope: "B2B (racing
+// schools, karting academies): door open, outbound starts only
+// in Month 5. No roadmap feature work in 6mo beyond multi-seat
+// billing which is a Month 6 item if inbound demand appears."
+//
+// The teaser is an INBOUND signal — a visible place on the
+// pricing page where interested operators can self-identify.
+// /for-schools route is T201 (Block J); linking to it today
+// means a temporary 404 until T201 lands (same forward-link
+// pattern as T034 → T057 /pricing).
+
+const HEADING_ID = 'pricing-b2b-teaser-heading';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto mt-24 w-full max-w-6xl border-t pt-24 sm:mt-32 sm:pt-32"
+>
+  <article
+    class="border-steel/10 bg-concrete/20 rounded-2 mx-auto flex max-w-2xl flex-col border p-8 sm:p-10"
+  >
+    <p class="text-steel text-caption tracking-wide uppercase">For teams</p>
+    <h2 id={HEADING_ID} class="font-display text-h3 text-chalk tracking-display mt-4 text-balance">
+      Running a racing academy?
+    </h2>
+    <p class="text-steel text-body leading-body mt-5">
+      The €15 tier is priced for individual drivers. Racing schools and karting academies run a
+      different workflow — multi-seat billing, cohort reporting, progression at roster scale. If
+      that describes your operation, we would like to hear from you.
+    </p>
+    <p class="mt-6">
+      <a
+        href="/for-schools"
+        class="text-chalk hover:text-acid-green focus-visible:outline-chalk text-body underline underline-offset-4 transition"
+      >
+        Talk to us &rarr;
+      </a>
+    </p>
+  </article>
+</section>

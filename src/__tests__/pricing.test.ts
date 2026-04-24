@@ -115,3 +115,17 @@ test('T061: the FAQ accordion is mounted after the founder offer', async () => {
   expect(founderIdx).toBeGreaterThan(-1);
   expect(faqIdx).toBeGreaterThan(founderIdx);
 });
+
+test('T062: the B2B teaser lands after the FAQ', async () => {
+  // Integration check: B2B teaser is the last section before
+  // the page-close CTA (T063+). Reader arc: price → inventory →
+  // founder offer → objections → "and if you're a school,
+  // here's your door." Doctrine §8 B2B is "door open", not a
+  // primary call — placement at the bottom respects that.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Running a racing academy/);
+  const faqIdx = html.indexOf('Common questions');
+  const b2bIdx = html.indexOf('Running a racing academy');
+  expect(faqIdx).toBeGreaterThan(-1);
+  expect(b2bIdx).toBeGreaterThan(faqIdx);
+});

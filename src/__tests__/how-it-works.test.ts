@@ -91,3 +91,14 @@ test('T046: the "Brain" section lands after Capture (step 02 follows 01)', async
   expect(captureIdx).toBeGreaterThan(-1);
   expect(brainIdx).toBeGreaterThan(captureIdx);
 });
+
+test('T047: the "Plan" section lands after Brain (step 03 follows 02)', async () => {
+  // Integration check: the next-session plan section follows the
+  // Brain section. Reader arc: brain analyses → plan emits.
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*A plan sized to the next session[\s\S]*<\/h2>/);
+  const brainIdx = html.indexOf('The brain lives on the server');
+  const planIdx = html.indexOf('A plan sized to the next session');
+  expect(brainIdx).toBeGreaterThan(-1);
+  expect(planIdx).toBeGreaterThan(brainIdx);
+});

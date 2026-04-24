@@ -1,0 +1,59 @@
+---
+// T047 — Step 03 of the four-step loop. Describes what the server
+// emits after analysis: a plan sized to a single next session.
+// Anchored in 01-STRATEGIC-DOCTRINE.md §4 principle 6 — "the loop
+// closes or the feature doesn't ship. Every coaching insight ships
+// with observation → evidence → likely cause → prescribed action →
+// MEASURABLE success condition → review-next-session." The two
+// beats lock the plan's size (executable in one practice slot) and
+// its precision (target metric + target value) — the two things
+// that separate LAP's output from a MoTeC "here's a graph" session
+// review.
+
+interface PlanBeat {
+  heading: string;
+  body: string;
+}
+
+const BEATS: PlanBeat[] = [
+  {
+    heading: 'One session, one plan',
+    body: 'A plan never asks more of you than you can execute in a single practice slot. Three or four drills max, each sized to a handful of laps — not a quarter-hour video to watch before you drive.',
+  },
+  {
+    heading: 'Target metric, target value',
+    body: 'Every drill ships with a number you can hit or miss — "trail-release to 12% at apex over three sessions," "minimum speed +1.5 km/h at T6 at Spa over five laps." Vague coaching ("brake later") is not a drill; a measurable number is.',
+  },
+];
+
+const HEADING_ID = 'how-it-works-plan-heading';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto mt-24 w-full max-w-6xl border-t pt-24 sm:mt-32 sm:pt-32"
+>
+  <header class="max-w-prose">
+    <p class="text-steel text-caption tracking-wide uppercase">Step 03</p>
+    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+      A plan sized to the next session.
+    </h2>
+    <p class="text-steel text-body mt-5">
+      After the brain finishes analysing a session, it emits a plan — not a graph, not a long
+      report, but a short list of drills you can execute in the next practice slot.
+    </p>
+  </header>
+
+  <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-6">
+    {
+      BEATS.map((beat) => (
+        <article class="border-steel/15 bg-concrete/40 rounded-2 flex flex-col border p-7">
+          <h3 class="font-display text-h4 text-chalk tracking-display text-balance">
+            {beat.heading}
+          </h3>
+          <p class="text-steel text-body leading-body mt-4">{beat.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

@@ -144,3 +144,41 @@ test('T088: meta description carries the "sim racing telemetry" noun phrase', as
   expect(descMatch).not.toBeNull();
   expect(descMatch![1].toLowerCase()).toContain('sim racing telemetry');
 });
+
+test('T089: /demo renders a link to /how-it-works', async () => {
+  // Sprint T089 places related links to /how-it-works + /pricing
+  // on /demo so a reader who watched the walkthrough but isn't
+  // ready to start a trial has somewhere else to go. The
+  // /how-it-works link is the missing piece — FinalCta already
+  // carries a /pricing link — so its presence is the T089 signal.
+  const html = await render();
+  expect(html).toMatch(/<a[^>]+href="\/how-it-works"/);
+});
+
+test('T089: related-links footer contains both /how-it-works and /pricing', async () => {
+  // Both links appear inside a <footer> wrapper so the pattern is
+  // visually + structurally identifiable as a "see also" block —
+  // distinct from the FinalCta's embedded "See full pricing" link.
+  // Counting both links *inside the footer* is what locks T089's
+  // intent: a dedicated related-pages section, not ad-hoc inline
+  // references.
+  const html = await render();
+  const footerMatch = html.match(/<footer[\s\S]*?<\/footer>/);
+  expect(footerMatch).not.toBeNull();
+  const footerHtml = footerMatch![0];
+  expect(footerHtml).toMatch(/href="\/how-it-works"/);
+  expect(footerHtml).toMatch(/href="\/pricing"/);
+});
+
+test('T089: related-links footer lands after the FinalCta in document order', async () => {
+  // Reader flow: walkthrough → testimonials → trial CTA →
+  // related links. Putting related-links BEFORE the CTA would
+  // invite the reader to wander off before the primary ask; after
+  // the CTA, the links serve as a fallback path for readers who
+  // decided not to trial but still want to learn more.
+  const html = await render();
+  const ctaIdx = html.indexOf('Start 14-day trial');
+  const hiwLinkIdx = html.indexOf('href="/how-it-works"');
+  expect(ctaIdx).toBeGreaterThan(-1);
+  expect(hiwLinkIdx).toBeGreaterThan(ctaIdx);
+});

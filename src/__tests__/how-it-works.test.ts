@@ -54,3 +54,13 @@ test('T042: /how-it-works title includes "LAP" branding (BaseLayout integration)
   const html = await render();
   expect(html).toMatch(/<title>[^<]*LAP[^<]*<\/title>/);
 });
+
+test('T044: the annotated SVG diagram is mounted on the page', async () => {
+  // Integration check: the HowItWorksDiagram component (SVG + text
+  // alt) ships below the hero. T044 moves the four-step framing
+  // from abstract words (hero subhead) to a visual representation —
+  // this test catches accidental unmounting.
+  const html = await render();
+  expect(html).toMatch(/<figure[^>]+role="img"/);
+  expect(html).toMatch(/<svg[^>]+viewBox=/);
+});

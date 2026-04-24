@@ -1,0 +1,199 @@
+---
+// T044 — annotated SVG diagram. A 2×2 feedback loop showing the
+// four steps T043's hero names: capture → brain → plan → improve.
+// Doctrine anchor per ADR-005: each node is a first-class backend
+// surface — capture schema, §5.2–§5.4 brain (WeaknessEpisode,
+// ActionPrescription, ActionOutcome), next-session plan, and §5.1
+// DriverProgressSnapshot. The figcaption carries the full text
+// alternative as a visible ordered list so sighted and SR users
+// read the same content.
+
+interface Step {
+  name: string;
+  description: string;
+}
+
+const STEPS: Step[] = [
+  {
+    name: 'Capture',
+    description:
+      'Every session — sim or real — finalises into one canonical session bundle across iRacing, ACC, AMS2, RaceBox, and phone capture.',
+  },
+  {
+    name: 'Brain',
+    description:
+      'The backend groups recurring patterns into weakness episodes and pairs each one with a concrete drill from a rule-based coaching library.',
+  },
+  {
+    name: 'Plan',
+    description:
+      'Open patterns become a next-session plan: a target metric, a target value, and the session count you should execute it across.',
+  },
+  {
+    name: 'Improve',
+    description:
+      "The next session's measured value hits the target or does not; LAP marks the weakness closed, improving, or still open — and the loop starts again.",
+  },
+];
+
+const TITLE_ID = 'how-it-works-diagram-title';
+const DESC_ID = 'how-it-works-diagram-desc';
+---
+
+<figure
+  role="img"
+  aria-labelledby={TITLE_ID}
+  aria-describedby={DESC_ID}
+  class="border-steel/15 bg-concrete/40 rounded-2 flex flex-col gap-8 border p-6 md:flex-row md:items-center md:gap-10 md:p-8"
+>
+  <svg
+    viewBox="0 0 600 400"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    class="w-full flex-1 md:max-w-lg"
+  >
+    <defs>
+      <marker
+        id="how-it-works-arrow"
+        viewBox="0 0 10 10"
+        refX="8"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto"
+      >
+        <path d="M0,0 L10,5 L0,10 Z" fill="var(--color-steel)"></path>
+      </marker>
+    </defs>
+
+    <!-- Capture (top-left) -->
+    <rect
+      x="40"
+      y="40"
+      width="180"
+      height="80"
+      rx="8"
+      fill="var(--color-asphalt)"
+      stroke="var(--color-steel)"
+      stroke-opacity="0.5"></rect>
+    <text
+      x="130"
+      y="90"
+      text-anchor="middle"
+      font-family="var(--font-display)"
+      font-size="28"
+      fill="var(--color-chalk)">Capture</text
+    >
+
+    <!-- Brain (top-right) -->
+    <rect
+      x="380"
+      y="40"
+      width="180"
+      height="80"
+      rx="8"
+      fill="var(--color-asphalt)"
+      stroke="var(--color-steel)"
+      stroke-opacity="0.5"></rect>
+    <text
+      x="470"
+      y="90"
+      text-anchor="middle"
+      font-family="var(--font-display)"
+      font-size="28"
+      fill="var(--color-chalk)">Brain</text
+    >
+
+    <!-- Plan (bottom-right) -->
+    <rect
+      x="380"
+      y="280"
+      width="180"
+      height="80"
+      rx="8"
+      fill="var(--color-asphalt)"
+      stroke="var(--color-steel)"
+      stroke-opacity="0.5"></rect>
+    <text
+      x="470"
+      y="330"
+      text-anchor="middle"
+      font-family="var(--font-display)"
+      font-size="28"
+      fill="var(--color-chalk)">Plan</text
+    >
+
+    <!-- Improve (bottom-left) -->
+    <rect
+      x="40"
+      y="280"
+      width="180"
+      height="80"
+      rx="8"
+      fill="var(--color-asphalt)"
+      stroke="var(--color-steel)"
+      stroke-opacity="0.5"></rect>
+    <text
+      x="130"
+      y="330"
+      text-anchor="middle"
+      font-family="var(--font-display)"
+      font-size="28"
+      fill="var(--color-chalk)">Improve</text
+    >
+
+    <!-- Clockwise arrows -->
+    <line
+      x1="220"
+      y1="80"
+      x2="378"
+      y2="80"
+      stroke="var(--color-steel)"
+      stroke-width="2"
+      marker-end="url(#how-it-works-arrow)"></line>
+    <line
+      x1="470"
+      y1="120"
+      x2="470"
+      y2="278"
+      stroke="var(--color-steel)"
+      stroke-width="2"
+      marker-end="url(#how-it-works-arrow)"></line>
+    <line
+      x1="380"
+      y1="320"
+      x2="222"
+      y2="320"
+      stroke="var(--color-steel)"
+      stroke-width="2"
+      marker-end="url(#how-it-works-arrow)"></line>
+    <line
+      x1="130"
+      y1="280"
+      x2="130"
+      y2="122"
+      stroke="var(--color-steel)"
+      stroke-width="2"
+      marker-end="url(#how-it-works-arrow)"></line>
+  </svg>
+
+  <figcaption class="flex-1 md:max-w-sm">
+    <h3 id={TITLE_ID} class="font-display text-h4 text-chalk tracking-display text-balance">
+      The four-step loop
+    </h3>
+    <ol id={DESC_ID} class="text-steel text-body mt-5 flex flex-col gap-4">
+      {
+        STEPS.map((step, i) => (
+          <li class="flex gap-3">
+            <span class="text-steel shrink-0 font-mono tracking-wide">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span>
+              <strong class="text-chalk font-medium">{step.name}.</strong> {step.description}
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </figcaption>
+</figure>

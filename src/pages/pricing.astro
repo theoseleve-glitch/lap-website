@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PricingTierCard from '../components/PricingTierCard.astro';
+import PricingIncluded from '../components/PricingIncluded.astro';
 
 // T057 — shell for the /pricing page. The homepage T034 FinalCta
 // (and its /how-it-works mirror via T052) links to /pricing via
@@ -30,5 +31,6 @@ const DESCRIPTION =
     </header>
 
     <PricingTierCard />
+    <PricingIncluded />
   </main>
 </BaseLayout>

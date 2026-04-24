@@ -73,3 +73,16 @@ test('T058: the tier card is mounted on /pricing below the header', async () => 
   expect(html).toMatch(/<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup\?plan=monthly"/);
   expect(html).toMatch(/<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup\?plan=yearly"/);
 });
+
+test('T059: the "What\'s included" checklist is mounted after the tier card', async () => {
+  // Integration check: the 12-bullet checklist lands below the
+  // tier card. Ordering matters — the reader sees price first,
+  // then the full inventory, which matches the mental sequence
+  // "is this affordable?" → "is it enough?"
+  const html = await render();
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*What(?:'|&#39;|&apos;|&rsquo;)s included/);
+  const tierIdx = html.indexOf('Full LAP access');
+  const includedIdx = html.search(/What(?:'|&#39;|&apos;|&rsquo;)s included/);
+  expect(tierIdx).toBeGreaterThan(-1);
+  expect(includedIdx).toBeGreaterThan(tierIdx);
+});

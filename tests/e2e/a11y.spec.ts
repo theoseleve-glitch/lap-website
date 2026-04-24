@@ -93,3 +93,25 @@ test('T068: /pricing has zero WCAG 2.1 A/AA axe violations', async ({ page }) =>
     results.violations.length ? `axe violations:\n  - ${summary}` : 'clean',
   ).toEqual([]);
 });
+
+test('T083: /demo has zero WCAG 2.1 A/AA axe violations', async ({ page }) => {
+  // /demo is static (no GSAP) — the T072 shell + T073 walkthrough
+  // placeholder are plain HTML. Axe gates the single <main>
+  // landmark + <section aria-labelledby> wiring, the H1 → H2
+  // hierarchy, and the muted-card placeholder's text-steel on
+  // bg-concrete/20 contrast (same token pairing T035 SocialProof
+  // passes axe with; a regression in either direction fails this
+  // test before it ships to prod). When T074 lands the lazy-loaded
+  // iframe, this gate also catches missing title attributes / iframe
+  // accessibility regressions in the same CI pass.
+  await page.goto('/demo');
+  const results = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze();
+
+  const summary = buildSummary(results.violations);
+  expect(
+    results.violations,
+    results.violations.length ? `axe violations:\n  - ${summary}` : 'clean',
+  ).toEqual([]);
+});

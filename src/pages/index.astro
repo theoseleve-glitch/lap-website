@@ -3,12 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 
 // T023 locks the headline to Option B from 01-STRATEGIC-DOCTRINE.md §2.
-// See src/__tests__/homepage.test.ts for the rationale and a regression
-// test that pins the exact string. The subhead, primary CTA href, and
-// secondary CTA href below are placeholders refined in T024, T025, T026
-// respectively — any edit there should keep the Hero contract intact.
+// T024 locks the subhead below — the "ecosystem pitch" beat that
+// stacks under the headline and delivers the doctrine's category claim
+// ("Driver OS"), the cross-platform promise, and the progression echo.
+// Primary CTA href and secondary CTA href remain placeholders refined
+// in T025, T026 respectively.
 const HEADLINE = 'Every lap, one step better.';
-const SUBHEAD = 'The Driver OS for serious sim racers.';
+const SUBHEAD =
+  'The cross-platform Driver OS that turns every sim and real-world session into measurable progress.';
 const PRIMARY_CTA = {
   text: 'Start 14-day trial',
   href: 'https://app.lap-coach.racing/signup',

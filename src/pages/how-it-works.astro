@@ -16,9 +16,15 @@ import FinalCta from '../components/FinalCta.astro';
 // next-session plan / §5.1 DriverProgressSnapshot). SEO retuning
 // per targeted keyword lands in T054.
 
-const TITLE = 'How LAP works — LAP';
+// T054 — SEO meta tuned for the long-tail keyword "sim racing
+// coaching platform how it works". Title leads with the action
+// ("How LAP works") and closes with the target noun phrase so a
+// SERP snippet reads naturally rather than as keyword soup.
+// Description leads with the target phrase and paraphrases the
+// page's four-step scaffold to match the content below.
+const TITLE = 'How LAP works — the sim racing coaching platform';
 const DESCRIPTION =
-  'The coaching loop, the sim↔real bridge, and the data model behind them — how LAP turns every sim and real-world session into a plan for the next one.';
+  'The sim racing coaching platform that turns every sim and real-world session into a next-session plan. Capture, brain, plan, improve — four steps, one loop.';
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>

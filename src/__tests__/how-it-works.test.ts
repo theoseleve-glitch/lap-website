@@ -55,6 +55,31 @@ test('T042: /how-it-works title includes "LAP" branding (BaseLayout integration)
   expect(html).toMatch(/<title>[^<]*LAP[^<]*<\/title>/);
 });
 
+test('T054: <title> carries the "sim racing coaching platform" target keyword', async () => {
+  // Sprint T054 targets the long-tail keyword "sim racing coaching
+  // platform how it works" for this page. Putting the core noun
+  // phrase in the <title> gives the single strongest ranking
+  // signal. The phrasing stays natural — the loop rules forbid
+  // keyword soup ("human-quality professional prose, not SEO
+  // keyword soup").
+  const html = await render();
+  const titleMatch = html.match(/<title>([^<]+)<\/title>/);
+  expect(titleMatch).not.toBeNull();
+  expect(titleMatch![1].toLowerCase()).toContain('sim racing coaching platform');
+});
+
+test('T054: meta description carries the target keyword and stays readable', async () => {
+  // The description shows on SERP below the title. Leading with
+  // the target keyword rewards the query match and tells the
+  // reader within the first few words that they are in the right
+  // place. No comma-delimited keyword list — the description
+  // must read as a sentence.
+  const html = await render();
+  const descMatch = html.match(/<meta\s+name="description"\s+content="([^"]+)"/);
+  expect(descMatch).not.toBeNull();
+  expect(descMatch![1].toLowerCase()).toContain('sim racing coaching platform');
+});
+
 test('T044: the annotated SVG diagram is mounted on the page', async () => {
   // Integration check: the HowItWorksDiagram component (SVG + text
   // alt) ships below the hero. T044 moves the four-step framing

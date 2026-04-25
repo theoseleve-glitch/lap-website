@@ -101,3 +101,85 @@ test('T120: page has a back-link to the /product overview', async () => {
   const html = await render();
   expect(html).toMatch(/<a[^>]+href="\/product"/);
 });
+
+// Helper for T121: extract the samples section by aria-labelledby.
+// Section-scoped pattern matches the bridge/mobile precedent — a
+// stray reference elsewhere in the page does NOT satisfy the
+// structural contract for the samples section. T120 already names
+// "weakness" / "prescription" / "rule" page-wide, so without this
+// scope the new tests would pass on the T120 base alone.
+function extractSamplesSection(html: string): string {
+  const match = html.match(
+    /<section[^>]+aria-labelledby="[^"]*samples[^"]*"[^>]*>([\s\S]*?)<\/section>/i,
+  );
+  return match ? match[1] : '';
+}
+
+test('T121: page has a dedicated samples section', async () => {
+  // T120 base shell ends at "Rule → prescription"; the samples
+  // section is what makes the catalog claim concrete — a reader
+  // who scans for "show me a rule" should land on a heading.
+  const html = await render();
+  expect(html).toMatch(/<section[^>]+aria-labelledby="[^"]*samples/i);
+});
+
+test('T121: samples section contains 3 distinct sample headings (catalog, not anecdote)', async () => {
+  // One sample reads as a hand-picked anecdote; three or more
+  // reads as a catalog with shape coverage. The library framing
+  // requires multiple visible rules.
+  const html = await render();
+  const section = extractSamplesSection(html);
+  expect(section).not.toBe('');
+  const headings = section.match(/<h3[\s>][\s\S]*?<\/h3>/gi) ?? [];
+  expect(headings.length).toBeGreaterThanOrEqual(3);
+});
+
+test('T121: samples section names a specific track corner / named circuit', async () => {
+  // Generic "fast right-hander" loses sim racers. A named corner
+  // (Spa La Source, Brands Hatch Druids, Silverstone Copse, etc.)
+  // makes the example concrete. Lock at least one named circuit
+  // or named corner so a future copy edit cannot quietly
+  // genericise to "a slow corner."
+  const html = await render();
+  const section = extractSamplesSection(html);
+  expect(section).toMatch(
+    /Spa|La Source|Eau Rouge|Pouhon|Brands Hatch|Druids|Suzuka|130R|Silverstone|Copse|Maggotts|Becketts|Nordschleife|Imola|Monza|Mount Panorama/i,
+  );
+});
+
+test('T121: samples section names a measurable success condition', async () => {
+  // ADR-005 §5.3 SuccessCondition — every prescription must have
+  // a measurable target. The marketing surface has to show the
+  // numerical commitment (km/h, %, sessions, etc.) so readers
+  // see that "rules-based" means "auditable", not "vibes." A
+  // page without numbers in the samples is the exact failure
+  // mode this lock prevents.
+  const html = await render();
+  const section = extractSamplesSection(html);
+  expect(section).toMatch(/\d+\s*(km\/h|kmh|%|sessions?|days?|laps?)/i);
+});
+
+test('T121: samples section names a coaching library rule-id-like reference (ADR-013 pattern)', async () => {
+  // ADR-013 rule format uses dotted lower-snake ids like
+  // "br.late_braking.apex_speed_loss". Showing one rule id on
+  // the marketing page anchors the "catalog of named, versioned
+  // rules" claim — readers see a concrete identifier, not a
+  // black box. Locked inside the samples section so a stray
+  // dotted token elsewhere (filenames, etc.) does NOT satisfy.
+  const html = await render();
+  const section = extractSamplesSection(html);
+  expect(section).toMatch(/[a-z]+\.[a-z_]+/);
+});
+
+test('T121: samples section names at least one drill / action verb', async () => {
+  // The prescription is the "do this next session" output. A
+  // sample that surfaces only the weakness without naming a drill
+  // (or actionable verb — release, brake, throttle) collapses
+  // to "here is your problem" without "here is what you do."
+  // Lock the actionable side too.
+  const html = await render();
+  const section = extractSamplesSection(html);
+  expect(section.toLowerCase()).toMatch(
+    /\b(drill|trail.brake|throttle|release|brake later|brake earlier|input)\b/,
+  );
+});

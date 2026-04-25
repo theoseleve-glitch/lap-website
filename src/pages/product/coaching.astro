@@ -95,6 +95,110 @@ const DESCRIPTION =
       </section>
 
       <section
+        aria-labelledby="coaching-samples-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">
+          Three samples from the library
+        </p>
+        <h2
+          id="coaching-samples-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          What a rule looks like in practice.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          Three rules from the library, one in each pedal axis — one braking, one throttle, one
+          cornering. Each shows the same shape: which weakness it catches, what the prescription
+          asks of you, and the measurable success condition the platform will check against your
+          next sessions.
+        </p>
+
+        <article class="border-steel/10 mt-10 border-l-2 pl-6">
+          <p class="text-steel text-caption tracking-wide uppercase">Braking · Spa · La Source</p>
+          <h3 class="font-display text-h4 text-chalk tracking-display mt-2 text-balance">
+            The trail-brake release that costs five km/h at the apex of La Source.
+          </h3>
+          <p class="text-steel text-caption mt-2 font-mono">
+            Rule <code class="text-acid-green">br.late_braking.apex_speed_loss</code>
+            · severity medium · category technique
+          </p>
+          <p class="text-steel text-body leading-body mt-4">
+            The detector flagged your apex speed at La Source running about
+            <strong class="text-chalk font-medium">5 km/h</strong> under your reference for the same car
+            and track combination — three laps in this session, twice more in the previous two weeks.
+            The signal trace shows the trail-brake release falling off too sharply mid-corner: pressure
+            drops to zero before the car has rotated, the front loses grip, and the apex line opens up.
+          </p>
+          <p class="text-steel text-body leading-body mt-4">
+            The prescription asks for a softer release: 5–10% pedal pressure carried past turn-in,
+            eased off as you pick up the throttle. The drill is one practice stint isolating the
+            corner, focused on the pedal trace shape rather than the lap time. Success condition:
+            apex speed at La Source ≥
+            <strong class="text-chalk font-medium">96%</strong> of your reference, measured over the next
+            <strong class="text-chalk font-medium">3 sessions</strong> on the same car class.
+          </p>
+        </article>
+
+        <article class="border-steel/10 mt-10 border-l-2 pl-6">
+          <p class="text-steel text-caption tracking-wide uppercase">
+            Throttle · Brands Hatch · Druids
+          </p>
+          <h3 class="font-display text-h4 text-chalk tracking-display mt-2 text-balance">
+            The early throttle pickup that scrubs exit speed at Druids.
+          </h3>
+          <p class="text-steel text-caption mt-2 font-mono">
+            Rule <code class="text-acid-green">th.early_throttle_pickup.exit_traction_loss</code>
+            · severity medium · category technique
+          </p>
+          <p class="text-steel text-body leading-body mt-4">
+            The detector flagged the exit of Druids: throttle going to full while the steering input
+            is still above the traction threshold for your car class, recorded twice in the session
+            with brief lift-and-recover events both times. On a rear-driven GT3 that small misorder
+            costs you the run all the way down to Graham Hill bend, because the exit slide bleeds
+            about a tenth of a second of speed onto the next straight.
+          </p>
+          <p class="text-steel text-body leading-body mt-4">
+            The prescription asks you to delay full throttle until the steering has unwound past
+            roughly half-lock, picking up progressively rather than punching the pedal off the apex.
+            The drill is three exits of Druids in isolation, watching the steering-vs-throttle
+            overlay rather than the speed trace. Success condition: zero traction-circle violations
+            on Druids exit, measured over the next <strong class="text-chalk font-medium"
+              >3 sessions</strong
+            >.
+          </p>
+        </article>
+
+        <article class="border-steel/10 mt-10 border-l-2 pl-6">
+          <p class="text-steel text-caption tracking-wide uppercase">
+            Cornering · Silverstone · Copse
+          </p>
+          <h3 class="font-display text-h4 text-chalk tracking-display mt-2 text-balance">
+            The corner-entry oversteer at Copse you can&rsquo;t see in the mirrors.
+          </h3>
+          <p class="text-steel text-caption mt-2 font-mono">
+            Rule <code class="text-acid-green">en.entry_oversteer.steering_overshoot</code>
+            · severity high · category platform-balance
+          </p>
+          <p class="text-steel text-body leading-body mt-4">
+            The detector flagged corner-entry yaw oscillation at Copse: more than two corrective
+            steering inputs while still on the brake, four laps in a row. The car rotates faster
+            than your hands settle, you catch it on the wheel, and the line scrubs out toward
+            track-out. From the cockpit it feels like the car &ldquo;just is&rdquo; loose; the trace
+            shows the trail-brake holding load on the front longer than the platform can stabilise.
+          </p>
+          <p class="text-steel text-body leading-body mt-4">
+            The prescription asks for an earlier brake release into Copse, gentler steering input on
+            turn-in, and weight-transfer managed with the pedal rather than the wheel. The drill
+            targets ten clean Copse entries with the steering-correction count visible live. Success
+            condition: ≤ <strong class="text-chalk font-medium">1</strong>
+            mid-corner steering correction at Copse, measured over the next
+            <strong class="text-chalk font-medium">3 sessions</strong>.
+          </p>
+        </article>
+      </section>
+
+      <section
         aria-labelledby="coaching-outcomes-heading"
         class="border-steel/15 max-w-prose border-t pt-10"
       >

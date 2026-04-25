@@ -81,3 +81,55 @@ test('T113: copy stays doctrine-aligned — no AI-coach / LLM / generative', asy
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
   expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
 });
+
+// Helper for T115: extract the RaceBox section by aria-labelledby.
+// Locking section-scoped content (not page-wide) means a future
+// edit that strips the dedicated section but leaves the keyword
+// somewhere in prose still fails the structural contract.
+function extractRaceBoxSection(html: string): string {
+  const match = html.match(
+    /<section[^>]+aria-labelledby="[^"]*racebox[^"]*"[^>]*>([\s\S]*?)<\/section>/i,
+  );
+  return match ? match[1] : '';
+}
+
+test('T115: page has a dedicated RaceBox integration section', async () => {
+  // T113 brief-mentioned RaceBox in the capture section; T115
+  // expands it to its own aria-labelled section so the
+  // hardware-tier ladder (phone GPS → RaceBox → ...) is visible
+  // at a scan instead of buried in prose. Same anchored-section
+  // pattern as supported-sims and system-requirements on /product/
+  // desktop.
+  const html = await render();
+  expect(html).toMatch(/<section[^>]+aria-labelledby="[^"]*racebox/i);
+});
+
+test('T115: RaceBox section heading names "RaceBox"', async () => {
+  // Locked at the section level (not page-wide) — a brief inline
+  // mention in another section satisfies "page has RaceBox" but
+  // not "the section's heading is about RaceBox".
+  const html = await render();
+  const section = extractRaceBoxSection(html);
+  expect(section).not.toBe('');
+  expect(section).toMatch(/RaceBox/);
+});
+
+test('T115: RaceBox section names the sample-rate advantage (25Hz / Hz / GNSS)', async () => {
+  // Naming the actual technical spec inside the RaceBox section
+  // lets track-day drivers evaluate "real data" vs "phone-grade".
+  // Vagueness ("better accuracy") fails the comparison test —
+  // drivers are sceptical of marketing-grade promises about GPS.
+  const html = await render();
+  const section = extractRaceBoxSection(html);
+  expect(section.toLowerCase()).toMatch(/(25\s*hz|10\s*hz|gnss|sample rate)/);
+});
+
+test('T115: RaceBox section names bluetooth as the connection method', async () => {
+  // The setup question every visitor asks: "how does it pair?".
+  // Bluetooth is the answer; locked inside the RaceBox section
+  // so a future edit that drops the connection method (and leaves
+  // the visitor wondering whether they need a USB cable) fails.
+  const html = await render();
+  const section = extractRaceBoxSection(html);
+  expect(section.toLowerCase()).toMatch(/bluetooth/);
+});

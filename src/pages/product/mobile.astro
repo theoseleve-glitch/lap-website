@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// T113 — /product/mobile. Second per-pillar product page after
+// /product/desktop. Two sprint-spec areas: real-life capture +
+// Android. Sub-tasks layer onto this base:
+//   * T114 — Google Play badge (BLOCKED until app is in Play
+//     Store, which depends on the Android app shipping)
+//   * T115 — RaceBox integration explained
+//   * T116 — Wear OS companion mentioned
+//
+// Doctrine §9 timeline anchors the platform story: Android in M2
+// (closed beta, 2026-06-22), iOS in M5 (V1 release, 2026-09-23).
+// Pre-launch only Android is shipping, so the page must explicitly
+// disclose iOS-not-yet for the same reason /product/desktop
+// discloses macOS-not-yet — anti-persona for iOS-only racers.
+
+const TITLE = 'LAP for mobile — real-world capture, Android — LAP';
+const DESCRIPTION =
+  'LAP for mobile captures the data from your real-world track day on Android — phone GPS for the entry-level capture, RaceBox for high-fidelity, Wear OS companion for glance-able lap times.';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-acid-green text-caption tracking-wide uppercase">Mobile</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        LAP for mobile.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        The desktop client captures your sim sessions; the mobile app captures the real-world half
+        of your driving. Same driver profile, same prescriptions, both halves of the cross-platform
+        promise.
+      </p>
+    </header>
+
+    <div class="mt-16 flex flex-col gap-12">
+      <section
+        aria-labelledby="mobile-capture-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">Real-world capture</p>
+        <h2
+          id="mobile-capture-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          From the track day to your driver profile.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          Track-day data is what tells you whether the trail-braking habit you fixed on sim is
+          actually showing up at the real-world circuit. The mobile app captures it. Phone GPS is
+          the entry-level path — open the app, start the session, drive. No extra hardware, no
+          export step. The session syncs to your driver profile the next time you have signal, so a
+          weakness flagged on Saturday becomes a sim drill the same week.
+        </p>
+        <p class="text-steel text-body leading-body mt-4">
+          For high-fidelity data, a bluetooth GNSS receiver (RaceBox or compatible) raises the
+          sample rate enough to support sector deltas at the same resolution the sim side gives you.
+          The integration detail lives in the next section.
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="mobile-android-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">Android</p>
+        <h2
+          id="mobile-android-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          Android first, iOS later.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          The mobile app launches on <strong class="text-chalk font-medium">Android</strong> at public
+          beta. It works on any modern Android phone with bluetooth — the capture path itself is light,
+          and a track-day phone usually has plenty of unused horsepower while it sits in your pocket between
+          sessions.
+        </p>
+        <p class="text-steel text-body leading-body mt-4">
+          <strong class="text-chalk font-medium">iOS</strong> support is on the roadmap and lands with
+          the V1 release, not at public beta. If you race exclusively on an iPhone today, the waitlist
+          is the right place to wait — we will email you when the iOS app ships, not before.
+        </p>
+      </section>
+    </div>
+
+    <p class="mt-16">
+      <a
+        href="/product"
+        class="text-chalk hover:text-acid-green text-body inline-flex items-center underline underline-offset-4 transition"
+      >
+        ← Back to product overview
+      </a>
+    </p>
+  </main>
+</BaseLayout>

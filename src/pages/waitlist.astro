@@ -50,3 +50,11 @@ const waitlistCount = Number.parseInt(rawCount ?? '0', 10);
     <WaitlistForm />
   </main>
 </BaseLayout>
+
+<script>
+  // T103 — side-effect import auto-fires `waitlist_submitted` if
+  // the URL is /waitlist?status=submitted (the form-POST 303
+  // destination). On a normal first GET there are no params, so
+  // nothing fires.
+  import '../scripts/waitlist-events';
+</script>

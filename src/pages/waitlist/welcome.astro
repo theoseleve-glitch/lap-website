@@ -37,3 +37,11 @@ const DESCRIPTION =
     </header>
   </main>
 </BaseLayout>
+
+<script>
+  // T103 — fire `waitlist_confirmed` on every welcome-page load.
+  // The page is only reachable via the /api/waitlist/confirm 303,
+  // so every load is a successful double-opt-in conversion event.
+  import { captureWaitlistConfirmed } from '../../scripts/waitlist-events';
+  captureWaitlistConfirmed();
+</script>

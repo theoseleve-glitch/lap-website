@@ -117,6 +117,38 @@ test('T070: home → /pricing → consume sections → monthly CTA → /signup?p
   expect(page.url()).toMatch(/\/signup\?plan=monthly$/);
 });
 
+test('T090: /demo → consume sections → trial CTA → /signup', async ({ page }) => {
+  // Three-stage /demo journey the sprint task calls out: land →
+  // consume → CTA. Unlike T055 (home → /how-it-works), there is no
+  // hero link to /demo in the current build, so this test simulates
+  // the realistic path — a cold SERP click on the "sim racing
+  // telemetry demo" query (T088 tuned that meta) lands the reader
+  // directly on /demo. From there they consume the T072 shell, the
+  // T073 walkthrough placeholder, and the T086 testimonials block
+  // before clicking the T085 FinalCta.
+  await stubSignup(page);
+
+  // Land: cold /demo entry.
+  await page.goto('/demo');
+
+  // Consume: H1 + the two key H2s must render. If a refactor
+  // silently unmounts either section between T073/T086, the count
+  // slips and this fails with a clear signal rather than letting
+  // the CTA still work on a gutted page.
+  await expect(page.locator('h1')).toContainText('See LAP in action');
+  await expect(page.locator('h2').filter({ hasText: /three-minute walkthrough/i })).toBeVisible();
+  await expect(
+    page.locator('h2').filter({ hasText: /No testimonials until the beta opens/ }),
+  ).toBeVisible();
+
+  // CTA: scroll to the final trial button and click through.
+  const trialCta = page.getByRole('link', { name: 'Start 14-day trial' });
+  await trialCta.scrollIntoViewIfNeeded();
+  await trialCta.click();
+  await page.waitForURL(new RegExp(`^${SIGNUP_URL.replaceAll('.', '\\.')}`));
+  expect(page.url()).toMatch(new RegExp(`^${SIGNUP_URL.replaceAll('.', '\\.')}`));
+});
+
 test('T055: home → /how-it-works → consume sections → trial CTA → /signup', async ({ page }) => {
   // Three-stage journey the sprint task calls out: navigate →
   // consume → CTA. Exercises the T026 secondary CTA (/how-it-works

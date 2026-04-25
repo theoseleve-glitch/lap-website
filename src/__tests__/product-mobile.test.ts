@@ -133,3 +133,55 @@ test('T115: RaceBox section names bluetooth as the connection method', async () 
   const section = extractRaceBoxSection(html);
   expect(section.toLowerCase()).toMatch(/bluetooth/);
 });
+
+// Helper for T116: extract the Wear OS section by aria-labelledby.
+// Same section-scoped pattern as the RaceBox helper — locks
+// content to the dedicated section so brief mentions elsewhere
+// (the page header description names Wear OS) do NOT satisfy
+// the structural contract.
+function extractWearOsSection(html: string): string {
+  const match = html.match(
+    /<section[^>]+aria-labelledby="[^"]*wear[^"]*"[^>]*>([\s\S]*?)<\/section>/i,
+  );
+  return match ? match[1] : '';
+}
+
+test('T116: page has a dedicated Wear OS companion section', async () => {
+  // T116 deliverable verb is `mentioned`, lighter than T115's
+  // `explained` — but the section structure is still required
+  // so a visitor scanning the page can find the companion-device
+  // story without reading the prose. Same anchored-section
+  // pattern as RaceBox.
+  const html = await render();
+  expect(html).toMatch(/<section[^>]+aria-labelledby="[^"]*wear/i);
+});
+
+test('T116: Wear OS section names "Wear OS" (the platform brand)', async () => {
+  const html = await render();
+  const section = extractWearOsSection(html);
+  expect(section).not.toBe('');
+  expect(section).toMatch(/Wear OS/i);
+});
+
+test('T116: Wear OS section names the glance / wrist use case', async () => {
+  // Companion smartwatches are useful for "look without
+  // unlocking your phone" — the at-track ergonomic win. If the
+  // section talks about "notifications" or "data sync" without
+  // anchoring the actual on-track use case, the value
+  // proposition disappears. Lock at least one use-case anchor
+  // word so a future edit cannot quietly genericise.
+  const html = await render();
+  const section = extractWearOsSection(html);
+  expect(section.toLowerCase()).toMatch(/(glance|wrist|lap time|cockpit)/);
+});
+
+test('T116: Wear OS section discloses the V1 release timing', async () => {
+  // Doctrine §9: Wear OS ships at V1 release (M5 / 2026-09-23),
+  // NOT at public beta. Mentioning the companion without naming
+  // when it actually arrives implies "you get it at signup",
+  // which is overclaim. Lock either the V1/M5 anchor or
+  // explicit later/post-launch language.
+  const html = await render();
+  const section = extractWearOsSection(html);
+  expect(section.toLowerCase()).toMatch(/(v1|m5|2026-09|release|after launch|post-launch|later)/);
+});

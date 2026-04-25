@@ -10,8 +10,8 @@ surface.
 **Beginner — single-corner focus.** Pick one slow-medium corner
 you know well: Spa La Source, Brands Hatch Druids, your home-
 track hairpin. The goal is the simplest thing in the world to
-say and the hardest thing to actually do consistently — keep
-brake pressure non-zero at the moment you turn in. Run twenty
+say and the hardest thing to do consistently — keep brake
+pressure non-zero at the moment you turn in. Run twenty
 focused laps on that one corner, with the brake-trace overlay
 visible after each lap. Success criterion: brake-trace and
 steering-input overlap by at least two-tenths of a second on
@@ -48,7 +48,7 @@ of focused trail braking work has too much noise to be
 diagnostic on its own — tire warm-up, mood, focus, any of those
 can swamp the signal. Twelve weeks of weekly sessions, surfaced
 as a trend in [your driver profile](/product/driver-profile),
-is what tells you whether the technique is actually
+is what tells you whether the technique is
 consolidating. The shape gets steadier; the variance falls; the
 mistakes from the previous section become rarer. That is the
 loop closing.

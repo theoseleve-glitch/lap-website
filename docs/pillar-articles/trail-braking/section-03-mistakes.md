@@ -42,8 +42,8 @@ real weight transfer to happen. The trail braking intent is right
 but the predicate fails — there is not enough load on the front
 tires for any rotation benefit to land. Signature: peak brake
 pressure under sixty percent of available; entry speed too high
-for the rotation actually achieved; understeer through the
-mid-corner phase rather than just at the apex point.
+for the rotation achieved; understeer through the mid-corner
+phase rather than at the apex point.
 
 **Too aggressive at start.** Peak brake pressure spikes near
 maximum, the front tires lock, and the rotation that does come

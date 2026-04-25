@@ -1,0 +1,85 @@
+---
+// T124 — Shared footer for the five pillar product pages
+// (/product/desktop, /product/mobile, /product/bridge,
+// /product/coaching, /product/driver-profile). Hoists the See-also
+// + back-link block that T123 inlined on each page into one
+// component driven by currentSlug.
+//
+// Canonical pillar order is the single source of truth — adding a
+// sixth pillar later means editing this file's PILLARS array, not
+// five inline lists. Tagline copy uses doctrine-established phrasing
+// already on /product overview eyebrows + taglines.
+
+export type PillarSlug = 'desktop' | 'mobile' | 'bridge' | 'coaching' | 'driver-profile';
+
+interface Props {
+  currentSlug: PillarSlug;
+}
+
+interface PillarLink {
+  slug: PillarSlug;
+  href: string;
+  label: string;
+}
+
+const PILLARS: readonly PillarLink[] = [
+  {
+    slug: 'desktop',
+    href: '/product/desktop',
+    label: 'Desktop — sim capture, live coaching, strategy',
+  },
+  {
+    slug: 'mobile',
+    href: '/product/mobile',
+    label: 'Mobile — real-world capture on Android',
+  },
+  {
+    slug: 'bridge',
+    href: '/product/bridge',
+    label: 'Bridge — sim and real, one progression',
+  },
+  {
+    slug: 'coaching',
+    href: '/product/coaching',
+    label: 'Coaching library — rules, prescriptions, outcomes',
+  },
+  {
+    slug: 'driver-profile',
+    href: '/product/driver-profile',
+    label: 'Driver Profile — your progression over time',
+  },
+];
+
+const { currentSlug } = Astro.props;
+const siblings = PILLARS.filter((p) => p.slug !== currentSlug);
+---
+
+<section
+  aria-labelledby="see-also-heading"
+  class="border-steel/15 mt-16 max-w-prose border-t pt-10"
+>
+  <h2 id="see-also-heading" class="text-steel text-caption tracking-wide uppercase">See also</h2>
+  <ul class="mt-4 space-y-3">
+    {
+      siblings.map((p) => (
+        <li>
+          <a
+            href={p.href}
+            class="text-chalk hover:text-acid-green text-body underline underline-offset-4 transition"
+          >
+            {p.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<p class="mt-12">
+  <a
+    href="/product"
+    class="text-chalk hover:text-acid-green text-body inline-flex items-center underline underline-offset-4 transition"
+  >
+    ← Back to product overview
+  </a>
+</p>

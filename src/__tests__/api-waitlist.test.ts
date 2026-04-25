@@ -1,41 +1,40 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { onRequestPost } from '../../functions/api/waitlist';
 
-// T092 + T093 — unit tests for the /api/waitlist Cloudflare Pages
-// Function. The handler runs on Cloudflare's edge after T008
-// (BLOCKED until the Pages project lands); these tests prove
-// the logic against synthetic Request objects and a mocked
-// fetch so the code is reviewed-and-tested before deployment
-// rather than after a production submission silently fails.
+// T092 + T093 + T094 — unit tests for the /api/waitlist Cloudflare
+// Pages Function. The handler runs on Cloudflare's edge after T008
+// (BLOCKED until the Pages project lands); these tests prove the
+// logic against synthetic Request objects and a mocked fetch so the
+// code is reviewed-and-tested before deployment rather than after a
+// production submission silently fails.
 //
-// T093 added Turnstile verification ahead of the Resend forward.
-// The default fetch mock handles BOTH the Turnstile siteverify
-// endpoint (returning success:true) and the Resend audience
-// endpoint (returning 200) so existing tests stay focused on
-// the field they're meant to assert; individual tests override
-// the mock when they need a Turnstile-specific or Resend-specific
-// response.
+// T094 made this a TRUE double-opt-in flow: the form post no longer
+// adds the contact to the Resend audience. Instead, the function
+// generates an HMAC-signed token, sends a confirmation email via
+// Resend's transactional /emails endpoint, and redirects the visitor
+// to /waitlist?status=submitted. T095 will land the
+// /api/waitlist/confirm handler that verifies the token and finally
+// commits the contact to the audience.
+//
+// The default fetch mock dispatches by URL — siteverify, /emails,
+// and (no longer expected) /audiences — so individual tests can
+// override behavior on one endpoint without rewiring the rest.
 
 interface TestEnv {
   RESEND_API_KEY: string;
   RESEND_AUDIENCE_ID: string;
   TURNSTILE_SECRET_KEY: string;
+  WAITLIST_TOKEN_SECRET: string;
 }
 
 const ENV: TestEnv = {
   RESEND_API_KEY: 'test_api_key',
   RESEND_AUDIENCE_ID: 'aud_test',
-  // Cloudflare's documented "always pass" test secret key — public
-  // test fixture, not a secret. Mirrors the always-pass site key
-  // used as the WaitlistForm default.
   TURNSTILE_SECRET_KEY: '1x0000000000000000000000000000000AA',
+  WAITLIST_TOKEN_SECRET: 'test_waitlist_token_secret_at_least_32_chars',
 };
 
 function buildRequest(fields: Record<string, string>) {
-  // Default the Turnstile token so existing T092 validation tests
-  // continue to assert the field they're meant to assert. Tests
-  // that want to exercise the Turnstile path override 'cf-turnstile-response'
-  // explicitly.
   const params = new URLSearchParams({
     'cf-turnstile-response': 'valid_test_token',
     ...fields,
@@ -59,13 +58,20 @@ function defaultFetchMockImpl(url: string | URL | Request) {
       }),
     );
   }
-  if (urlString.includes('api.resend.com/audiences')) {
+  if (urlString.includes('api.resend.com/emails')) {
     return Promise.resolve(
-      new Response(JSON.stringify({ data: { id: 'contact_xyz' } }), {
+      new Response(JSON.stringify({ id: 'email_xyz' }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       }),
     );
+  }
+  if (urlString.includes('api.resend.com/audiences')) {
+    // T094 should never call this — kept here so a regression that
+    // re-introduces the immediate audience-add gets caught with a
+    // clear "did NOT call audiences" assertion failure rather than
+    // a silent network noop.
+    return Promise.resolve(new Response('SHOULD NOT REACH', { status: 500 }));
   }
   return Promise.resolve(new Response('{}', { status: 200 }));
 }
@@ -126,45 +132,106 @@ describe('T092 — input validation', () => {
   });
 });
 
-describe('T092 — Resend forwarding', () => {
-  test('valid POST forwards to Resend audience contacts API', async () => {
+describe('T094 — confirmation email (true double-opt-in)', () => {
+  test('valid POST sends a confirmation email via Resend POST /emails', async () => {
     const request = buildRequest({ email: 'driver@example.com', consent: 'on' });
     await onRequestPost({ request, env: ENV });
 
-    const resendCall = fetchMock.mock.calls.find((c) =>
-      String(c[0]).includes('api.resend.com/audiences'),
+    const emailCall = fetchMock.mock.calls.find((c) =>
+      String(c[0]).includes('api.resend.com/emails'),
     );
-    expect(resendCall).toBeDefined();
-    const [url, init] = resendCall!;
-    expect(url).toBe('https://api.resend.com/audiences/aud_test/contacts');
+    expect(emailCall).toBeDefined();
+    const [url, init] = emailCall!;
+    expect(url).toBe('https://api.resend.com/emails');
     expect(init.method).toBe('POST');
     expect(init.headers['Authorization']).toBe('Bearer test_api_key');
     expect(init.headers['Content-Type']).toBe('application/json');
-    const body = JSON.parse(init.body);
-    expect(body.email).toBe('driver@example.com');
-    expect(body.unsubscribed).toBe(false);
   });
 
-  test('valid POST returns 303 redirect to /waitlist?status=submitted on Resend success', async () => {
+  test('confirmation email subject is the locked T094 phrase', async () => {
+    // Sprint T094 acceptance: "Confirm your email to join the LAP
+    // waitlist". The subject is the most-visible part of the email
+    // in the inbox preview; locking it verbatim catches any silent
+    // drift toward generic "Welcome!" / "Confirm subscription"
+    // copy.
+    const request = buildRequest({ email: 'driver@example.com', consent: 'on' });
+    await onRequestPost({ request, env: ENV });
+    const emailCall = fetchMock.mock.calls.find((c) =>
+      String(c[0]).includes('api.resend.com/emails'),
+    );
+    const body = JSON.parse(emailCall![1].body);
+    expect(body.subject).toBe('Confirm your email to join the LAP waitlist');
+  });
+
+  test('confirmation email is addressed to the submitted email', async () => {
+    const request = buildRequest({ email: 'driver@example.com', consent: 'on' });
+    await onRequestPost({ request, env: ENV });
+    const emailCall = fetchMock.mock.calls.find((c) =>
+      String(c[0]).includes('api.resend.com/emails'),
+    );
+    const body = JSON.parse(emailCall![1].body);
+    expect(body.to).toBe('driver@example.com');
+  });
+
+  test('confirmation email "from" is on the lap-coach.racing domain', async () => {
+    // From-address must be on the verified Resend domain. Hardcoded
+    // here so a future "let's switch sender" decision shows up in
+    // the diff rather than a Resend bounce log.
+    const request = buildRequest({ email: 'driver@example.com', consent: 'on' });
+    await onRequestPost({ request, env: ENV });
+    const emailCall = fetchMock.mock.calls.find((c) =>
+      String(c[0]).includes('api.resend.com/emails'),
+    );
+    const body = JSON.parse(emailCall![1].body);
+    expect(body.from).toMatch(/@lap-coach\.racing(?:>)?$/);
+  });
+
+  test('confirmation email body contains a /api/waitlist/confirm link with a token', async () => {
+    // The confirmation link is the entire point of the email. Both
+    // the html and text bodies should contain it (mail clients fall
+    // back to text-only). The token has 3 dot-separated segments:
+    // base64url(email).expiry.hexHmac — verified later by T095.
+    const request = buildRequest({ email: 'driver@example.com', consent: 'on' });
+    await onRequestPost({ request, env: ENV });
+    const emailCall = fetchMock.mock.calls.find((c) =>
+      String(c[0]).includes('api.resend.com/emails'),
+    );
+    const body = JSON.parse(emailCall![1].body);
+    const allContent = (body.html ?? '') + (body.text ?? '');
+    expect(allContent).toMatch(/\/api\/waitlist\/confirm\?token=/);
+    const linkMatch = allContent.match(/\/api\/waitlist\/confirm\?token=([^"\s&)<]+)/);
+    expect(linkMatch).not.toBeNull();
+    const token = linkMatch![1];
+    expect(token.split('.').length).toBe(3);
+  });
+
+  test('valid POST does NOT call the Resend audiences API (true double-opt-in)', async () => {
+    // T094's defining behavior: the contact is NOT added to the
+    // audience until they confirm (T095). If a future refactor
+    // accidentally re-introduces the immediate audience-add, the
+    // defaultFetchMockImpl returns 500 for /audiences and the test
+    // catches the regression here.
+    const request = buildRequest({ email: 'driver@example.com', consent: 'on' });
+    await onRequestPost({ request, env: ENV });
+    const calls = fetchMock.mock.calls.map((c) => String(c[0]));
+    expect(calls.some((u) => u.includes('api.resend.com/audiences'))).toBe(false);
+  });
+
+  test('valid POST returns 303 redirect to /waitlist?status=submitted on email-send success', async () => {
     const request = buildRequest({ email: 'driver@example.com', consent: 'on' });
     const response = await onRequestPost({ request, env: ENV });
-
-    // 303 (See Other) is the canonical POST → GET redirect status.
-    // 302 would also work but 303 explicitly signals "the resource
-    // is available at this OTHER URL via GET" — exactly what we
-    // want here so a refresh of /waitlist?status=submitted doesn't
-    // re-POST the form.
     expect(response.status).toBe(303);
     const location = response.headers.get('Location');
     expect(location).toMatch(/\/waitlist\?status=submitted$/);
   });
 
-  test('Resend 5xx returns 502 (so the visitor sees a retryable error, not a silent success)', async () => {
+  test('Resend email-send 5xx returns 502 (not silent success)', async () => {
     fetchMock.mockImplementation((url) => {
       const urlString = String(url);
       if (urlString.includes('siteverify')) {
         return Promise.resolve(new Response(JSON.stringify({ success: true }), { status: 200 }));
       }
+      // emails endpoint returns 503 (upstream Resend outage)
       return Promise.resolve(
         new Response(JSON.stringify({ message: 'Internal error' }), { status: 503 }),
       );
@@ -173,26 +240,34 @@ describe('T092 — Resend forwarding', () => {
     const request = buildRequest({ email: 'driver@example.com', consent: 'on' });
     const response = await onRequestPost({ request, env: ENV });
 
-    // 502 (Bad Gateway) signals "upstream — Resend — failed".
-    // Returning 200/redirect on a Resend failure would tell the
-    // visitor "we got it" when we didn't, and the founder rate
-    // promise (T060) becomes a broken promise. 502 lets the
-    // visitor retry honestly.
+    // Same 502 pattern as before: signal "upstream failed", not
+    // "you did something wrong" (4xx). Visitor can retry honestly.
     expect(response.status).toBe(502);
   });
 });
 
-describe('T092 — environment safety', () => {
-  test('500 if RESEND_API_KEY is missing — fail loud, not silently noop', async () => {
+describe('T092/T093/T094 — environment safety', () => {
+  test('500 if RESEND_API_KEY is missing', async () => {
     const request = buildRequest({ email: 'driver@example.com', consent: 'on' });
     const response = await onRequestPost({
       request,
       env: { ...ENV, RESEND_API_KEY: '' },
     });
+    expect(response.status).toBe(500);
+    const calls = fetchMock.mock.calls.map((c) => String(c[0]));
+    expect(calls.some((u) => u.includes('api.resend.com'))).toBe(false);
+  });
 
-    // Misconfigured deploy with a missing secret would otherwise
-    // pretend to accept signups while emitting nothing. 500 makes
-    // the misconfiguration visible in the Pages logs immediately.
+  test('500 if WAITLIST_TOKEN_SECRET is missing — token signing would silently produce garbage', async () => {
+    // The token secret signs the confirmation link. Missing-secret
+    // would either crash the HMAC step or sign with an empty key
+    // (which is verifiable by ANYONE — token forgery). 500
+    // fail-closed at the env check is the only safe answer.
+    const request = buildRequest({ email: 'driver@example.com', consent: 'on' });
+    const response = await onRequestPost({
+      request,
+      env: { ...ENV, WAITLIST_TOKEN_SECRET: '' },
+    });
     expect(response.status).toBe(500);
     const calls = fetchMock.mock.calls.map((c) => String(c[0]));
     expect(calls.some((u) => u.includes('api.resend.com'))).toBe(false);
@@ -225,13 +300,10 @@ describe('T093 — Turnstile spam protection', () => {
         return Promise.resolve(
           new Response(
             JSON.stringify({ success: false, 'error-codes': ['invalid-input-response'] }),
-            {
-              status: 200,
-            },
+            { status: 200 },
           ),
         );
       }
-      // If we got here for resend, it'd be a critical bug.
       return Promise.resolve(new Response('SHOULD NOT REACH', { status: 500 }));
     });
 
@@ -240,10 +312,7 @@ describe('T093 — Turnstile spam protection', () => {
 
     expect(response.status).toBe(400);
     const calls = fetchMock.mock.calls.map((c) => String(c[0]));
-    // Turnstile WAS called once.
     expect(calls.some((u) => u.includes('siteverify'))).toBe(true);
-    // Resend was NOT called — fail-fast on bot detection saves
-    // mailing-list quota and cleanliness.
     expect(calls.some((u) => u.includes('api.resend.com'))).toBe(false);
   });
 
@@ -256,9 +325,6 @@ describe('T093 — Turnstile spam protection', () => {
     const [url, init] = verifyCall!;
     expect(url).toBe('https://challenges.cloudflare.com/turnstile/v0/siteverify');
     expect(init.method).toBe('POST');
-    // Cloudflare expects application/x-www-form-urlencoded with
-    // `secret` and `response` fields. Sending JSON would silently
-    // get rejected.
     const body = init.body instanceof URLSearchParams ? init.body : new URLSearchParams(init.body);
     expect(body.get('secret')).toBe('1x0000000000000000000000000000000AA');
     expect(body.get('response')).toBe('valid_test_token');
@@ -270,10 +336,6 @@ describe('T093 — Turnstile spam protection', () => {
       request,
       env: { ...ENV, TURNSTILE_SECRET_KEY: '' },
     });
-
-    // Misconfigured prod deploy with no Turnstile secret would
-    // otherwise let bots through. Fail-closed = visible 500 in
-    // logs, NOT a silent open door.
     expect(response.status).toBe(500);
     const calls = fetchMock.mock.calls.map((c) => String(c[0]));
     expect(calls.some((u) => u.includes('api.resend.com'))).toBe(false);

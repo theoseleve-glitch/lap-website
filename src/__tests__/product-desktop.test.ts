@@ -121,3 +121,43 @@ test('T111: each sim entry has a one-line descriptor (not just the name)', async
   // AMS2: formula / stock / broad track list
   expect(lower).toMatch(/(formula|stock car|track list|brazilian)/);
 });
+
+test('T112: page has a "System requirements" section', async () => {
+  // Anchored section a Windows visitor scanning the page can land
+  // on without reading prose — same pattern as the supported-sims
+  // grid. The aria-labelledby pattern keeps the assistive-tech
+  // surface consistent across the page.
+  const html = await render();
+  expect(html).toMatch(/<section[^>]+aria-labelledby="[^"]*system-requirements/);
+  expect(html.toLowerCase()).toMatch(/system requirements/);
+});
+
+test('T112: system requirements name Windows + 64-bit (the OS + arch lock)', async () => {
+  // Sims are Windows-first; the desktop client follows. Locking
+  // both "Windows" and "64-bit" prevents a future "PC" or "modern
+  // computer" generalisation that fails the search-and-scan reader
+  // looking for their specific hardware fit.
+  const html = await render();
+  expect(html).toMatch(/Windows/);
+  expect(html).toMatch(/64-bit|64 bit|x64/i);
+});
+
+test('T112: system requirements mention an internet/online connectivity need', async () => {
+  // The driver profile syncs to the cloud, so first sign-in needs
+  // network. The honest framing also says capture works offline
+  // and syncs on reconnect — this is the half that prevents
+  // "always-online required" misreading. Test locks at least one
+  // network/online/internet keyword so the connectivity surface
+  // stays disclosed.
+  const html = await render();
+  expect(html.toLowerCase()).toMatch(/(internet|online|network|sync)/);
+});
+
+test('T112: system requirements name macOS posture (roadmap, not supported today)', async () => {
+  // Doctrine-aligned anti-persona disclosure: a Mac sim-racer
+  // reading /product/desktop should know within seconds that
+  // their hardware is not supported today. Vagueness here =
+  // wasted trial signups + a support email per Mac visitor.
+  const html = await render();
+  expect(html.toLowerCase()).toMatch(/(macos|mac\b|m1|apple)/);
+});

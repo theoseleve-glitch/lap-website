@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// T107 — /product overview. Five-pillar architecture surface that
+// makes the product shape visible at a scan: desktop captures sim
+// sessions, mobile captures real-world track days, the bridge ties
+// them together, the coaching library powers the prescriptions
+// after every session, the driver profile is the progression
+// you build over months. Each pillar links to its own sub-page
+// (T108-T122 land those); pre-T108 those links 404 — which reads
+// as honest "coming soon" while the names + descriptions render
+// regardless.
+//
+// Doctrine voice (01-STRATEGIC-DOCTRINE.md): cross-platform Driver
+// OS, sim AND real-world, ADR-005 Coaching Memory backend objects
+// (weakness / prescription / outcome). No "AI coach now" claims —
+// ADR-004 forbids LLM-driven coaching in the 6-month plan.
+
+const TITLE = 'Product — LAP';
+const DESCRIPTION =
+  'The five pillars of LAP: desktop sim capture, mobile real-world capture, the sim-to-real bridge, the coaching library, and the driver profile that ties it together.';
+
+interface Pillar {
+  href: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+}
+
+const PILLARS: readonly Pillar[] = [
+  {
+    href: '/product/desktop',
+    eyebrow: 'Desktop',
+    title: 'Sim capture, live coaching, and strategy',
+    body: 'Captures the sim session in real time as you drive. After every stint, weaknesses (where you actually lost time) become prescriptions you can take back into the next session. Strategy mode covers stint planning, pace targets, and tyre management for race nights.',
+  },
+  {
+    href: '/product/mobile',
+    eyebrow: 'Mobile',
+    title: 'Real-world capture on the track day',
+    body: 'Phone GPS plus a bluetooth GNSS hat for high-fidelity track-day data on Android. Wear OS companion handles glance-able lap times. RaceBox integration covers anyone who already owns one.',
+  },
+  {
+    href: '/product/bridge',
+    eyebrow: 'Bridge',
+    title: 'Sim and real, one driver profile',
+    body: 'The algorithm that maps sim weaknesses onto your real-world driving and the other way round. A trail-braking habit you fix on the sim shows up as faster lap times at the actual track; a real-world cornering note becomes a sim drill.',
+  },
+  {
+    href: '/product/coaching',
+    eyebrow: 'Coaching library',
+    title: 'Prescriptions backed by a rule library',
+    body: 'Every prescription comes from a rule in the coaching library — track section, car class, weakness shape. Outcomes feed back into which prescriptions actually move the needle, so the library improves with every session driven.',
+  },
+  {
+    href: '/product/driver-profile',
+    eyebrow: 'Driver Profile',
+    title: 'Your progression, six months in',
+    body: 'Strengths, weaknesses, drills attempted, drills closed, by track and by car class. The shape of your driving over time instead of a folder of telemetry files you never look at again.',
+  },
+];
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-acid-green text-caption tracking-wide uppercase">Product</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        The LAP Driver OS, in five pieces.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        LAP is the cross-platform Driver OS that turns every sim and real-world session into a
+        personalised development plan you can execute. The product is five pieces that converge into
+        one driver profile.
+      </p>
+    </header>
+
+    <div class="mt-16 flex flex-col gap-12">
+      {
+        PILLARS.map((pillar) => (
+          <section
+            aria-labelledby={`pillar-${pillar.href.split('/').pop()}-heading`}
+            class="border-steel/15 border-t pt-10"
+          >
+            <p class="text-steel text-caption tracking-wide uppercase">{pillar.eyebrow}</p>
+            <h2
+              id={`pillar-${pillar.href.split('/').pop()}-heading`}
+              class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+            >
+              {pillar.title}
+            </h2>
+            <p class="text-steel text-body leading-body mt-4 max-w-prose">{pillar.body}</p>
+            <a
+              href={pillar.href}
+              class="text-chalk hover:text-acid-green text-body mt-4 inline-flex items-center underline underline-offset-4 transition"
+            >
+              Read more
+            </a>
+          </section>
+        ))
+      }
+    </div>
+  </main>
+</BaseLayout>

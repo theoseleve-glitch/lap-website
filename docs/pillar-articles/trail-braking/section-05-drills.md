@@ -39,8 +39,8 @@ that only happens to work at one specific entry geometry.
 
 Capture is what makes any of this measurable. The
 [desktop client](/product/desktop) records the sim sessions
-automatically; the mobile app handles real-world capture for
-track days. Same drill, same success criterion, same
+automatically; [the mobile app](/product/mobile) handles
+real-world capture for track days. Same drill, same success criterion, same
 brake-trace metric — different session, different platform.
 
 Quarterly progression is the durable benefit. A single session

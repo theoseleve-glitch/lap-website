@@ -60,10 +60,12 @@ gives back both. Signature: the brake-pressure peak coincides
 with the steering-input peak, both within a tenth of a second
 of each other.
 
-The pattern across all six is the same: each trail braking
-mistake is a *shape* in the data, and the shape carries cleanly
-between
-iRacing, ACC, AMS2, and a real-world RaceBox capture. The
+Each shape lives in [the coaching library](/product/coaching)
+as a named rule, with the same name the detector emits when it
+fires. The pattern across all six is the same: each trail
+braking mistake is a *shape* in the data, and the shape carries
+cleanly between iRacing, ACC, AMS2, and a real-world RaceBox
+capture. The
 intensity — how much time each costs — is platform-specific, but
 the diagnosis itself is not. That is the
 [shape-vs-intensity framework](/blog/sim-to-real-transfer)

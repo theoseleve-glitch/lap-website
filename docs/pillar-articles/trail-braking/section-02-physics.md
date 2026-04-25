@@ -35,6 +35,8 @@ iRacing or ACC is the shape of a good trail-brake release in a
 real GT3. What differs is the seat-of-pants calibration — how
 much pedal pressure produces how much deceleration — and that
 is a per-platform recalibration issue, not a technique issue.
+[The bridge](/product/bridge) is what makes that operational —
+same physics, same shape, same rule on either platform.
 
 Trail braking is not always the right call. Big-stop hairpins
 where the entry geometry punishes any brake-on rotation

@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { PILLAR_3_FAQS, pillar3FaqJsonLd } from '../../data/pillar-3-faq';
+
+// T160 — published Pillar 3 article. Closes Pillar 3 sprint.
+// Same pattern as T140 (sim-to-real-transfer) and T150 (what-
+// is-trail-braking): markdown-rendered body imports canonical
+// editorial source from docs/pillar-articles/telemetry-apps-
+// comparison/section-XX.md so the published page and the
+// editorial workspace cannot drift apart.
+//
+// Indexing-submission step at Google Search Console is a
+// manual post-deploy action — page is build-ready and
+// indexable; once production deploys (depends on T008/T009/
+// T010 deploy infra), the URL goes into GSC's URL Inspection
+// tool for explicit crawl request, and the auto-generated
+// sitemap.xml takes care of the recurring re-crawl signal.
+
+import * as section01 from '../../../docs/pillar-articles/telemetry-apps-comparison/section-01-intro.md';
+import * as section02 from '../../../docs/pillar-articles/telemetry-apps-comparison/section-02-strengths.md';
+import * as section03 from '../../../docs/pillar-articles/telemetry-apps-comparison/section-03-limits.md';
+import * as section04 from '../../../docs/pillar-articles/telemetry-apps-comparison/section-04-pricing.md';
+import * as section05 from '../../../docs/pillar-articles/telemetry-apps-comparison/section-05-personas.md';
+import * as section06 from '../../../docs/pillar-articles/telemetry-apps-comparison/section-06-limitations.md';
+import * as section07 from '../../../docs/pillar-articles/telemetry-apps-comparison/section-07-conclusion.md';
+
+const { Content: Section01 } = section01;
+const { Content: Section02 } = section02;
+const { Content: Section03 } = section03;
+const { Content: Section04 } = section04;
+const { Content: Section05 } = section05;
+const { Content: Section06 } = section06;
+const { Content: Section07 } = section07;
+
+const TITLE =
+  'Best sim racing telemetry app (2026): LAP, Garage61, RaceLab, MoTeC, Track Attack, STINT compared';
+const DESCRIPTION =
+  'Six telemetry apps compared on six dimensions — capture surface, data depth, cross-platform unification, pricing, persona fit. Honest shopping guide that does not declare a single winner: the right answer depends on your persona, your budget, and your platform mix.';
+
+const siteURL = Astro.site ?? new URL('https://lap-coach.racing/');
+const pageURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const ARTICLE_PUBLISHED = '2026-04-25';
+const ARTICLE_MODIFIED = '2026-04-25';
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Best sim racing telemetry app comparison (2026)',
+  description: DESCRIPTION,
+  url: pageURL,
+  datePublished: ARTICLE_PUBLISHED,
+  dateModified: ARTICLE_MODIFIED,
+  author: {
+    '@type': 'Organization',
+    name: 'LAP',
+    url: siteURL.toString(),
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'LAP',
+    url: siteURL.toString(),
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': pageURL,
+  },
+};
+
+const faqJsonLd = pillar3FaqJsonLd();
+
+const FAQ_HEADING_ID = 'pillar-3-faq-heading';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION} ogType="article">
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <article class="max-w-prose">
+      <header>
+        <p class="text-acid-green text-caption tracking-wide uppercase">Telemetry app comparison</p>
+        <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+          Best sim racing telemetry app, compared honestly.
+        </h1>
+        <p class="text-steel text-body mt-6">
+          Six apps — LAP, Garage61, RaceLab, MoTeC, Track Attack, STINT — walked through six shared
+          dimensions: sim capture surface, real-world capture surface, data depth, cross-platform
+          unification, pricing model, and persona fit. The article does not declare a single
+          winner. Five reader personas map to different shortlists, and we name the personas where
+          LAP is not yet the right answer alongside the personas where it is.
+        </p>
+      </header>
+
+      <div
+        class="prose prose-invert text-steel mt-16 max-w-prose [&_a]:text-acid-green [&_a:hover]:underline [&_h2]:font-display [&_h2]:text-h3 [&_h2]:text-chalk [&_h2]:tracking-display [&_h2]:mt-16 [&_h2]:mb-6 [&_h3]:font-display [&_h3]:text-h4 [&_h3]:text-chalk [&_h3]:tracking-display [&_h3]:mt-10 [&_h3]:mb-4 [&_p]:my-4 [&_p]:leading-body [&_ul]:my-4 [&_ul]:pl-6 [&_ul]:list-disc [&_li]:my-2 [&_li]:leading-body [&_strong]:text-chalk [&_table]:my-6 [&_table]:w-full [&_table]:border-collapse [&_th]:border [&_th]:border-steel/20 [&_th]:p-2 [&_th]:text-chalk [&_th]:text-left [&_td]:border [&_td]:border-steel/15 [&_td]:p-2 [&_td]:align-top"
+      >
+        <Section01 />
+        <Section02 />
+        <Section03 />
+        <Section04 />
+        <Section05 />
+        <Section06 />
+        <Section07 />
+      </div>
+    </article>
+
+    <section
+      aria-labelledby={FAQ_HEADING_ID}
+      class="border-steel/10 mx-auto mt-24 max-w-prose border-t pt-24 sm:mt-32 sm:pt-32"
+    >
+      <header>
+        <p class="text-steel text-caption tracking-wide uppercase">FAQ</p>
+        <h2
+          id={FAQ_HEADING_ID}
+          class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+        >
+          Common questions.
+        </h2>
+      </header>
+
+      <div class="mt-12 flex flex-col gap-3">
+        {
+          PILLAR_3_FAQS.map((faq) => (
+            <details class="border-steel/15 bg-concrete/40 rounded-2 group border">
+              <summary class="text-chalk flex cursor-pointer items-center justify-between gap-4 p-6 font-medium">
+                <span>{faq.question}</span>
+                <span
+                  class="text-steel shrink-0 transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <div class="border-steel/10 border-t px-6 pt-4 pb-6">
+                <p class="text-steel text-body leading-body">{faq.answer}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(articleJsonLd)}
+  />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</BaseLayout>

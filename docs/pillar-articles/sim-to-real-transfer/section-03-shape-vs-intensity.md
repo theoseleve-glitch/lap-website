@@ -7,8 +7,8 @@ loss it produces on a particular car, in a particular setup, on
 a particular track surface, in a particular session.
 
 The framework that decides which parts of your sim work transfer
-to the real circuit is the one that takes those two dimensions
-seriously and treats them differently.
+to the real circuit takes those two dimensions seriously and
+treats them differently.
 
 **Shape is platform-agnostic.** "Late on the brakes into Spa La
 Source" is a legible diagnosis whether you logged the lap on
@@ -45,5 +45,5 @@ artefact that makes this comparison automatic is
 sessions into the same canonical shape, runs the weakness
 detector on the canonical version, and surfaces matched pairs as
 one progression. The framework is the principle; the bridge is
-how we operationalise it. Every claim in the rest of this
-article rests on this distinction holding up.
+how we operationalise it. Every claim that follows rests on
+this distinction.

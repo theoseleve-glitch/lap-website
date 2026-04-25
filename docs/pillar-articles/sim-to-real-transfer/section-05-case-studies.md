@@ -14,13 +14,12 @@ has the layout and reproduces the major bumps reasonably; AMS2
 has a Sebring scan as well; ACC doesn't include it. Where
 transfer is strong: the rhythm of the lap, where to attack, the
 turn-1 brake commitment, and the basic line through the
-high-speed sections. Where transfer is weak: how the bumps
-actually move the car around mid-corner, which curbs you can
-ride over and which destroy your alignment for the next half
-sector. Verdict — do your sim laps for the rhythm and the brake
-points; expect surprises in the high-speed bumpy sections, and
-do not let your sim-confident commitment level decide your real
-session-one corner-entry speed.
+high-speed sections. Where transfer is weak: how the bumps move
+the car around mid-corner, which curbs you can ride over and
+which destroy your alignment for the next half sector. Verdict
+— do your sim laps for the rhythm and the brake points; expect
+surprises in the high-speed bumpy sections, and do not let
+sim-confidence set your real session-one corner-entry speeds.
 
 ### Silverstone — the clean transfer
 
@@ -53,7 +52,7 @@ Pflanzgarten — those are the hardest things to learn at the real
 track and the easiest things to learn in the sim. Where
 transfer is weak: the elevation feel. Sim shows the gradients,
 but the visceral "stomach drops" at the blind crests doesn't
-arrive until you're actually there. Worse, the sim has a reset
+arrive until you're there. Worse, the sim has a reset
 button and the real Nordschleife has armco for kilometres.
 Verdict — sim prep is non-negotiable for layout, but do not let
 familiarity lull you into mis-calibrating commitment levels at

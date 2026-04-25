@@ -28,8 +28,8 @@ The gradient, from highest fidelity to lowest:
    technique terms — your hands and feet do the same thing — but
    the sim massively undersells the visual cone-of-fear. Eau
    Rouge and Suzuka's 130R look manageable on a screen and
-   intimidating from the cockpit. The hesitation that arrives at
-   the real track only does so on the real track.
+   intimidating from the cockpit. The hesitation only arrives
+   on the real track.
 
 4. **Compression and elevation zones.** Medium fidelity. Sim
    approximates downforce-versus-elevation and the basic load
@@ -46,8 +46,7 @@ The gradient, from highest fidelity to lowest:
    simplifies surface roughness and curb impact; the real track
    moves the car around mid-corner in ways no rig replicates.
    Sebring is the canonical example — even drivers with hundreds
-   of sim laps there get surprises in the high-speed bumpy
-   sections.
+   of sim laps get surprises in the high-speed bumpy sections.
 
 The practical implication: trust your sim work most in
 categories 1, 2, and 4. Expect the visual fear in 3 and the

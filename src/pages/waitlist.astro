@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WaitlistForm from '../components/WaitlistForm.astro';
+
+// T091 — /waitlist route. Mounts the WaitlistForm so the route
+// referenced by T060 PricingFounderOffer ("Signed up before
+// launch? €12 a month for 12 months") resolves to a real page
+// where a visitor can actually become a founder. Block F's
+// later tasks (T092 Worker, T093 Turnstile, T094 double-opt-in,
+// T095 welcome page, T096-T099 drip emails) layer onto the form
+// without changing this page's surface.
+
+// T088-style SEO: the title leads with the action ("Join the
+// LAP waitlist") + a price anchor in the description. No keyword
+// soup — these are the words a visitor in the founder-rate window
+// would search for, used because they describe the page.
+const TITLE = 'Join the LAP waitlist — LAP';
+const DESCRIPTION =
+  'Join the LAP waitlist for the public beta launch. Founder rate locked at €12 a month for 12 months — the offer survives any future pricing change. Email-only, GDPR-compliant.';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-steel text-caption tracking-wide uppercase">Waitlist</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        Join the LAP waitlist.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        LAP opens public beta later this year. Waitlist members get the launch invite first, plus a
+        grandfathered <strong class="text-chalk font-medium">€12 a month for 12 months</strong>
+        from your first paid month — €3 under the standard rate, durable across any future pricing change.
+      </p>
+    </header>
+
+    <WaitlistForm />
+  </main>
+</BaseLayout>

@@ -1,0 +1,79 @@
+---
+// T091 — waitlist form component, email + GDPR-compliant consent.
+//
+// Form action: POST /api/waitlist. The endpoint lands as a
+// Cloudflare Pages Function under T092 (Worker → Resend "waitlist"
+// audience). Until T092 ships, /api/waitlist 404s on submission —
+// that's acceptable for the COMPONENT's "submits" acceptance. The
+// form mechanism (correct fields, native validation, native POST
+// navigation) works today; the destination follows.
+//
+// Consent posture (GDPR Article 7): a freely-given, affirmative,
+// specific, informed consent. The required checkbox is the
+// affirmative action; the inline label discloses the purpose
+// ("launch and founder-pricing emails") and the unsubscribe path
+// — that's the substantive informed-consent surface for a single-
+// purpose email collection. A /privacy page link will be added
+// when /privacy ships and when the site adds analytics/cookies
+// that need broader policy disclosure (T103 PostHog events will
+// trigger that conversation).
+//
+// Doctrine: 01-STRATEGIC-DOCTRINE.md §8 founder rate (€12/month
+// for 12 months, grandfathered) is what makes this waitlist a
+// real offer rather than a generic "we'll let you know" form.
+// T060 PricingFounderOffer locks the rate; this form is the
+// instrument for becoming a founder.
+
+const HEADING_ID = 'waitlist-form-heading';
+---
+
+<form
+  action="/api/waitlist"
+  method="post"
+  aria-labelledby={HEADING_ID}
+  class="border-steel/15 bg-concrete/40 rounded-2 mt-12 flex max-w-2xl flex-col gap-6 border p-8 sm:p-10"
+>
+  <header>
+    <p class="text-acid-green text-caption tracking-wide uppercase">Founder waitlist</p>
+    <h2 id={HEADING_ID} class="font-display text-h3 text-chalk tracking-display mt-3 text-balance">
+      Get the launch invite and the founder rate.
+    </h2>
+    <p class="text-steel text-body mt-4">
+      Email-only signup. We send the public-beta invite and confirm your €12 a month for 12 months
+      when launch lands.
+    </p>
+  </header>
+
+  <div class="flex flex-col gap-2">
+    <label for="waitlist-email" class="text-chalk text-body font-medium"> Email </label>
+    <input
+      id="waitlist-email"
+      name="email"
+      type="email"
+      required
+      autocomplete="email"
+      class="bg-asphalt border-steel/30 text-chalk placeholder:text-steel/60 focus-visible:border-chalk focus-visible:outline-chalk text-body rounded-1 border px-4 py-3 transition focus-visible:outline-2 focus-visible:outline-offset-2"
+    />
+  </div>
+
+  <label for="waitlist-consent" class="text-steel text-caption leading-body flex items-start gap-3">
+    <input
+      id="waitlist-consent"
+      name="consent"
+      type="checkbox"
+      required
+      class="border-steel/40 bg-asphalt text-chalk focus-visible:outline-chalk mt-1 size-4 shrink-0 rounded-sm border focus-visible:outline-2 focus-visible:outline-offset-2"
+    />
+    <span>
+      I agree to receive launch and founder-pricing emails from LAP. Unsubscribe anytime from any
+      email.
+    </span>
+  </label>
+
+  <button
+    type="submit"
+    class="bg-chalk text-asphalt hover:bg-chalk/90 focus-visible:outline-chalk text-body inline-flex items-center justify-center px-7 py-3 font-medium transition"
+  >
+    Join the waitlist
+  </button>
+</form>

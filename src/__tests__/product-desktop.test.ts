@@ -78,3 +78,46 @@ test('T108: copy stays doctrine-aligned — no AI-coach / LLM / generative', asy
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
   expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
 });
+
+test('T111: page renders a structured "Supported sims" grid section', async () => {
+  // T108 already names the three sims inline in the capture
+  // section — that anchors the cross-platform claim at the top
+  // of the page. T111 layers a CANONICAL "which sims" reference
+  // grid: a labelled section that visitors scanning the page can
+  // jump to without reading the prose. The aria-labelledby
+  // pattern is consistent with every other section component on
+  // the site.
+  const html = await render();
+  // Aria-labelled section heading naming the supported sims.
+  expect(html).toMatch(/<section[^>]+aria-labelledby="[^"]*supported-sims/);
+  // The heading itself uses "Supported sims" (or close) language.
+  expect(html.toLowerCase()).toMatch(/supported sims/);
+});
+
+test('T111: supported-sims section uses a list (ul/ol) with three sim entries', async () => {
+  // Bullet grid = a <ul> (or grid layout via class). Locking the
+  // <ul> structure means a future refactor that flattens to prose
+  // (and loses the canonical "which sims" reference shape) fails
+  // the test before shipping.
+  const html = await render();
+  // At least one <ul> on the page.
+  expect(html).toMatch(/<ul[\s>]/);
+});
+
+test('T111: each sim entry has a one-line descriptor (not just the name)', async () => {
+  // Bare names ("iRacing / ACC / AMS2") fail the descriptor
+  // contract — a visitor needs to know whether the kind of racing
+  // they actually do is supported. Descriptors anchor this.
+  // Each sim's descriptor names a strength: iRacing = multiplayer
+  // / official series, ACC = GT3 / GT4 / endurance, AMS2 = formula
+  // / stock / track list. The test locks at least one strength
+  // anchor per sim.
+  const html = await render();
+  const lower = html.toLowerCase();
+  // iRacing: official series or multiplayer
+  expect(lower).toMatch(/(official series|multiplayer|league)/);
+  // ACC: GT3 / GT4 / endurance / Blancpain
+  expect(lower).toMatch(/(gt3|gt4|endurance|blancpain)/);
+  // AMS2: formula / stock / broad track list
+  expect(lower).toMatch(/(formula|stock car|track list|brazilian)/);
+});

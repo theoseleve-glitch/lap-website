@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// T095 — /waitlist/welcome is the destination of the post-confirm
+// 303 redirect from functions/api/waitlist/confirm.ts. The visitor
+// arrives here ONLY after clicking the link in their confirmation
+// email, which means the audience-add already succeeded — this
+// page's job is to make that double-opt-in click feel resolved
+// and to reaffirm the founder rate they signed up for.
+//
+// noindex: the welcome page is a private destination, not a
+// marketing surface. Nothing to gain from search-engine indexing,
+// and a public confirmation URL in SERPs would feel weirdly leaky
+// even if the copy is harmless. BaseLayout's noindex prop emits
+// <meta name="robots" content="noindex">.
+
+const TITLE = 'You’re on the LAP waitlist — LAP';
+const DESCRIPTION =
+  'You confirmed your email. You’re on the LAP waitlist — launch invite first, founder rate locked at €12 a month for 12 months.';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION} noindex>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-acid-green text-caption tracking-wide uppercase">Confirmed</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        You're on the LAP waitlist.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        Your email is confirmed. You'll get the public-beta launch invite first, plus a
+        grandfathered <strong class="text-chalk font-medium">€12 a month for 12 months</strong>
+        from your first paid month — durable across any future pricing change.
+      </p>
+      <p class="text-steel text-body mt-6">
+        We won't email you about anything else, and you can unsubscribe from any email at any time.
+      </p>
+    </header>
+  </main>
+</BaseLayout>

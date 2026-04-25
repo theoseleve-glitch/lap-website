@@ -7,6 +7,7 @@ interface Props {
   description?: string;
   ogImage?: string;
   ogType?: 'website' | 'article';
+  noindex?: boolean;
 }
 
 // Strategic-doctrine-aligned default description. No LLM / AI-coach claims
@@ -21,6 +22,7 @@ const {
   description = DEFAULT_DESCRIPTION,
   ogImage = '/og-default.png',
   ogType = 'website',
+  noindex = false,
 } = Astro.props;
 
 // Astro.site is pinned to https://lap-coach.racing/ in astro.config.mjs; in any
@@ -47,6 +49,7 @@ const jsonLd = {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={pageURL} />
 
     <meta property="og:title" content={title} />

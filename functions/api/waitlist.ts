@@ -29,6 +29,8 @@
 //   6. The lap-coach.racing domain must be verified in the Resend
 //      dashboard so the "from" address can send.
 
+import { signEmailToken } from '../_lib/waitlist-token';
+
 interface WaitlistEnv {
   RESEND_API_KEY: string;
   RESEND_AUDIENCE_ID: string;
@@ -44,43 +46,12 @@ interface PagesFunctionContext {
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const FROM_ADDRESS = 'LAP <noreply@lap-coach.racing>';
 const CONFIRMATION_SUBJECT = 'Confirm your email to join the LAP waitlist';
-const CONFIRMATION_TTL_SECONDS = 7 * 24 * 60 * 60;
 
 function badRequest(reason: string): Response {
   return new Response(reason, {
     status: 400,
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },
   });
-}
-
-function base64url(input: string): string {
-  // btoa handles ASCII; the email is ASCII so this is safe.
-  // Strip the base64 padding and swap +/ for URL-safe -_.
-  return btoa(input).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-
-function hex(buffer: ArrayBuffer): string {
-  return Array.from(new Uint8Array(buffer))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-}
-
-async function signEmailToken(email: string, secret: string): Promise<string> {
-  const expiry = Math.floor(Date.now() / 1000) + CONFIRMATION_TTL_SECONDS;
-  const payload = `${email}.${expiry}`;
-  const enc = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    'raw',
-    enc.encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  );
-  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(payload));
-  // base64url(email).expiry.hexHmac — single dot-segment URL-safe blob.
-  // T095's verifier splits on dots, base64url-decodes the email,
-  // recomputes the HMAC over `${email}.${expiry}` and compares.
-  return `${base64url(email)}.${expiry}.${hex(sig)}`;
 }
 
 function confirmationEmailBodies(confirmationUrl: string): { html: string; text: string } {

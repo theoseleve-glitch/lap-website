@@ -3,7 +3,16 @@
     "collect": {
       "staticDistDir": "./dist",
       "numberOfRuns": 3,
-      "url": ["http://localhost/index.html", "http://localhost/demo/index.html"],
+      "url": [
+        "http://localhost/index.html",
+        "http://localhost/demo/index.html",
+        "http://localhost/product/index.html",
+        "http://localhost/product/desktop/index.html",
+        "http://localhost/product/mobile/index.html",
+        "http://localhost/product/bridge/index.html",
+        "http://localhost/product/coaching/index.html",
+        "http://localhost/product/driver-profile/index.html"
+      ],
       "settings": {
         "onlyCategories": ["performance"]
       }
@@ -18,6 +27,12 @@
         },
         {
           "matchingUrlPattern": "^http://localhost/demo/index\\.html$",
+          "assertions": {
+            "largest-contentful-paint": ["error", { "maxNumericValue": 2000 }]
+          }
+        },
+        {
+          "matchingUrlPattern": "^http://localhost/product/(desktop/|mobile/|bridge/|coaching/|driver-profile/)?index\\.html$",
           "assertions": {
             "largest-contentful-paint": ["error", { "maxNumericValue": 2000 }]
           }

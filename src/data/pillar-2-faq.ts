@@ -15,10 +15,11 @@
 //   * Substantive answers (≥30 words floor; 50-65 typical) so the
 //     FAQ pulls real long-tail search traffic
 //
-// Types reused from pillar-1-faq.ts — both pillars share the
-// same FAQ shape; future pillars import from there as well.
+// Types live in `./faq` (extracted at T169 once Pillar 4 made
+// three consumers). Pillar 2 was the first downstream consumer
+// in this cluster.
 
-import type { Faq, FaqPageJsonLd } from './pillar-1-faq';
+import type { Faq, FaqPageJsonLd } from './faq';
 
 export const PILLAR_2_FAQS: ReadonlyArray<Faq> = [
   {

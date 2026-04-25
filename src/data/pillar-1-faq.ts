@@ -14,24 +14,11 @@
 //     "realistic" overclaim (ADR-004)
 //   * Substantive answers (≥30 words each) so the FAQ pulls
 //     real long-tail search traffic, not token padding
+//
+// Faq + FaqPageJsonLd types were extracted to `./faq` at T169,
+// once Pillar 4 made three consumers on the shared shape.
 
-export interface Faq {
-  readonly question: string;
-  readonly answer: string;
-}
-
-export interface FaqPageJsonLd {
-  readonly '@context': 'https://schema.org';
-  readonly '@type': 'FAQPage';
-  readonly mainEntity: ReadonlyArray<{
-    readonly '@type': 'Question';
-    readonly name: string;
-    readonly acceptedAnswer: {
-      readonly '@type': 'Answer';
-      readonly text: string;
-    };
-  }>;
-}
+import type { Faq, FaqPageJsonLd } from './faq';
 
 export const PILLAR_1_FAQS: ReadonlyArray<Faq> = [
   {

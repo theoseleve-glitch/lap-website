@@ -22,11 +22,11 @@
 //   * ≥3 of the 6 named apps referenced cumulatively — the
 //     comparison universe must show in the FAQ, not just LAP
 //
-// Types reused from pillar-1-faq.ts — Pillar 2 + Pillar 3
-// share the same FAQ shape; future pillars import from there
-// as well (premature abstraction avoided per outline note).
+// Types live in `./faq` (extracted at T169 once Pillar 4 made
+// three consumers — the deferred abstraction landed when the
+// outline's Rule-of-Three trigger fired).
 
-import type { Faq, FaqPageJsonLd } from './pillar-1-faq';
+import type { Faq, FaqPageJsonLd } from './faq';
 
 export const PILLAR_3_FAQS: ReadonlyArray<Faq> = [
   {

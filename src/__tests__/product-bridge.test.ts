@@ -88,3 +88,61 @@ test('T117: copy stays doctrine-aligned — no AI-coach / LLM / generative', asy
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
   expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
 });
+
+// Helper for T119: extract the how-it-works section by aria-
+// labelledby. Section-scoped pattern matches RaceBox + Wear OS
+// helpers on /product/mobile.
+function extractHowItWorksSection(html: string): string {
+  const match = html.match(
+    /<section[^>]+aria-labelledby="[^"]*how-it-works[^"]*"[^>]*>([\s\S]*?)<\/section>/i,
+  );
+  return match ? match[1] : '';
+}
+
+test('T119: page has a dedicated "how it works" algorithm-teaser section', async () => {
+  // The algorithm teaser is a separate section (not a paragraph
+  // tucked into one of the existing four). A reader who wants the
+  // mechanism story scans for the heading and lands on the
+  // pipeline; a reader who wants the conceptual story stays in
+  // the existing four sections. Two readers, one page.
+  const html = await render();
+  expect(html).toMatch(/<section[^>]+aria-labelledby="[^"]*how-it-works/i);
+});
+
+test('T119: how-it-works section uses an ordered list (the pipeline IS sequential)', async () => {
+  // The transfer pipeline runs in order: normalize → detect →
+  // match. A <ul> would read as "these are some things"; <ol>
+  // reads as "these happen in this order". Semantic structure
+  // matches the actual mechanism.
+  const html = await render();
+  const section = extractHowItWorksSection(html);
+  expect(section).not.toBe('');
+  expect(section).toMatch(/<ol[\s>]/);
+});
+
+test('T119: how-it-works section names the normalization/canonical step', async () => {
+  // The pipeline starts by mapping every session into a canonical
+  // shape so downstream comparison is platform-agnostic. Without
+  // this step the algorithm story does not hold together.
+  const html = await render();
+  const section = extractHowItWorksSection(html);
+  expect(section.toLowerCase()).toMatch(/(normaliz|canonical|same shape)/);
+});
+
+test('T119: how-it-works section names the weakness-detection step', async () => {
+  // ADR-005 §5.2 WeaknessEpisode is the doctrine vocabulary the
+  // teaser must reach. Locking this keyword keeps the marketing
+  // surface aligned with the backend object names.
+  const html = await render();
+  const section = extractHowItWorksSection(html);
+  expect(section.toLowerCase()).toMatch(/weakness/);
+});
+
+test('T119: how-it-works section names the cross-platform shape match', async () => {
+  // The matching step is what makes the bridge a bridge. Vague
+  // "compare" or "analyse" loses the conceptual unlock; "shape"
+  // here ties back to the homepage T030 + T117 framework.
+  const html = await render();
+  const section = extractHowItWorksSection(html);
+  expect(section.toLowerCase()).toMatch(/(match|map|cross-platform)/);
+});

@@ -116,6 +116,44 @@ const DESCRIPTION =
           fast-lap chasing.
         </p>
       </section>
+
+      <section
+        aria-labelledby="bridge-how-it-works-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">How it works</p>
+        <h2
+          id="bridge-how-it-works-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          The pipeline, in three steps.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          The bridge is not a black box. The shape of the algorithm is straightforward enough to
+          describe; the work is in getting each step right.
+        </p>
+        <ol class="text-steel text-body leading-body mt-6 ml-6 list-decimal space-y-3">
+          <li>
+            <strong class="text-chalk font-medium">Normalize.</strong>
+            Every session — sim or real — gets reduced to the same canonical shape: the same traces (brake,
+            throttle, steering, speed, time delta) sampled the same way along the same track-aligned reference,
+            regardless of which platform produced it.
+          </li>
+          <li>
+            <strong class="text-chalk font-medium">Detect weaknesses.</strong>
+            The detector runs on the canonical shape, not on the absolute lap time. A weakness is a pattern
+            — late on the brakes into T1, off-throttle too early at the apex, oversteer on exit — and
+            patterns are platform-agnostic. The output is a ranked list of weakness episodes per session.
+          </li>
+          <li>
+            <strong class="text-chalk font-medium">Match across platforms.</strong>
+            When a session lands on the other platform, the matcher compares its weakness episodes to
+            the most similar episodes on the previous platform. Matched pairs become a progression line
+            on your driver profile; unmatched real-world episodes become new entries the sim physics had
+            not exposed. The transfer report is the rendering of that comparison.
+          </li>
+        </ol>
+      </section>
     </div>
 
     <p class="mt-16">

@@ -19,7 +19,13 @@
 // no oracle for the confirmation flow.
 
 import { describe, expect, test } from 'vitest';
-import { signEmailToken, verifyEmailToken } from '../../functions/_lib/waitlist-token';
+import {
+  buildUnsubscribeUrl,
+  signEmailToken,
+  signUnsubscribeToken,
+  verifyEmailToken,
+  verifyUnsubscribeToken,
+} from '../../functions/_lib/waitlist-token';
 
 const SECRET = 'test_waitlist_token_secret_at_least_32_chars';
 
@@ -83,5 +89,73 @@ describe('T095: waitlist-token helpers', () => {
     const malformed = `${parts[0]}.notanumber.${parts[2]}`;
     const result = await verifyEmailToken(malformed, SECRET);
     expect(result).toBeNull();
+  });
+});
+
+describe('T100: unsubscribe-token helpers', () => {
+  test('signUnsubscribeToken + verifyUnsubscribeToken roundtrip returns the email', async () => {
+    // The unsubscribe flow MUST work indefinitely (GDPR Article 7:
+    // withdrawing consent is as easy as giving it). The token has
+    // no expiry segment, so a recipient who clicks an old email
+    // 18 months in still gets a working unsubscribe link.
+    const token = await signUnsubscribeToken('driver@example.com', SECRET);
+    const result = await verifyUnsubscribeToken(token, SECRET);
+    expect(result).toEqual({ email: 'driver@example.com' });
+  });
+
+  test('verifyUnsubscribeToken returns null on tampered HMAC', async () => {
+    const token = await signUnsubscribeToken('driver@example.com', SECRET);
+    const tampered = token.slice(0, -1) + (token.endsWith('0') ? '1' : '0');
+    const result = await verifyUnsubscribeToken(tampered, SECRET);
+    expect(result).toBeNull();
+  });
+
+  test('verifyUnsubscribeToken returns null on malformed token', async () => {
+    // Unsubscribe tokens are 2-segment (base64url(email).hexHmac).
+    // 3 or 1 or anything else means malformed.
+    const result = await verifyUnsubscribeToken('one', SECRET);
+    expect(result).toBeNull();
+    const result2 = await verifyUnsubscribeToken('one.two.three', SECRET);
+    expect(result2).toBeNull();
+  });
+
+  test('verifyUnsubscribeToken returns null on wrong secret', async () => {
+    const token = await signUnsubscribeToken('driver@example.com', SECRET);
+    const result = await verifyUnsubscribeToken(token, 'a_completely_different_value_here');
+    expect(result).toBeNull();
+  });
+
+  test('confirmation token (3-segment) does not verify as unsubscribe token', async () => {
+    // CRITICAL cross-domain isolation. A confirm token signed with
+    // the SAME secret must not pass unsubscribe verification —
+    // otherwise the same secret could be used to forge cross-flow
+    // tokens. Different segment shape + different HMAC payload
+    // (purpose-tagged) make these two domains cryptographically
+    // separate.
+    const confirmToken = await signEmailToken('driver@example.com', SECRET);
+    const result = await verifyUnsubscribeToken(confirmToken, SECRET);
+    expect(result).toBeNull();
+  });
+
+  test('unsubscribe token (2-segment) does not verify as confirmation token', async () => {
+    // The reverse direction — unsubscribe tokens must not pass
+    // confirm verification.
+    const unsubToken = await signUnsubscribeToken('driver@example.com', SECRET);
+    const result = await verifyEmailToken(unsubToken, SECRET);
+    expect(result).toBeNull();
+  });
+
+  test('buildUnsubscribeUrl produces a /api/waitlist/unsubscribe URL with the signed token', async () => {
+    // The drip handler (T096 when unblocked) calls this helper
+    // per-recipient to mint the URL passed into bodies(). Locking
+    // the path here means a future change to the unsubscribe
+    // endpoint route fails the test before the URL goes live.
+    const baseUrl = 'https://lap-coach.racing/anything';
+    const url = await buildUnsubscribeUrl('driver@example.com', SECRET, baseUrl);
+    expect(url).toMatch(/^https:\/\/lap-coach\.racing\/api\/waitlist\/unsubscribe\?token=/);
+    const token = new URL(url).searchParams.get('token');
+    expect(token).toBeTruthy();
+    const verified = await verifyUnsubscribeToken(token!, SECRET);
+    expect(verified).toEqual({ email: 'driver@example.com' });
   });
 });

@@ -109,3 +109,59 @@ export async function verifyEmailToken(
 
   return { email };
 }
+
+// T100 — unsubscribe tokens. Different format and different HMAC
+// payload from confirmation tokens so a token signed for one
+// purpose cannot be replayed as the other. Cryptographic domain
+// separation: same secret, different "purpose" string in the
+// payload prevents privilege escalation between flows.
+//
+// Format: `${base64url(email)}.${hexHmac}` (2 segments — no expiry).
+// Payload signed: `unsubscribe.${email}`.
+//
+// Why no expiry: GDPR Article 7. A recipient who finds an old LAP
+// email a year later and clicks unsubscribe expects it to work.
+// Time-bombing the link is hostile to the recipient's right to
+// withdraw consent.
+
+const UNSUBSCRIBE_PAYLOAD_PREFIX = 'unsubscribe';
+
+export async function signUnsubscribeToken(email: string, secret: string): Promise<string> {
+  const tag = await hmacHex(`${UNSUBSCRIBE_PAYLOAD_PREFIX}.${email}`, secret);
+  return `${base64urlEncode(email)}.${tag}`;
+}
+
+export async function verifyUnsubscribeToken(
+  token: string,
+  secret: string,
+): Promise<{ email: string } | null> {
+  const parts = token.split('.');
+  if (parts.length !== 2) return null;
+  const [encodedEmail, providedTag] = parts;
+
+  let email: string;
+  try {
+    email = base64urlDecode(encodedEmail);
+  } catch {
+    return null;
+  }
+  if (email === '') return null;
+
+  const expectedTag = await hmacHex(`${UNSUBSCRIBE_PAYLOAD_PREFIX}.${email}`, secret);
+  if (!constantTimeEqual(providedTag, expectedTag)) return null;
+
+  return { email };
+}
+
+export async function buildUnsubscribeUrl(
+  email: string,
+  secret: string,
+  baseUrl: string,
+): Promise<string> {
+  // Helper for the drip handler (T096 when unblocked): mint a
+  // per-contact unsubscribe URL ready to drop into the email
+  // body. Centralising the path here means a future route change
+  // updates one place, not three email modules.
+  const token = await signUnsubscribeToken(email, secret);
+  return new URL(`/api/waitlist/unsubscribe?token=${token}`, baseUrl).toString();
+}

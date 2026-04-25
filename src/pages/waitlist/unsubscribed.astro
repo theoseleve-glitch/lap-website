@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// T100 — /waitlist/unsubscribed is the destination of a successful
+// 303 redirect from functions/api/waitlist/unsubscribe.ts. The
+// recipient just clicked a per-contact unsubscribe link in a drip
+// email; this page closes the loop by confirming the state and
+// noting that it is final (no future drip touches, audit trail
+// preserved per soft-opt-out posture).
+//
+// Doctrine note: keep the copy short, factual, and free of "we're
+// sad to see you go" guilt-language. The point is to confirm the
+// state and let the recipient close the tab.
+
+const TITLE = 'You’re unsubscribed — LAP';
+const DESCRIPTION =
+  'You are unsubscribed from LAP waitlist emails. We will not contact you again unless you re-subscribe.';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION} noindex>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-steel text-caption tracking-wide uppercase">Unsubscribed</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        You're unsubscribed.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        We have removed you from the LAP waitlist drip. You will not get the launch invite, the
+        founder-rate confirmation, or any follow-up emails from us.
+      </p>
+      <p class="text-steel text-body mt-6">
+        If this was a mistake, you can rejoin anytime from the waitlist page. Either way, thanks for
+        the read.
+      </p>
+    </header>
+  </main>
+</BaseLayout>

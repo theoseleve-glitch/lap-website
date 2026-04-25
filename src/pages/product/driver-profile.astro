@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// T122 — /product/driver-profile. Fifth and final per-pillar
+// product page. The driver profile is the unification surface:
+// sim AND real sessions fold into one progression-over-time
+// record per driver, with skill dimensions (ADR-005 §5.1
+// DriverProgressSnapshot) and weakness episodes (§5.2) as the
+// underlying objects.
+//
+// Doctrine voice: cross-platform Driver OS, ADR-005 vocabulary
+// (skill, dimension, score, confidence, weakness, prescription,
+// outcome), ADR-004 anti-LLM lock — score WITH confidence is the
+// honest framing that distinguishes us from a one-number rating.
+//
+// /product overview pillar descriptor commits this page to:
+// strengths, weaknesses, drills attempted, drills closed, by
+// track and by car class — "shape of your driving over time
+// instead of a folder of telemetry files you never look at again."
+
+const TITLE = 'The Driver Profile — your progression, sim and real, one record — LAP';
+const DESCRIPTION =
+  'The driver profile is the progression-over-time surface — skill dimensions scored across sim and real-life sessions, weakness episodes tracked from open to dormant, drills attempted and drills closed, all indexed by track and car class.';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-acid-green text-caption tracking-wide uppercase">Driver Profile</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        Your progression, six months in.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        The driver profile is the part of LAP you check least and use most. It is the running record
+        of your shape as a driver — strengths, weaknesses, drills attempted, drills closed — built
+        session by session out of every sim stint and every track day, on one timeline, per driver.
+      </p>
+    </header>
+
+    <div class="mt-16 flex flex-col gap-12">
+      <section
+        aria-labelledby="profile-shape-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">The shape of your driving</p>
+        <h2
+          id="profile-shape-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          A record of what we have actually seen.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          The profile is not a star rating, and it is not a leaderboard. It is a record of what the
+          platform has actually seen you do — across sessions, across tracks, across cars. The shape
+          of your driving over time, in place of a folder of telemetry files you never look at
+          again. When a friend asks you what kind of driver you are, the profile is what you could
+          open and answer with.
+        </p>
+        <p class="text-steel text-body leading-body mt-4">
+          Three views matter day-to-day. <strong class="text-chalk font-medium">Strengths</strong>
+          — where the platform is confident you are above your reference. <strong
+            class="text-chalk font-medium">Weaknesses</strong
+          > — recurring issues with their lifecycle visible: open, improving, resolved, dormant. And
+          <strong class="text-chalk font-medium">drills</strong> — what you have been working on, what
+          worked, what did not. The same record, three angles.
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="profile-dimensions-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">Skill dimensions</p>
+        <h2
+          id="profile-dimensions-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          Ten axes, not one number.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          A single overall rating compresses too much. The profile scores you across ten skill
+          dimensions instead — braking, throttle pickup, minimum speed through corners, line
+          consistency, tyre management, racecraft, fatigue consistency, strategy execution, setup
+          sensitivity, and adaptation to new tracks and cars. Each dimension carries its own score,
+          its own 14-day trend, and its own evidence trail of which sessions fed it.
+        </p>
+        <p class="text-steel text-body leading-body mt-4">
+          The dimensions also segment by context. Strong on braking in GT3 cars at Spa, weaker on
+          braking in LMP at Le Mans — those are two different rows in the profile, not one averaged
+          number that hides the gap. Indexing is the same across the platform: by
+          <strong class="text-chalk font-medium">track</strong> and by
+          <strong class="text-chalk font-medium">car class</strong>. The driver profile inherits
+          those axes from the coaching library, which is what makes the loop close: a weakness
+          flagged at La Source on a Mercedes GT3 reads against your braking-at-Spa-in-GT3 score, not
+          against your driving in general.
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="profile-cross-platform-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">Sim and real, one timeline</p>
+        <h2
+          id="profile-cross-platform-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          One profile per driver, both halves.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          The whole point of a profile, as opposed to a per-platform dashboard, is that it does not
+          care whether the session came from your sim rig or your track day. Sim sessions and
+          real-world sessions feed the same skill dimensions, the same weakness episodes, the same
+          progression. A weakness flagged on iRacing in March, attacked through prescriptions in
+          April, then re-checked on the actual circuit in May — that is one continuous arc on the
+          profile, not two separate stories pretending to be unrelated.
+        </p>
+        <p class="text-steel text-body leading-body mt-4">
+          The bridge is what makes the cross-platform shape transferable; the driver profile is
+          where the shape lands. Six months of sim work plus three track days does not become a
+          spreadsheet you forget about — it becomes a record that says, here is what you started as,
+          here is what you have moved, here is what you are still working on.
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="profile-confidence-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">Score with confidence</p>
+        <h2
+          id="profile-confidence-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          The number is honest about what it knows.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          Every dimension carries a confidence value next to its score. The platform tells you when
+          a number is the result of forty sessions of evidence and when it is the result of three.
+          Confidence decays over time without re-observation: if you have not driven a circuit in
+          three months, the score for it dims, and the open weakness episodes there go dormant
+          rather than pretending they are still live findings.
+        </p>
+        <p class="text-steel text-body leading-body mt-4">
+          That is the honest version of progression tracking, and it is the version that comes out
+          of measurement rather than a model that talks about you. You see how good the platform
+          thinks you are, and you see how sure the platform is. Those two lines together are what a
+          driver profile is for.
+        </p>
+      </section>
+    </div>
+
+    <p class="mt-16">
+      <a
+        href="/product"
+        class="text-chalk hover:text-acid-green text-body inline-flex items-center underline underline-offset-4 transition"
+      >
+        ← Back to product overview
+      </a>
+    </p>
+  </main>
+</BaseLayout>

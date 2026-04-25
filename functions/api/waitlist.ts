@@ -1,14 +1,19 @@
-// T092 — Cloudflare Pages Function for the waitlist form. Lands at
-// /api/waitlist on the deployed site (Cloudflare Pages auto-discovers
-// files under `functions/`). The function validates the form post,
-// forwards to the Resend "waitlist" audience, and redirects the
-// visitor back to /waitlist with a status query string.
+// T092 + T093 — Cloudflare Pages Function for the waitlist form.
+// Lands at /api/waitlist on the deployed site (Cloudflare Pages
+// auto-discovers files under `functions/`). The function:
+//   1. Validates the form post (email, consent — T092)
+//   2. Verifies the Cloudflare Turnstile token via siteverify (T093)
+//   3. Forwards the contact to the Resend "waitlist" audience (T092)
+//   4. 303-redirects the visitor back to /waitlist?status=submitted
+//      on success
 //
 // Deployment dependencies (NOT yet wired — see T008 BLOCKED):
 //   1. Cloudflare Pages project bound to this repo (T008)
 //   2. RESEND_API_KEY secret on the Pages project
 //   3. RESEND_AUDIENCE_ID env var = the "waitlist" audience id from
 //      Resend's dashboard
+//   4. TURNSTILE_SECRET_KEY secret on the Pages project (matches
+//      the PUBLIC_TURNSTILE_SITE_KEY used in WaitlistForm.astro)
 // Until T008 unblocks, this file is reviewed-and-tested code waiting
 // for an environment to run in. The unit tests in
 // src/__tests__/api-waitlist.test.ts prove the logic in isolation.
@@ -24,6 +29,7 @@
 interface WaitlistEnv {
   RESEND_API_KEY: string;
   RESEND_AUDIENCE_ID: string;
+  TURNSTILE_SECRET_KEY: string;
 }
 
 interface PagesFunctionContext {
@@ -46,8 +52,10 @@ export async function onRequestPost(context: PagesFunctionContext): Promise<Resp
   // Fail loud on misconfigured deploy. Returning 500 with a server-
   // side log entry beats pretending the signup worked while emitting
   // nothing — the latter would silently break the T060 founder-rate
-  // promise.
-  if (!env.RESEND_API_KEY || !env.RESEND_AUDIENCE_ID) {
+  // promise. Turnstile secret missing is identically critical: a
+  // function that skips bot verification because of a missing key
+  // is a silent open door, not a quiet noop.
+  if (!env.RESEND_API_KEY || !env.RESEND_AUDIENCE_ID || !env.TURNSTILE_SECRET_KEY) {
     return new Response('Server misconfigured', {
       status: 500,
       headers: { 'Content-Type': 'text/plain; charset=utf-8' },
@@ -57,6 +65,7 @@ export async function onRequestPost(context: PagesFunctionContext): Promise<Resp
   const formData = await request.formData();
   const email = formData.get('email');
   const consent = formData.get('consent');
+  const turnstileToken = formData.get('cf-turnstile-response');
 
   if (typeof email !== 'string' || email.trim() === '') {
     return badRequest('Email is required');
@@ -72,6 +81,27 @@ export async function onRequestPost(context: PagesFunctionContext): Promise<Resp
   // without an explicit value attribute (the form ships none).
   if (consent !== 'on' && consent !== 'true') {
     return badRequest('Consent is required');
+  }
+
+  // T093 — Turnstile verification. The widget injects a
+  // cf-turnstile-response hidden field after the challenge passes.
+  // Missing token = bot or JS-disabled bypass; siteverify
+  // success:false = stale or replayed token. Both fail-fast at 400
+  // before we waste Resend quota.
+  if (typeof turnstileToken !== 'string' || turnstileToken === '') {
+    return badRequest('Spam check failed — please retry');
+  }
+  const verifyResponse = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      secret: env.TURNSTILE_SECRET_KEY,
+      response: turnstileToken,
+    }).toString(),
+  });
+  const verifyData = (await verifyResponse.json()) as { success?: boolean };
+  if (!verifyData.success) {
+    return badRequest('Spam check failed — please retry');
   }
 
   const resendResponse = await fetch(

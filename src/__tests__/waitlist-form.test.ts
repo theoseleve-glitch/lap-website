@@ -83,3 +83,26 @@ test('T091: copy stays doctrine-aligned — no AI-coach / LLM / generative', asy
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
   expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
 });
+
+test('T093: form renders the Cloudflare Turnstile widget div with a data-sitekey', async () => {
+  // Turnstile is the spam-protection layer. The widget is a single
+  // <div class="cf-turnstile" data-sitekey="..."> that the
+  // upstream Cloudflare script (loaded async/defer) hydrates into
+  // an invisible-or-managed challenge. The data-sitekey defaults
+  // to Cloudflare's public always-pass test key
+  // (1x00000000000000000000AA) so dev "just works"; production
+  // overrides via the PUBLIC_TURNSTILE_SITE_KEY env var.
+  const html = await render();
+  expect(html).toMatch(/<div[^>]+class="[^"]*cf-turnstile[^"]*"[^>]+data-sitekey="[^"]+"/);
+});
+
+test('T093: form loads the Cloudflare Turnstile script (async, deferred)', async () => {
+  // Without the script tag, the cf-turnstile div is just an
+  // empty container — no challenge runs and no token gets
+  // submitted. async + defer keep it off the LCP critical path
+  // (T036 budget).
+  const html = await render();
+  expect(html).toMatch(
+    /<script[^>]+src="https:\/\/challenges\.cloudflare\.com\/turnstile\/v0\/api\.js"/,
+  );
+});

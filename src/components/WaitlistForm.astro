@@ -23,8 +23,22 @@
 // real offer rather than a generic "we'll let you know" form.
 // T060 PricingFounderOffer locks the rate; this form is the
 // instrument for becoming a founder.
+//
+// T093 — Cloudflare Turnstile spam protection. The widget is a
+// single <div class="cf-turnstile"> + an async/deferred script
+// load. The widget injects a hidden cf-turnstile-response field
+// into the form when the challenge passes; T092's Pages Function
+// verifies that token via the Cloudflare siteverify endpoint
+// before forwarding to Resend.
+//
+// Site key default: Cloudflare publishes always-pass test keys
+// (1x00000000000000000000AA / secret 1x0000000000000000000000000000000AA)
+// for development. They're public test fixtures, safe to ship in
+// source. Production overrides via PUBLIC_TURNSTILE_SITE_KEY at
+// build time + TURNSTILE_SECRET_KEY on the Pages project.
 
 const HEADING_ID = 'waitlist-form-heading';
+const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA';
 ---
 
 <form
@@ -70,6 +84,8 @@ const HEADING_ID = 'waitlist-form-heading';
     </span>
   </label>
 
+  <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY}></div>
+
   <button
     type="submit"
     class="bg-chalk text-asphalt hover:bg-chalk/90 focus-visible:outline-chalk text-body inline-flex items-center justify-center px-7 py-3 font-medium transition"
@@ -77,3 +93,5 @@ const HEADING_ID = 'waitlist-form-heading';
     Join the waitlist
   </button>
 </form>
+
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>

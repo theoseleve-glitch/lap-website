@@ -52,4 +52,7 @@ The practical implication: trust your sim work most in
 categories 1, 2, and 4. Expect the visual fear in 3 and the
 seat-of-pants gap in 5. Treat 6 as a category you have to
 recalibrate at the actual track, not a category you can
-shortcut.
+shortcut. [Your driver profile](/product/driver-profile)
+tracks each tier separately, so a sim-strong / track-weak
+split in any single tier surfaces as a tier-shaped signal
+rather than as generic noise.

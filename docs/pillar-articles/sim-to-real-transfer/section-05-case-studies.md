@@ -62,3 +62,7 @@ Across all three, the partial transfer is predictable from the
 gradient alone. That's the whole point of the framework — once
 you can place a circuit in the right tier, you know in advance
 which parts of your sim work to trust and which to recalibrate.
+[Your driver profile](/product/driver-profile) carries the same
+logic into per-corner skill scoring: each weakness episode tags
+the corner type, so the framework's predictions land directly
+on your data.

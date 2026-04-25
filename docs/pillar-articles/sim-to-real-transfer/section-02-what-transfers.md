@@ -57,6 +57,8 @@ gets sim racers into trouble on their first track day.
   Pressure calibration has to be re-learned every track day.
 
 Once you accept that *shapes* transfer and *magnitudes* don't,
-the rest of the article makes sense. The next section unpacks
-why — the *shape vs intensity* framework that decides which
-parts of your driving carry over and which don't.
+the rest of the article makes sense. Those shapes are what
+[the coaching library](/product/coaching) codifies, one rule
+per named weakness. The next section unpacks why — the *shape
+vs intensity* framework that decides which parts of your
+driving carry over and which don't.

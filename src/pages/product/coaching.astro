@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// T120 — /product/coaching. Fourth per-pillar product page after
+// desktop, mobile, and bridge. The coaching library is the doctrinal
+// moat (ADR-013) and the engine that turns a WeaknessEpisode
+// (ADR-005 §5.2) into an ActionPrescription (§5.3) with ActionOutcome
+// (§5.4) closing the loop. Sub-task T121 (sample weaknesses +
+// prescriptions) layers concrete examples onto this base.
+//
+// Doctrine lock: ADR-004 forbids LLM-driven coaching in the 6-month
+// plan. Coaching is the single highest-risk pillar for a reader to
+// silently infer "AI coach", so the page must explicitly frame the
+// mechanism as rules-based — same defensive negation pattern as
+// /product/desktop's "live coaching" section.
+
+const TITLE = 'The coaching library — rules, prescriptions, outcomes — LAP';
+const DESCRIPTION =
+  'The coaching library is a catalog of weakness shapes — rules indexed by track section, car class, and weakness shape. Each rule is auditable YAML, versioned, and produces a prescription with a measurable success condition.';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-acid-green text-caption tracking-wide uppercase">Coaching library</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        The coaching library.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        Every prescription in LAP comes from a rule in the coaching library. The library is what
+        decides which patterns count as a weakness, which drill to put in front of you, and how to
+        tell whether it worked. It is the surface where doctrine and code meet.
+      </p>
+    </header>
+
+    <div class="mt-16 flex flex-col gap-12">
+      <section
+        aria-labelledby="coaching-library-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">The library</p>
+        <h2
+          id="coaching-library-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          A catalog of weakness shapes.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          The library is a versioned set of rules — small, named, written down. Each rule is a
+          weakness pattern with an explanation, a prescription, and a measurable success condition.
+          They are indexed by three axes: the
+          <strong class="text-chalk font-medium">track section</strong>
+          the pattern shows up in, the
+          <strong class="text-chalk font-medium">car class</strong>
+          it applies to, and the
+          <strong class="text-chalk font-medium">weakness shape</strong>
+          itself — late-on-the-brakes, off-throttle-too-early, oversteer-on-exit. The rule that fires
+          on you depends on which combination matched your session, not on a one-size-fits-all tip sheet.
+        </p>
+        <p class="text-steel text-body leading-body mt-4">
+          The library is rule-based, not a chat box. A weakness has to match a written-down
+          detection condition before it surfaces, and a prescription has to cite the rule it came
+          from. That framing matters because the alternative — a model that talks to you — is
+          something we have ruled out for the first phase of LAP for a reason: an opaque coach you
+          cannot audit is not a coach you can trust.
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="coaching-rule-to-prescription-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">Rule → prescription</p>
+        <h2
+          id="coaching-rule-to-prescription-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          From a detected weakness to a drill you can do tomorrow.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          When a session lands on the platform, the detector walks the library and records every
+          rule whose condition matched. Each match becomes a
+          <strong class="text-chalk font-medium">weakness episode</strong> — when it happened, where on
+          the lap, how severe, how confident. The rule then produces a
+          <strong class="text-chalk font-medium">prescription</strong>: a small piece of work with a
+          plain-language rationale, a drill to do next session, and a success condition the platform
+          will check against your future laps.
+        </p>
+        <p class="text-steel text-body leading-body mt-4">
+          A prescription is not a vibe. It has a target metric, a target value, and a measurement
+          window — three more sessions, seven more days, the next race weekend. You can see exactly
+          which rule fired it, what evidence triggered the rule, and what would count as the
+          prescription having worked.
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="coaching-outcomes-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">Outcomes</p>
+        <h2
+          id="coaching-outcomes-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          And then we measure whether it worked.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          When the measurement window closes, the platform records an
+          <strong class="text-chalk font-medium">outcome</strong>: did the success condition hold,
+          how much did the metric move, what fraction of the gap to your reference closed. Outcomes
+          are how a prescription stops being a suggestion and starts being a fact. Either it worked
+          for you or it did not, on numbers you can read.
+        </p>
+        <p class="text-steel text-body leading-body mt-4">
+          Outcomes also feed back into the library itself. Rules whose prescriptions consistently
+          fail to move the needle for drivers in a given car-and-track context get retired or
+          re-tuned; rules whose prescriptions consistently work get reinforced. The library improves
+          on the back of measurement, not on the back of a model retrain.
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="coaching-auditable-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">Auditable, not opaque</p>
+        <h2
+          id="coaching-auditable-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          Rules you can read.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          Each rule is a small, named, versioned object — readable by us, readable by you when the
+          platform shows you why a prescription fired. That is the deliberate trade. We are giving
+          up the surface area of an open-ended chat in exchange for a coaching surface where every
+          recommendation has a clear chain of custody: this rule, on this evidence, with this
+          expected gain, measured against this success condition.
+        </p>
+        <p class="text-steel text-body leading-body mt-4">
+          The pieces that make a session-by-session coach work — pattern matching, prescription,
+          outcome measurement — are not the pieces that need a model that talks. They need a library
+          that is written down. That is the bet of the first phase of LAP, and the coaching library
+          is the artefact that proves it.
+        </p>
+      </section>
+    </div>
+
+    <p class="mt-16">
+      <a
+        href="/product"
+        class="text-chalk hover:text-acid-green text-body inline-flex items-center underline underline-offset-4 transition"
+      >
+        ← Back to product overview
+      </a>
+    </p>
+  </main>
+</BaseLayout>

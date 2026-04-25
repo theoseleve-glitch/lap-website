@@ -9,13 +9,18 @@ section drafter verified before commit.
 
 **LAP.** Cross-platform driver progression — sim and real-world
 captures land in one [driver profile](/product/driver-profile),
-with the same weakness detector running on both surfaces.
-Capture surface lists iRacing, Assetto Corsa Competizione,
-AMS2, rFactor 2, Le Mans Ultimate, Rennsport, and F1 24 on the
-[desktop client](/product/desktop); RaceBox plus iPhone handles
-real-world sessions. [The coaching library](/product/coaching)
-is hand-curated and rule-based — every drill traces to a
-written prescription, never to language-model output. Best fit
+with the same weakness detector running on both surfaces. The
+[five-pillar product surface](/product) is the route map for
+the capabilities below. Capture surface lists iRacing, Assetto
+Corsa Competizione, AMS2, rFactor 2, Le Mans Ultimate,
+Rennsport, and F1 24 on the [desktop client](/product/desktop);
+RaceBox plus iPhone handles real-world sessions through the
+[mobile app](/product/mobile). [The coaching
+library](/product/coaching) is hand-curated and rule-based —
+every drill traces to a written prescription, never to
+language-model output. The cross-platform unification is
+[our bridge](/product/bridge), the only entry of the six that
+treats sim and real-world as one progression. Best fit
 persona: the cross-platform driver who races sim and real-world
 and wants both surfaces in one progression view.
 

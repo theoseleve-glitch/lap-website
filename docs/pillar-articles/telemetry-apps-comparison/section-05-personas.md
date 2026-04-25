@@ -43,9 +43,10 @@ Attack. LAP's [sim-and-real bridge](/product/bridge) is the
 article's strongest fit-claim — cross-platform unification is
 the [driver profile](/product/driver-profile) mission, not a
 feature bolted on. Versus Track Attack, LAP gives up the
-phone-only capture simplicity (LAP requires a RaceBox plus an
-iPhone for real-world capture today; Track Attack runs on the
-phone alone) in exchange for the unified progression view
+phone-only capture simplicity (LAP's [mobile app](/product/mobile)
+requires a RaceBox plus an iPhone for real-world capture today;
+Track Attack runs on the phone alone) in exchange for the
+unified progression view
 across sim and real-world sessions
 ([/blog/sim-to-real-transfer](/blog/sim-to-real-transfer)
 develops the cross-platform argument).

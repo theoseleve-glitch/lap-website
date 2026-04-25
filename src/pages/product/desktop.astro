@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// T108 — /product/desktop. The first per-pillar product page,
+// covering the three sprint-spec areas: sim capture, live coaching,
+// strategy. Sub-tasks layer onto this base:
+//   * T109 — screenshots + video (BLOCKED until assets exist)
+//   * T110 — download CTA → GitHub Releases (BLOCKED on T008 + a
+//     released build)
+//   * T111 — fuller supported-sims list
+//   * T112 — system requirements
+//
+// "Live coaching" doctrine note: ADR-004 forbids LLM-driven
+// coaching claims. The Live coaching section uses the sprint-spec
+// vocabulary in the heading but the body frames it as rule-based
+// reference signals (pace delta, sector deltas, optional in-cockpit
+// overlay). No voice coach in your headset, no LLM. Same domain
+// word, different mechanism.
+
+const TITLE = 'LAP for desktop — sim capture, live coaching, strategy — LAP';
+const DESCRIPTION =
+  'LAP for desktop captures every sim session in real time, surfaces rule-based pace and sector reference signals while you drive, and ships race-night strategy tooling. iRacing, ACC, AMS2.';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-acid-green text-caption tracking-wide uppercase">Desktop</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        LAP for desktop.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        The desktop client captures every sim session you drive, gives you live reference signals
+        while you are still in the cockpit, and ships race-night strategy tooling for the events
+        where the lap-by-lap data is the whole point.
+      </p>
+    </header>
+
+    <div class="mt-16 flex flex-col gap-12">
+      <section
+        aria-labelledby="desktop-capture-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">Sim capture</p>
+        <h2
+          id="desktop-capture-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          Every session, in real time.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          Telemetry from <strong class="text-chalk font-medium">iRacing</strong>,
+          <strong class="text-chalk font-medium">ACC</strong> (Assetto Corsa Competizione), and
+          <strong class="text-chalk font-medium">AMS2</strong> (Automobilista 2) streams into LAP automatically.
+          No file imports, no post-session paste. The session lands in your driver profile the moment
+          you exit the cockpit, with weaknesses already flagged for the next drill cycle.
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="desktop-coaching-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">Live coaching</p>
+        <h2
+          id="desktop-coaching-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          Rule-based reference, not a voice in your headset.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          Live coaching here means signals you read at your own pace: lap-time delta against your
+          personal best on this track plus car combo, sector deltas against your reference lap, and
+          an optional in-cockpit overlay for the brake and throttle traces of the reference lap. The
+          signals come from the rule library and the data from your own driving — no generated
+          commentary, no chat-box trying to talk to you while you are at the wheel.
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="desktop-strategy-heading"
+        class="border-steel/15 max-w-prose border-t pt-10"
+      >
+        <p class="text-steel text-caption tracking-wide uppercase">Strategy</p>
+        <h2
+          id="desktop-strategy-heading"
+          class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+        >
+          Race-night tooling.
+        </h2>
+        <p class="text-steel text-body leading-body mt-4">
+          Endurance events and serious races run on the lap-by-lap numbers — pace targets, fuel
+          stints, tyre management, the gap to the car ahead three corners from now. The strategy
+          surface puts those numbers next to your live session so the call you make in lap 47 is the
+          call the data already supports, not the call the spotter remembered.
+        </p>
+      </section>
+    </div>
+
+    <p class="mt-16">
+      <a
+        href="/product"
+        class="text-chalk hover:text-acid-green text-body inline-flex items-center underline underline-offset-4 transition"
+      >
+        ← Back to product overview
+      </a>
+    </p>
+  </main>
+</BaseLayout>

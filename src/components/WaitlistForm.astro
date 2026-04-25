@@ -11,12 +11,10 @@
 // Consent posture (GDPR Article 7): a freely-given, affirmative,
 // specific, informed consent. The required checkbox is the
 // affirmative action; the inline label discloses the purpose
-// ("launch and founder-pricing emails") and the unsubscribe path
-// — that's the substantive informed-consent surface for a single-
-// purpose email collection. A /privacy page link will be added
-// when /privacy ships and when the site adds analytics/cookies
-// that need broader policy disclosure (T103 PostHog events will
-// trigger that conversation).
+// ("launch and founder-pricing emails") and the unsubscribe path,
+// and a /privacy link (T101) points at the full transparency
+// notice — controller identity, processors, rights, contact —
+// so the consent satisfies the "informed" prong of Article 7.
 //
 // Doctrine: 01-STRATEGIC-DOCTRINE.md §8 founder rate (€12/month
 // for 12 months, grandfathered) is what makes this waitlist a
@@ -79,8 +77,14 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000
       class="border-steel/40 bg-asphalt text-chalk focus-visible:outline-chalk mt-1 size-4 shrink-0 rounded-sm border focus-visible:outline-2 focus-visible:outline-offset-2"
     />
     <span>
-      I agree to receive launch and founder-pricing emails from LAP. Unsubscribe anytime from any
-      email.
+      I agree to receive launch and founder-pricing emails from LAP. See our
+      <a
+        href="/privacy"
+        class="text-chalk hover:text-acid-green underline underline-offset-4 transition"
+      >
+        privacy notice
+      </a>
+      for how we handle your data. Unsubscribe anytime from any email.
     </span>
   </label>
 

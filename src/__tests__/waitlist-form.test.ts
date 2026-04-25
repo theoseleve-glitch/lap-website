@@ -84,6 +84,18 @@ test('T091: copy stays doctrine-aligned — no AI-coach / LLM / generative', asy
   expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
 });
 
+test('T101: consent disclosure links to /privacy (GDPR informed-consent)', async () => {
+  // GDPR Article 13(1)(c+e+f) + Recital 42: informed consent
+  // requires the data subject to know who controls their data,
+  // who it goes to, and what their rights are. Linking to the
+  // privacy notice from the consent surface is how every
+  // GDPR-compliant signup form satisfies "informed". The link
+  // must point exactly at /privacy so the cross-doc contract
+  // (form → privacy notice) cannot drift.
+  const html = await render();
+  expect(html).toMatch(/<a[^>]+href="\/privacy"/);
+});
+
 test('T093: form renders the Cloudflare Turnstile widget div with a data-sitekey', async () => {
   // Turnstile is the spam-protection layer. The widget is a single
   // <div class="cf-turnstile" data-sitekey="..."> that the

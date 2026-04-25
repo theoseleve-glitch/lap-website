@@ -1,0 +1,241 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// T101 — privacy notice for the marketing site (lap-coach.racing).
+// Scope is intentionally tight: this notice covers the data
+// processing that happens on the marketing site today (waitlist,
+// cookieless analytics, error monitoring, security challenges).
+// The webapp at app.lap-coach.racing has its own broader processing
+// (auth, billing, telemetry capture) and will ship its own notice
+// when that surface lands.
+//
+// Doctrine: plain language, no legalese where it can be avoided,
+// "honest by default". Each section says what we actually do —
+// not generic boilerplate copied from a template generator. If
+// a sentence is opaque to a non-lawyer reader it is rewritten.
+//
+// Articles cited: GDPR Article 13 (information at collection),
+// 15-21 (data-subject rights), 28 (processors), 44+ (international
+// transfers). The text does not enumerate article numbers in the
+// body — the regulatory framework is named once (for the
+// search-and-skim "is this GDPR-compliant?" reader) and the
+// substantive rights are described in plain words.
+
+const TITLE = 'Privacy — LAP';
+const DESCRIPTION =
+  'How LAP handles your data on lap-coach.racing — what we collect, why, who we share it with, and your GDPR rights.';
+const LAST_UPDATED = '25 April 2026';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-3xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-steel text-caption tracking-wide uppercase">Policy</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">Privacy.</h1>
+      <p class="text-steel text-body mt-6">
+        This notice covers how LAP handles personal data on this marketing site (lap-coach.racing).
+        The webapp on app.lap-coach.racing has a separate, broader notice that ships when the webapp
+        launches. The framework that applies here is the EU General Data Protection Regulation
+        (GDPR).
+      </p>
+    </header>
+
+    <div class="text-steel text-body leading-body mt-12 flex flex-col gap-10">
+      <section aria-labelledby="privacy-controller-heading">
+        <h2
+          id="privacy-controller-heading"
+          class="font-display text-h3 text-chalk tracking-display text-balance"
+        >
+          Who we are
+        </h2>
+        <p class="mt-4">
+          LAP is the controller of the personal data processed on this site. LAP is run by a solo
+          founder, contactable at
+          <a
+            href="mailto:privacy@lap-coach.racing"
+            class="text-chalk hover:text-acid-green underline underline-offset-4 transition"
+          >
+            privacy@lap-coach.racing
+          </a>
+          for any privacy question or rights request, and at
+          <a
+            href="mailto:support@lap-coach.racing"
+            class="text-chalk hover:text-acid-green underline underline-offset-4 transition"
+          >
+            support@lap-coach.racing
+          </a>
+          for everything else.
+        </p>
+      </section>
+
+      <section aria-labelledby="privacy-collect-heading">
+        <h2
+          id="privacy-collect-heading"
+          class="font-display text-h3 text-chalk tracking-display text-balance"
+        >
+          What we collect, why, and on what legal basis
+        </h2>
+        <p class="mt-4">
+          We collect three categories of data on this site, each tied to a specific purpose and
+          legal basis.
+        </p>
+        <p class="mt-4">
+          <strong class="text-chalk font-medium">Waitlist email.</strong>
+          When you join the waitlist, we collect your email address and a record of your consent. The
+          purpose is to send you the public-beta launch invite and a short series of founder-pricing emails.
+          The legal basis is your consent (GDPR Article 6(1)(a)). You can withdraw it at any time by clicking
+          the unsubscribe link in any of those emails or by emailing us. We keep the address for as long
+          as you are subscribed; once you unsubscribe, we soft-delete it (mark unsubscribed in our email-sending
+          system) so the same address is not accidentally re-added later.
+        </p>
+        <p class="mt-4">
+          <strong class="text-chalk font-medium">Cookieless analytics.</strong>
+          We measure aggregate traffic (page views, referrers, country, device class) using PostHog configured
+          in cookieless mode. No tracking cookie is set on first visit and no cross-session identifier
+          is built. The legal basis is our legitimate interest in understanding which pages help visitors
+          decide whether LAP is for them (GDPR Article 6(1)(f)). You can object at any time by emailing
+          us; the analytics are aggregated to a level where individual exclusion is straightforward.
+        </p>
+        <p class="mt-4">
+          <strong class="text-chalk font-medium">Error monitoring.</strong>
+          When a JavaScript error happens on the site, we send the error message, the page URL, and the
+          browser type to Sentry so we can fix it. No form input or email is included. The legal basis
+          is our legitimate interest in keeping the site working (GDPR Article 6(1)(f)).
+        </p>
+      </section>
+
+      <section aria-labelledby="privacy-processors-heading">
+        <h2
+          id="privacy-processors-heading"
+          class="font-display text-h3 text-chalk tracking-display text-balance"
+        >
+          Who we share it with
+        </h2>
+        <p class="mt-4">
+          We do not sell or rent personal data. The processors we use, each under a written data
+          processing agreement, are:
+        </p>
+        <ul class="mt-4 ml-6 list-disc space-y-2">
+          <li>
+            <strong class="text-chalk font-medium">Resend</strong> — sends the waitlist confirmation email
+            and the founder-rate drip emails. Stores your email and unsubscribe state. US-based, GDPR-compliant
+            data processing terms.
+          </li>
+          <li>
+            <strong class="text-chalk font-medium">Cloudflare</strong> — hosts the site and runs Turnstile,
+            the spam-check challenge on the waitlist form. Sees standard request data (IP address, user
+            agent) for security purposes. US-based with EU points of presence.
+          </li>
+          <li>
+            <strong class="text-chalk font-medium">PostHog</strong> — receives cookieless analytics events
+            as described above. EU-hosted instance.
+          </li>
+          <li>
+            <strong class="text-chalk font-medium">Sentry</strong> — receives error reports as described
+            above. EU-hosted instance.
+          </li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="privacy-transfers-heading">
+        <h2
+          id="privacy-transfers-heading"
+          class="font-display text-h3 text-chalk tracking-display text-balance"
+        >
+          International transfers
+        </h2>
+        <p class="mt-4">
+          Some of our processors are based outside the EU (Resend, Cloudflare). Those transfers rely
+          on the European Commission&rsquo;s Standard Contractual Clauses or an equivalent adequacy
+          mechanism. If you want a copy of the safeguards in place for a specific processor, email
+          us.
+        </p>
+      </section>
+
+      <section aria-labelledby="privacy-rights-heading">
+        <h2
+          id="privacy-rights-heading"
+          class="font-display text-h3 text-chalk tracking-display text-balance"
+        >
+          Your rights
+        </h2>
+        <p class="mt-4">Under GDPR you have the right to:</p>
+        <ul class="mt-4 ml-6 list-disc space-y-2">
+          <li>
+            <strong class="text-chalk font-medium">Access</strong> a copy of the personal data we hold
+            about you.
+          </li>
+          <li>
+            <strong class="text-chalk font-medium">Rectify</strong> data that is inaccurate.
+          </li>
+          <li>
+            <strong class="text-chalk font-medium">Erase</strong> your data, subject to the limits of
+            what is required for an active legal obligation. For waitlist data this means full deletion;
+            nothing about a withdrawn waitlist signup is kept beyond the soft-delete audit record.
+          </li>
+          <li>
+            <strong class="text-chalk font-medium">Restrict or object</strong> to processing, including
+            the legitimate-interest analytics described above.
+          </li>
+          <li>
+            <strong class="text-chalk font-medium">Withdraw consent</strong> at any time, by clicking
+            the unsubscribe link in any drip email or by emailing us. Withdrawal does not affect processing
+            already done.
+          </li>
+          <li>
+            <strong class="text-chalk font-medium">Data portability</strong> — receive your data in a
+            portable format. For a waitlist record this is a single line of email + consent timestamp.
+          </li>
+          <li>
+            <strong class="text-chalk font-medium">Lodge a complaint</strong> with your national data
+            protection authority (the supervisory authority in your EU country of residence). We would
+            prefer you contact us first so we can fix what went wrong, but the regulator route is your
+            right.
+          </li>
+        </ul>
+        <p class="mt-4">
+          To exercise any of these rights, email
+          <a
+            href="mailto:privacy@lap-coach.racing"
+            class="text-chalk hover:text-acid-green underline underline-offset-4 transition"
+          >
+            privacy@lap-coach.racing
+          </a>
+          with the request and the email address tied to your data. We respond within 30 days as GDPR
+          requires, usually faster.
+        </p>
+      </section>
+
+      <section aria-labelledby="privacy-cookies-heading">
+        <h2
+          id="privacy-cookies-heading"
+          class="font-display text-h3 text-chalk tracking-display text-balance"
+        >
+          Cookies
+        </h2>
+        <p class="mt-4">
+          We do not set tracking cookies on this site. Cloudflare may set short-lived security
+          cookies to run the spam-check on the waitlist form (the cookie is not used for tracking).
+          PostHog runs in cookieless mode and sets none. If a future change requires a tracking
+          cookie, this notice gets updated and the relevant consent surface added before the change
+          goes live.
+        </p>
+      </section>
+
+      <section aria-labelledby="privacy-changes-heading">
+        <h2
+          id="privacy-changes-heading"
+          class="font-display text-h3 text-chalk tracking-display text-balance"
+        >
+          Changes to this notice
+        </h2>
+        <p class="mt-4">
+          When we update this notice we change the &ldquo;last updated&rdquo; date below. For a
+          material change (new processor, new processing purpose, expanded data category) we email
+          waitlist subscribers in advance.
+        </p>
+        <p class="text-steel/70 mt-6 text-sm">Last updated: {LAST_UPDATED}.</p>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

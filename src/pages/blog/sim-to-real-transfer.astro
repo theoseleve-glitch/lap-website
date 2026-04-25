@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { PILLAR_1_FAQS, pillar1FaqJsonLd } from '../../data/pillar-1-faq';
+
+// T140 — published Pillar 1 article. SEO acquisition surface for
+// sim-and-real-life racers searching the question
+// "does sim racing help my real-world track-day driving?"
+// Markdown-rendered body imports the canonical editorial source
+// from docs/pillar-articles/sim-to-real-transfer/ so the published
+// page and the editorial workspace cannot drift apart — same
+// content, two surfaces. FAQ surface (T139) imports from data
+// module; JSON-LD derives from the same array.
+//
+// Indexing-submission step at Google Search Console is a manual
+// post-deploy action — the page is build-ready and indexable; once
+// production deploys (depends on T008/T009/T010 deploy infra), the
+// URL goes into GSC's URL Inspection tool for explicit crawl
+// request, and the auto-generated sitemap.xml takes care of the
+// recurring re-crawl signal.
+
+import * as section02 from '../../../docs/pillar-articles/sim-to-real-transfer/section-02-what-transfers.md';
+import * as section03 from '../../../docs/pillar-articles/sim-to-real-transfer/section-03-shape-vs-intensity.md';
+import * as section04 from '../../../docs/pillar-articles/sim-to-real-transfer/section-04-track-geometry.md';
+import * as section05 from '../../../docs/pillar-articles/sim-to-real-transfer/section-05-case-studies.md';
+import * as section06 from '../../../docs/pillar-articles/sim-to-real-transfer/section-06-measure-yourself.md';
+
+const { Content: Section02 } = section02;
+const { Content: Section03 } = section03;
+const { Content: Section04 } = section04;
+const { Content: Section05 } = section05;
+const { Content: Section06 } = section06;
+
+const TITLE = 'Sim to real-life racing transfer — what carries over, and what doesn’t';
+const DESCRIPTION =
+  'Sim racing transfers to real driving partially, and the partial is predictable. The shape-vs-intensity framework, six-tier corner geometry, three case studies, and a DIY method to measure transfer in your own data.';
+
+const siteURL = Astro.site ?? new URL('https://lap-coach.racing/');
+const pageURL = new URL(Astro.url.pathname, siteURL).toString();
+
+// schema.org/Article — opens article-level rich-result eligibility.
+// Date strings keep this static-build-friendly; the article content
+// itself is editorially stable enough that publish/modified line up.
+const ARTICLE_PUBLISHED = '2026-04-25';
+const ARTICLE_MODIFIED = '2026-04-25';
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Sim to real-life racing transfer',
+  description: DESCRIPTION,
+  url: pageURL,
+  datePublished: ARTICLE_PUBLISHED,
+  dateModified: ARTICLE_MODIFIED,
+  author: {
+    '@type': 'Organization',
+    name: 'LAP',
+    url: siteURL.toString(),
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'LAP',
+    url: siteURL.toString(),
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': pageURL,
+  },
+};
+
+const faqJsonLd = pillar1FaqJsonLd();
+
+const FAQ_HEADING_ID = 'pillar-1-faq-heading';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION} ogType="article">
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <article class="max-w-prose">
+      <header>
+        <p class="text-acid-green text-caption tracking-wide uppercase">Sim to real</p>
+        <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+          Sim to real-life racing transfer.
+        </h1>
+        <p class="text-steel text-body mt-6">
+          The sim racer who has done five seasons of iRacing GT3 and is about to do their first
+          track day in a real car. The track-day driver who has been told their lap-time gap is on
+          trail-braking and is wondering whether buying a sim rig is a better use of money than
+          another track day. Both arrive at this article with the same question — does sim work
+          transfer to real driving? The answer is yes, partially, and the partial is predictable.
+        </p>
+      </header>
+
+      <div
+        class="prose prose-invert text-steel mt-16 max-w-prose [&_a]:text-acid-green [&_a:hover]:underline [&_h2]:font-display [&_h2]:text-h3 [&_h2]:text-chalk [&_h2]:tracking-display [&_h2]:mt-16 [&_h2]:mb-6 [&_h3]:font-display [&_h3]:text-h4 [&_h3]:text-chalk [&_h3]:tracking-display [&_h3]:mt-10 [&_h3]:mb-4 [&_p]:my-4 [&_p]:leading-body [&_ul]:my-4 [&_ul]:pl-6 [&_ul]:list-disc [&_li]:my-2 [&_li]:leading-body [&_strong]:text-chalk"
+      >
+        <Section02 />
+        <Section03 />
+        <Section04 />
+        <Section05 />
+        <Section06 />
+      </div>
+    </article>
+
+    <section
+      aria-labelledby={FAQ_HEADING_ID}
+      class="border-steel/10 mx-auto mt-24 max-w-prose border-t pt-24 sm:mt-32 sm:pt-32"
+    >
+      <header>
+        <p class="text-steel text-caption tracking-wide uppercase">FAQ</p>
+        <h2
+          id={FAQ_HEADING_ID}
+          class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+        >
+          Common questions.
+        </h2>
+      </header>
+
+      <div class="mt-12 flex flex-col gap-3">
+        {
+          PILLAR_1_FAQS.map((faq) => (
+            <details class="border-steel/15 bg-concrete/40 rounded-2 group border">
+              <summary class="text-chalk flex cursor-pointer items-center justify-between gap-4 p-6 font-medium">
+                <span>{faq.question}</span>
+                <span
+                  class="text-steel shrink-0 transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <div class="border-steel/10 border-t px-6 pt-4 pb-6">
+                <p class="text-steel text-body leading-body">{faq.answer}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(articleJsonLd)}
+  />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</BaseLayout>

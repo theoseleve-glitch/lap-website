@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "lhci": "lhci autorun",
-    "astro": "astro"
+    "astro": "astro",
+    "export:waitlist": "node scripts/export-waitlist.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.8",

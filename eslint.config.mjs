@@ -20,4 +20,15 @@ export default [
       ],
     },
   },
+  {
+    // Node ESM scripts (not browser code) — declare the Node
+    // globals they use so eslint's no-undef does not flag them.
+    files: ['scripts/**/*.{js,mjs}'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+      },
+    },
+  },
 ];

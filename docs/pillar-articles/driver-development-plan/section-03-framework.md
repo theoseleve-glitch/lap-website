@@ -13,9 +13,11 @@ trace shows a stab pattern with three inflection points
 where my reference shows a single continuous taper" — that
 is a shape. Shapes recur. The same brake-release shape that
 shows up at Sebring T1 will show up at Spa Les Combes and
-Suzuka Spoon, in sim and in real-world capture alike. [The
-trail-braking explainer](/blog/what-is-trail-braking) walks
-through one shape end-to-end.
+Suzuka Spoon, in sim and in real-world capture alike — [our
+cross-platform bridge](/product/bridge) is what unifies
+both surfaces under one diagnose step. [The trail-braking
+explainer](/blog/what-is-trail-braking) walks through one
+shape end-to-end.
 
 **Prescribe.** Pick exactly one thing to drill, with a
 success criterion that is observable and measurable. Not

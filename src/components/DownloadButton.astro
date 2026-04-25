@@ -1,0 +1,47 @@
+---
+// T129 — Download CTA primitive. The actual buttons land with
+// T110 (GitHub Releases on /product/desktop) and T114 (Play Store
+// badge on /product/mobile). When those tasks unblock, callers
+// use this component instead of hand-rolling an <a> tag, and
+// inherit the security + analytics integrity contract.
+//
+// Security invariants encoded:
+//   * target="_blank" — external download opens in a new tab so
+//     the page the user was reading is not replaced
+//   * rel="noopener noreferrer" — noopener blocks tab-nabbing
+//     (target page cannot rewrite window.opener); noreferrer
+//     prevents the download host from seeing which LAP page
+//     sent them
+//
+// Analytics anchoring:
+//   * data-download-platform / data-download-source — read by
+//     the page's click-wiring script (one-liner that imports
+//     captureDownloadInitiated from T128's download-events
+//     module and dispatches it on every download anchor click)
+//
+// Slot pattern: callers control the visible label so /product/
+// desktop can render "Download for Windows" and /product/mobile
+// can render "Get it on Google Play" without the component
+// having opinions about platform-specific button copy.
+
+import type { DownloadPlatform, DownloadSource } from '../scripts/download-events';
+
+interface Props {
+  platform: DownloadPlatform;
+  source: DownloadSource;
+  href: string;
+}
+
+const { platform, source, href } = Astro.props;
+---
+
+<a
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  data-download-platform={platform}
+  data-download-source={source}
+  class="bg-acid-green text-asphalt hover:bg-acid-green/90 text-body inline-flex items-center gap-2 rounded-md px-5 py-3 font-medium transition"
+>
+  <slot />
+</a>

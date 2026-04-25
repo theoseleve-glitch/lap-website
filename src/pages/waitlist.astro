@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import WaitlistForm from '../components/WaitlistForm.astro';
+import WaitlistCount from '../components/WaitlistCount.astro';
 
 // T091 — /waitlist route. Mounts the WaitlistForm so the route
 // referenced by T060 PricingFounderOffer ("Signed up before
@@ -17,6 +18,15 @@ import WaitlistForm from '../components/WaitlistForm.astro';
 const TITLE = 'Join the LAP waitlist — LAP';
 const DESCRIPTION =
   'Join the LAP waitlist for the public beta launch. Founder rate locked at €12 a month for 12 months — the offer survives any future pricing change. Email-only, GDPR-compliant.';
+
+// T102 — public waitlist count, optional. Read from build-time
+// env so the founder can publish the number once it crosses 100
+// without code changes (set PUBLIC_WAITLIST_COUNT=247 in
+// Cloudflare Pages env, redeploy). Below 100 the component
+// renders nothing; the page reads identically to the pre-T102
+// state, so the existing /waitlist tests remain untouched.
+const rawCount = import.meta.env.PUBLIC_WAITLIST_COUNT;
+const waitlistCount = Number.parseInt(rawCount ?? '0', 10);
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
@@ -32,6 +42,10 @@ const DESCRIPTION =
         from your first paid month — €3 under the standard rate, durable across any future pricing change.
       </p>
     </header>
+
+    <div class="mt-8">
+      <WaitlistCount count={waitlistCount} />
+    </div>
 
     <WaitlistForm />
   </main>

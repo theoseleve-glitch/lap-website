@@ -1,0 +1,32 @@
+---
+// T102 — public waitlist count, optional. Renders the social-
+// proof anchor "N sim racers on the waitlist" only when N ≥ 100.
+//
+// Below the threshold the component renders nothing rather than
+// an honest-but-self-defeating low number — small public counts
+// hurt conversion. Above the threshold the number motivates more
+// signups (visible momentum signal).
+//
+// Count source: passed in as a prop. Calling pages typically read
+// `import.meta.env.PUBLIC_WAITLIST_COUNT`, parse to int, pass.
+// Updating is a manual env-edit + redeploy — a future enhancement
+// could swap to a build-time Astro fetch from the Resend audience
+// or a /api/waitlist/count Pages Function with edge cache. For
+// the (optional) tier the manual posture is the right scope.
+
+interface Props {
+  count: number;
+}
+
+const { count } = Astro.props;
+const THRESHOLD = 100;
+const visible = Number.isFinite(count) && count >= THRESHOLD;
+---
+
+{
+  visible && (
+    <p class="text-steel text-caption tracking-wide">
+      <strong class="text-chalk font-medium">{count}</strong> sim racers on the waitlist.
+    </p>
+  )
+}

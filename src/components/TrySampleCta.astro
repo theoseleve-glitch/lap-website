@@ -1,0 +1,52 @@
+---
+// T076 — "Try it with a real session" CTA on /demo. Bridges
+// the gap between the 3-minute walkthrough video (T074, BLOCKED
+// on real product UI) and the full T085 trial CTA with a lower-
+// friction interactive offer: visitor either uploads their own
+// iRacing .ibt session file or opens our prewired Sebring sample
+// at app.lap-coach.racing/sample (T077 data fixture, also
+// pending).
+//
+// The site-side CTA ships now. The destination 404s pre-launch
+// — same posture as T085's /signup destination — and becomes
+// live alongside public-beta launch on 2026-07-23.
+//
+// Placement on /demo: between DemoWalkthrough and SocialProof.
+// This makes the page ladder explicit:
+//   walkthrough → try-with-your-own-data → social proof → trial
+// Each rung is lower-friction than the next, so the visitor
+// self-sorts to whichever rung lands them at the right level
+// of commitment.
+
+const CTA_HREF = 'https://app.lap-coach.racing/sample';
+const HEADING_ID = 'try-real-session-heading';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto mt-16 w-full max-w-6xl border-t py-24 sm:mt-24 sm:py-32"
+>
+  <div class="max-w-prose">
+    <p class="text-steel text-caption tracking-wide uppercase">Try it</p>
+    <h2
+      id={HEADING_ID}
+      class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+    >
+      Try it with a real session.
+    </h2>
+    <p class="text-steel text-body mt-5">
+      Upload an iRacing .ibt session file or open our prewired Sebring sample to see what LAP says
+      about real laps. No sign-up required.
+    </p>
+
+    <div class="mt-10">
+      <a
+        href={CTA_HREF}
+        rel="noopener"
+        class="bg-chalk text-asphalt hover:bg-chalk/90 focus-visible:outline-chalk text-body inline-flex items-center justify-center px-7 py-3 font-medium transition"
+      >
+        Try with a real session &rarr;
+      </a>
+    </div>
+  </div>
+</section>

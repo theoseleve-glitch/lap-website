@@ -42,6 +42,59 @@ const HERO_HEADING_ID = 'for-schools-hero-heading';
 const VALUE_PROP_HEADING_ID = 'for-schools-value-prop-heading';
 const PRICING_HEADING_ID = 'for-schools-pricing-heading';
 const CASE_STUDY_HEADING_ID = 'for-schools-case-study-heading';
+const PUBLIC_THINKING_HEADING_ID = 'for-schools-public-thinking-heading';
+
+// T206 — public-thinking social-proof slot. Six existing
+// public artefacts (4 pillar/technique articles + 2 build-in-
+// public founder notes) handed to the operator audience as
+// proof of depth. Real links, real authored work — no
+// fabricated testimonials, no logo wall before partners ship.
+// The case-study placeholder section (T202) still owns the
+// forward-looking "first programme" slot; this section is its
+// backward-looking complement.
+interface PublicThinkingLink {
+  readonly slug: string;
+  readonly title: string;
+  readonly summary: string;
+}
+const PUBLIC_THINKING_LINKS: ReadonlyArray<PublicThinkingLink> = [
+  {
+    slug: 'driver-development-plan',
+    title: 'Driver development plan',
+    summary:
+      'The Pillar 4 framework — weakness shape, drill, criterion, cadence — applied per driver across a programme.',
+  },
+  {
+    slug: 'sim-to-real-transfer',
+    title: 'Sim-to-real transfer',
+    summary:
+      'Why the same diagnoses land on iRacing/AMS2 sessions and on real-track captures.',
+  },
+  {
+    slug: 'what-is-trail-braking',
+    title: 'What is trail braking',
+    summary:
+      'Long-form technique deep-dive of the kind your coaching team will engage with.',
+  },
+  {
+    slug: 'consistency-over-raw-pace',
+    title: 'Consistency over raw pace',
+    summary:
+      'The metric that separates programme drivers who make rapid progress from those who plateau.',
+  },
+  {
+    slug: 'designing-coaching-drivers-follow',
+    title: 'Designing coaching that drivers follow',
+    summary:
+      'The four-component anatomy of a prescription drivers actually act on.',
+  },
+  {
+    slug: 'pre-launch-month-in-numbers',
+    title: 'The pre-launch month in numbers',
+    summary:
+      'Recurring monthly build-in-public update — the depth, the deliberate omissions, the trajectory.',
+  },
+];
 
 const MAILTO =
   'mailto:sales@lap-coach.racing?subject=Schools%20%26%20academies%20enquiry';
@@ -232,6 +285,46 @@ const MAILTO_PRICING =
       </p>
     </section>
 
+    <section
+      aria-labelledby={PUBLIC_THINKING_HEADING_ID}
+      class="border-steel/10 mt-24 max-w-prose border-t pt-16 sm:mt-32 sm:pt-20"
+    >
+      <p class="text-steel text-caption tracking-wide uppercase">
+        Operator-facing reading
+      </p>
+      <h2
+        id={PUBLIC_THINKING_HEADING_ID}
+        class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+      >
+        Read what we publish publicly.
+      </h2>
+      <p class="text-steel text-body mt-6 leading-body">
+        Coaching framework, technique deep-dives, and the build-in-public
+        updates ship under the same byline as the product. If your
+        programme is evaluating LAP, this is the depth we operate at.
+      </p>
+
+      <ul class="mt-12 flex flex-col gap-6">
+        {
+          PUBLIC_THINKING_LINKS.map((link) => (
+            <li>
+              <a
+                href={`/blog/${link.slug}`}
+                class="group flex flex-col gap-1"
+              >
+                <span class="text-acid-green text-body font-medium group-hover:underline">
+                  {link.title}
+                </span>
+                <span class="text-steel text-body leading-body">
+                  {link.summary}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
     <footer
       class="px-grid-margin text-steel/80 text-caption mx-auto mt-16 flex w-full max-w-6xl justify-center gap-6 pt-8 font-mono tracking-wide sm:mt-24"
     >
@@ -246,6 +339,12 @@ const MAILTO_PRICING =
         class="hover:text-chalk focus-visible:outline-chalk underline underline-offset-4 transition"
       >
         Pricing
+      </a>
+      <a
+        href="/blog"
+        class="hover:text-chalk focus-visible:outline-chalk underline underline-offset-4 transition"
+      >
+        Blog
       </a>
     </footer>
   </main>

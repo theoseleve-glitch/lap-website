@@ -32,6 +32,7 @@ import { describe, expect, test } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import ForSchools from '../pages/for-schools.astro';
+import { BLOG_INDEX } from '../data/blog-index';
 
 const render = () =>
   AstroContainer.create().then((c) => c.renderToString(ForSchools));
@@ -437,6 +438,115 @@ describe('T205: multi-seat pricing anchor (not commit)', () => {
     expect(sectionMatch![0]).toMatch(
       /href="(?:#for-schools-form[^"]*|mailto:sales@lap-coach\.racing[^"]*)"/,
     );
+  });
+});
+
+describe('T206: public-thinking social-proof slot (real artefacts, not fabrication)', () => {
+  test('public-thinking section is a labelled landmark with paired H2', async () => {
+    const html = await render();
+    const sectionMatch = html.match(
+      /<section[^>]+aria-labelledby="(for-schools-public-thinking[^"]+)"/,
+    );
+    expect(
+      sectionMatch,
+      'a <section aria-labelledby="for-schools-public-thinking-..."> must exist',
+    ).not.toBeNull();
+    const labelId = sectionMatch![1];
+    expect(html).toMatch(new RegExp(`<h2[^>]+id="${labelId}"`));
+  });
+
+  test('public-thinking section links to at least 4 /blog/ articles', async () => {
+    // ≥4 internal article links inside the section signals
+    // depth-of-field for an operator scanning credibility.
+    const html = await render();
+    const sectionMatch = html.match(
+      /<section[^>]+aria-labelledby="for-schools-public-thinking[^"]+"[\s\S]*?<\/section>/,
+    );
+    expect(sectionMatch, 'public-thinking section must be findable').not.toBeNull();
+    const blogLinks = [
+      ...(sectionMatch![0].match(/href="\/blog\/[^"]+"/g) ?? []),
+    ];
+    expect(
+      blogLinks.length,
+      `public-thinking section must surface ≥4 /blog/ links; got ${blogLinks.length}`,
+    ).toBeGreaterThanOrEqual(4);
+  });
+
+  test('every public-thinking link resolves to a real BLOG_INDEX slug', async () => {
+    // Lock that the linked articles actually exist in
+    // BLOG_INDEX. A typo in a slug would otherwise ship a
+    // 404 link to the operator-facing audience scanning
+    // for credibility.
+    const html = await render();
+    const sectionMatch = html.match(
+      /<section[^>]+aria-labelledby="for-schools-public-thinking[^"]+"[\s\S]*?<\/section>/,
+    );
+    expect(sectionMatch).not.toBeNull();
+    const blogLinks = [
+      ...sectionMatch![0].matchAll(/href="\/blog\/([^"\/]+)"/g),
+    ].map((m) => m[1]);
+    const validSlugs = new Set(BLOG_INDEX.map((p) => p.slug));
+    for (const slug of blogLinks) {
+      expect(
+        validSlugs.has(slug),
+        `linked slug "${slug}" not in BLOG_INDEX — broken link risk`,
+      ).toBe(true);
+    }
+  });
+
+  test('public-thinking section surfaces ≥1 pillar article + ≥1 build-in-public note', async () => {
+    // Mix of categories: pillar articles signal technical
+    // depth (the doctrine the operator's coaching team will
+    // engage with); founder-story posts signal active build-
+    // in-public development. An operator evaluating a pre-
+    // launch tool gets both signals from the same section.
+    const html = await render();
+    const sectionMatch = html.match(
+      /<section[^>]+aria-labelledby="for-schools-public-thinking[^"]+"[\s\S]*?<\/section>/,
+    );
+    expect(sectionMatch).not.toBeNull();
+    const linkedSlugs = [
+      ...sectionMatch![0].matchAll(/href="\/blog\/([^"\/]+)"/g),
+    ].map((m) => m[1]);
+    const linkedEntries = BLOG_INDEX.filter((p) => linkedSlugs.includes(p.slug));
+    const hasPillar = linkedEntries.some((p) => p.category === 'pillar');
+    const hasFounder = linkedEntries.some(
+      (p) => p.category === 'founder-story',
+    );
+    expect(hasPillar, 'must link to ≥1 pillar article').toBe(true);
+    expect(hasFounder, 'must link to ≥1 founder-story / build-in-public note').toBe(
+      true,
+    );
+  });
+
+  test('page-wide: no fabricated testimonial blockquotes (T202 + T206 carry-over)', async () => {
+    // Belt-and-braces: any <blockquote> attributing a quote
+    // to a Name with role/affiliation is fabricated since no
+    // pilot has happened. T202 locked this for the case-study
+    // section; T206 promotes the lock to page-wide because
+    // social-proof slots could otherwise sneak quotes in.
+    const html = await render();
+    const blockquotes = html.match(/<blockquote[\s\S]*?<\/blockquote>/g) ?? [];
+    for (const bq of blockquotes) {
+      expect(
+        bq,
+        `page contains a blockquote with attribution dash — fabricated testimonial: ${bq}`,
+      ).not.toMatch(/[—–][\s]+[A-Z][a-zA-Z]+/);
+    }
+  });
+
+  test('page-wide: no fabricated logo <img> tags pointing at school/academy assets', async () => {
+    // Lock that no <img> in the rendered output references
+    // a logo path under /logos/ or /partners/ — there are no
+    // partner logos to ship until the first programmes
+    // consent, and we will not fabricate any.
+    const html = await render();
+    const fakeLogoImgs =
+      html.match(/<img[^>]*src="(?:\/(?:logos|partners)\/[^"]+|[^"]*\bplaceholder[^"]*\.(?:png|jpg|svg))"/gi) ?? [];
+    expect(
+      fakeLogoImgs.length,
+      `page must not embed fabricated partner logos: ${fakeLogoImgs.join(', ')}`,
+    ).toBe(0);
   });
 });
 

@@ -184,6 +184,19 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     tags: ['positioning', 'build-in-public'],
     datePublished: '2026-04-26',
   },
+  // ─── Launch-day announcement (T211) ─────────────────────
+  // Scheduled for public-beta launch on 2026-07-23; ships
+  // in source today with date-anchored copy that reads
+  // accurately whether visited before or after the date.
+  {
+    slug: 'introducing-lap',
+    title: 'Introducing LAP — public beta on 2026-07-23',
+    description:
+      'Launch-day note from the founding team. What LAP is, what ships in public beta, what V1 adds in September, and the four commitments LAP refuses to relax — including the no-language-model-coaching one.',
+    category: 'founder-story',
+    tags: ['positioning', 'build-in-public'],
+    datePublished: '2026-07-23',
+  },
 ];
 
 /** Returns the deduplicated set of tags actually used by posts. */

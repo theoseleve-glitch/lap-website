@@ -1,0 +1,24 @@
+# T096 — Cloudflare Pages project config. The repo's first
+# wrangler.toml; lands as a stub today and lights up at deploy
+# when T008 (Cloudflare Pages project linked to repo) unblocks.
+#
+# `name` and `compatibility_date` are required by Wrangler v3+;
+# `pages_build_output_dir` matches Astro's `dist/` build output
+# (locked by astro.config.mjs); `compatibility_flags` enables
+# nodejs_compat for any std-lib touch the Pages Functions need
+# (current functions/_lib/waitlist-token.ts uses Web Crypto only,
+# but the flag is cheap insurance against future imports).
+#
+# [[triggers]] crons fires the scheduled handler in
+# functions/_scheduled/waitlist-drip.ts daily at 14:00 UTC. Pages
+# picks up cron triggers via Advanced Mode at the deployed Worker
+# layer; the schedule field here is the source of truth for the
+# wrangler-driven deploy path.
+
+name = "lap-website"
+pages_build_output_dir = "./dist"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[triggers]]
+crons = ["0 14 * * *"]

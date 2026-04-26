@@ -340,3 +340,23 @@ describe('T202: case-study placeholder (honest "no pilot yet" framing)', () => {
     }
   });
 });
+
+describe('T203: form integration', () => {
+  test('page embeds the ForSchoolsForm component (POST to /api/for-schools)', async () => {
+    // T203 mounts the 5-field B2B inquiry form on /for-schools.
+    // The presence of the action URL is the cheapest proof that
+    // the form rendered through; T204 will layer the Resend send
+    // on top of the same endpoint.
+    const html = await render();
+    expect(html).toMatch(/action="\/api\/for-schools"/);
+  });
+
+  test('page embeds the form via component import (not inline duplicate)', () => {
+    // Lock that the form is loaded via the component import,
+    // not duplicated inline on the page. Keeps form invariants
+    // (5 fields, GDPR consent, Turnstile) in exactly one place.
+    const src = loadSource();
+    expect(src).toMatch(/ForSchoolsForm/);
+    expect(src).toMatch(/import\s+ForSchoolsForm\s+from\s+['"]\.\.\/components\/ForSchoolsForm\.astro['"]/);
+  });
+});

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ForSchoolsForm from '../components/ForSchoolsForm.astro';
 
 // T201 — /for-schools landing shell. Inbound destination of the
 // T062 PricingB2bTeaser link (currently 404 until this page
@@ -19,10 +20,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 // pilot has run yet, with an explicit "ships here after our
 // first programme" note rather than a fabricated testimonial.
 //
-// Subsequent tasks fill the remaining slots: T203 form, T204
-// form → Resend → sales@lap-coach.racing inbox + confirmation,
-// T205 pricing anchor, T206 social-proof slots, T207 press kit
-// (sibling page).
+// T203 — embeds the ForSchoolsForm component (5-field B2B
+// inquiry form) plus a success-state banner that surfaces when
+// the form-POST 303s back to ?status=submitted. The mailto
+// stays in the hero CTA and the case-study CTA as the
+// alternative inbound channel. T204 plugs Resend send +
+// confirmation email behind the same /api/for-schools endpoint
+// the form posts to.
+//
+// Subsequent tasks fill the remaining slots: T205 pricing
+// anchor, T206 social-proof slots, T207 press kit (sibling
+// page).
+
+const submitted = Astro.url.searchParams.get('status') === 'submitted';
 
 const TITLE = 'For racing schools and karting academies — LAP';
 const DESCRIPTION =
@@ -70,6 +80,24 @@ const MAILTO =
         </a>
       </p>
     </section>
+
+    {
+      submitted && (
+        <aside
+          role="status"
+          aria-live="polite"
+          class="border-acid-green/40 bg-acid-green/10 text-chalk rounded-2 mt-12 max-w-prose border p-6"
+        >
+          <p class="font-display text-h4 tracking-display">
+            Inquiry received.
+          </p>
+          <p class="text-steel text-body mt-3 leading-body">
+            A real person will reply from sales@lap-coach.racing, usually
+            within a working day. Thanks for getting in touch.
+          </p>
+        </aside>
+      )
+    }
 
     <section
       aria-labelledby={VALUE_PROP_HEADING_ID}
@@ -128,6 +156,10 @@ const MAILTO =
         </article>
       </div>
     </section>
+
+    <div class="border-steel/10 mt-24 border-t pt-16 sm:mt-32 sm:pt-20">
+      <ForSchoolsForm />
+    </div>
 
     <section
       aria-labelledby={CASE_STUDY_HEADING_ID}

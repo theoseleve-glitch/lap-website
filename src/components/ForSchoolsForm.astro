@@ -1,0 +1,147 @@
+---
+// T203 — B2B inquiry form for /for-schools. Five fields:
+// name, school, students-count, email, message. GDPR-compliant
+// consent (Article 7) + Cloudflare Turnstile spam protection,
+// matching the WaitlistForm posture. POSTs to /api/for-schools
+// (T203 endpoint with validation + 303 redirect). T204 plugs
+// the Resend send + confirmation email behind the same endpoint
+// without changing this surface.
+
+const HEADING_ID = 'for-schools-form-heading';
+const TURNSTILE_SITE_KEY =
+  import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA';
+---
+
+<form
+  action="/api/for-schools"
+  method="post"
+  aria-labelledby={HEADING_ID}
+  class="border-steel/15 bg-concrete/40 rounded-2 mt-12 flex max-w-2xl flex-col gap-6 border p-8 sm:p-10"
+>
+  <header>
+    <p class="text-acid-green text-caption tracking-wide uppercase">Inbound form</p>
+    <h2
+      id={HEADING_ID}
+      class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
+    >
+      Tell us about your programme.
+    </h2>
+    <p class="text-steel text-body mt-4">
+      Five fields. We answer from a real person at sales@lap-coach.racing,
+      usually within a working day.
+    </p>
+  </header>
+
+  <div class="flex flex-col gap-2">
+    <label for="for-schools-name" class="text-chalk text-body font-medium">
+      Your name
+    </label>
+    <input
+      id="for-schools-name"
+      name="name"
+      type="text"
+      required
+      autocomplete="name"
+      class="bg-asphalt border-steel/30 text-chalk placeholder:text-steel/60 focus-visible:border-chalk focus-visible:outline-chalk text-body rounded-1 border px-4 py-3 transition focus-visible:outline-2 focus-visible:outline-offset-2"
+    />
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label for="for-schools-school" class="text-chalk text-body font-medium">
+      School or academy
+    </label>
+    <input
+      id="for-schools-school"
+      name="school"
+      type="text"
+      required
+      autocomplete="organization"
+      class="bg-asphalt border-steel/30 text-chalk placeholder:text-steel/60 focus-visible:border-chalk focus-visible:outline-chalk text-body rounded-1 border px-4 py-3 transition focus-visible:outline-2 focus-visible:outline-offset-2"
+    />
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label
+      for="for-schools-students-count"
+      class="text-chalk text-body font-medium"
+    >
+      Drivers in the programme
+    </label>
+    <input
+      id="for-schools-students-count"
+      name="students-count"
+      type="number"
+      required
+      min="1"
+      step="1"
+      inputmode="numeric"
+      class="bg-asphalt border-steel/30 text-chalk placeholder:text-steel/60 focus-visible:border-chalk focus-visible:outline-chalk text-body rounded-1 border px-4 py-3 transition focus-visible:outline-2 focus-visible:outline-offset-2"
+    />
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label for="for-schools-email" class="text-chalk text-body font-medium">
+      Email
+    </label>
+    <input
+      id="for-schools-email"
+      name="email"
+      type="email"
+      required
+      autocomplete="email"
+      class="bg-asphalt border-steel/30 text-chalk placeholder:text-steel/60 focus-visible:border-chalk focus-visible:outline-chalk text-body rounded-1 border px-4 py-3 transition focus-visible:outline-2 focus-visible:outline-offset-2"
+    />
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label for="for-schools-message" class="text-chalk text-body font-medium">
+      Message
+    </label>
+    <textarea
+      id="for-schools-message"
+      name="message"
+      rows="5"
+      required
+      class="bg-asphalt border-steel/30 text-chalk placeholder:text-steel/60 focus-visible:border-chalk focus-visible:outline-chalk text-body rounded-1 border px-4 py-3 transition focus-visible:outline-2 focus-visible:outline-offset-2"
+    ></textarea>
+  </div>
+
+  <label
+    for="for-schools-consent"
+    class="text-steel text-caption leading-body flex items-start gap-3"
+  >
+    <input
+      id="for-schools-consent"
+      name="consent"
+      type="checkbox"
+      required
+      class="border-steel/40 bg-asphalt text-chalk focus-visible:outline-chalk mt-1 size-4 shrink-0 rounded-sm border focus-visible:outline-2 focus-visible:outline-offset-2"
+    />
+    <span>
+      I agree to LAP processing the details above to respond to this
+      inquiry. See our
+      <a
+        href="/privacy"
+        class="text-chalk hover:text-acid-green underline underline-offset-4 transition"
+      >
+        privacy notice
+      </a>
+      for how we handle your data.
+    </span>
+  </label>
+
+  <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY}></div>
+
+  <button
+    type="submit"
+    class="bg-chalk text-asphalt hover:bg-chalk/90 focus-visible:outline-chalk text-body inline-flex items-center justify-center px-7 py-3 font-medium transition"
+  >
+    Send inquiry
+  </button>
+</form>
+
+<script
+  is:inline
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer></script>

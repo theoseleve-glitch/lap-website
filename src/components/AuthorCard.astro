@@ -1,0 +1,49 @@
+---
+import { getAuthor, type Author } from '../data/authors';
+
+// T193 — AuthorCard component. Renders the byline surface
+// for a blog post or any author-attributed page. Accepts
+// either a fully-resolved Author object or an authorId
+// string that resolves through getAuthor() against the
+// registry. Default consumer pattern is the authorId form
+// so callers do not need to import the Author type.
+
+interface Props {
+  /** Pre-resolved Author object. */
+  readonly author?: Author;
+  /** OR: authorId to look up in the registry. */
+  readonly authorId?: string;
+}
+
+const { author: authorProp, authorId } = Astro.props;
+
+if (!authorProp && !authorId) {
+  throw new Error('AuthorCard requires either `author` or `authorId` prop.');
+}
+
+const author = authorProp ?? getAuthor(authorId!);
+---
+
+<aside
+  class="border-steel/15 bg-concrete/40 rounded-2 not-prose flex flex-col gap-3 border p-6"
+  aria-label={`About ${author.name}`}
+>
+  <header class="flex flex-col gap-1">
+    <p class="text-acid-green text-caption tracking-wide uppercase">By the team</p>
+    <p class="font-display text-h4 text-chalk tracking-display">{author.name}</p>
+    <p class="text-steel text-body">{author.role}</p>
+  </header>
+  <p class="text-steel text-body leading-body">{author.bio}</p>
+  {
+    author.url && (
+      <p>
+        <a
+          href={author.url}
+          class="text-acid-green text-caption tracking-wide uppercase hover:underline"
+        >
+          More about {author.name} →
+        </a>
+      </p>
+    )
+  }
+</aside>

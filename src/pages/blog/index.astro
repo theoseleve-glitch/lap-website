@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { BLOG_INDEX, type BlogCategory } from '../../data/blog-index';
+
+// T191 — /blog listing page. Single index of the entire
+// blog cluster: 4 pillar guides, 5 Batch 1 technique
+// deep-dives, 5 Batch 2 founder/product stories. Sourced
+// from src/data/blog-index.ts so future surfaces (related-
+// posts T195, RSS T196, taxonomy T194) consume the same
+// metadata.
+
+const TITLE = 'Blog — coaching, doctrine, and what we are building';
+const DESCRIPTION =
+  'Long-form pillar guides, technique deep-dives drawn from coaching rules, and founder notes on what we are building. Twelve articles, organised so the cluster reads as a coherent set rather than a feed.';
+
+const siteURL = Astro.site ?? new URL('https://lap-coach.racing/');
+const pageURL = new URL(Astro.url.pathname, siteURL).toString();
+
+interface CategorySection {
+  readonly key: BlogCategory;
+  readonly heading: string;
+  readonly subhead: string;
+}
+
+const SECTIONS: ReadonlyArray<CategorySection> = [
+  {
+    key: 'pillar',
+    heading: 'Pillar guides',
+    subhead:
+      'Long-form anchor articles. One per content cluster pillar, each one the comprehensive answer a reader gets when they search the head term.',
+  },
+  {
+    key: 'technique-deep-dive',
+    heading: 'Technique deep-dives',
+    subhead:
+      'Coaching-rule deep-dives across the corner, the lap, and the stint. The trace physics behind one weakness shape per article, with the framework drill that fixes it.',
+  },
+  {
+    key: 'founder-story',
+    heading: 'Founder notes',
+    subhead:
+      'Positioning, doctrine, scope, and build-in-public transparency. What LAP is, what LAP is not, and the monthly cadence the project reports under.',
+  },
+];
+
+const postsByCategory = (key: BlogCategory) =>
+  BLOG_INDEX.filter((p) => p.category === key);
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  url: pageURL,
+  name: TITLE,
+  description: DESCRIPTION,
+  hasPart: BLOG_INDEX.map((p) => ({
+    '@type': 'Article',
+    headline: p.title,
+    description: p.description,
+    url: new URL(`/blog/${p.slug}`, siteURL).toString(),
+    datePublished: p.datePublished,
+  })),
+};
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-acid-green text-caption tracking-wide uppercase">Blog</p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        Coaching, doctrine, and what we are building.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        Long-form pillar guides, technique deep-dives drawn from coaching rules, and founder
+        notes on what we are building. The cluster is organised so each section serves a
+        distinct reading intent rather than a chronological feed.
+      </p>
+    </header>
+
+    {
+      SECTIONS.map((section) => {
+        const posts = postsByCategory(section.key);
+        return (
+          <section class="mt-24 sm:mt-32">
+            <header class="max-w-prose">
+              <h2 class="font-display text-h2 text-chalk tracking-display text-balance">
+                {section.heading}
+              </h2>
+              <p class="text-steel text-body mt-4">{section.subhead}</p>
+            </header>
+
+            <ul class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {posts.map((post) => (
+                <li>
+                  <a
+                    href={`/blog/${post.slug}`}
+                    class="border-steel/15 bg-concrete/40 hover:border-acid-green/60 rounded-2 group flex h-full flex-col border p-6 transition-colors"
+                  >
+                    <h3 class="font-display text-h4 text-chalk tracking-display text-balance">
+                      {post.title}
+                    </h3>
+                    <p class="text-steel text-body mt-3 line-clamp-4">{post.description}</p>
+                    <p class="text-acid-green text-caption mt-6 tracking-wide uppercase">
+                      Read article →
+                    </p>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })
+    }
+  </main>
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(collectionJsonLd)}
+  />
+</BaseLayout>

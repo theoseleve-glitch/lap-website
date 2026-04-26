@@ -177,9 +177,10 @@ real-world variables — degradation, ambient drift, the
 fatigue tax of running at the limit physically rather than
 remotely — as additions to a baseline that already holds.
 The discipline transfers; [the sim-to-real transfer
-article](/blog/sim-to-real-transfer) develops the
-cross-platform argument that this post depends on. The
-absolute lap times shift; the consistency mindset travels.
+article](/blog/sim-to-real-transfer) lays out why the
+shape of a session's lap-time distribution carries
+between platforms even when the absolute numbers shift.
+The consistency mindset travels.
 
 ## What this post is, and what comes next
 

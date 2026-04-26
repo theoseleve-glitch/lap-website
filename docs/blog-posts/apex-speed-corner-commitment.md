@@ -179,8 +179,9 @@ real-world track day, with the absolute MIN_SPEED numbers
 shifted only slightly because of tire and surface
 differences. The drill above runs on either surface; [the
 sim-to-real transfer
-article](/blog/sim-to-real-transfer) develops the
-cross-platform argument that this post depends on.
+article](/blog/sim-to-real-transfer) is the cluster's
+explainer for why mid-corner trace shapes ride out the
+sim-to-real boundary unchanged.
 
 ## What this post is, and what comes next
 

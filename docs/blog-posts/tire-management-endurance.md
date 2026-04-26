@@ -70,7 +70,11 @@ deciding to. The third signal is the temperature trace
 itself — modern telemetry tools report tire surface
 temperature, and a tire whose temperature has drifted
 above the optimal compound window is a tire that is
-shedding rubber every corner.
+shedding rubber every corner. Not every tool surfaces
+tire-temperature data without extra hardware; [the
+telemetry app comparison](/blog/best-sim-racing-telemetry-app)
+walks through which six options expose stint-level signals
+and which require a hardware logger.
 
 ## The physics: rubber, heat, and grip
 
@@ -189,8 +193,9 @@ deliberate tire-management drills arrives at a real-world
 six-hour event with the trace-reading discipline already
 calibrated. The absolute numbers shift; the management
 mindset travels. [The sim-to-real transfer
-article](/blog/sim-to-real-transfer) develops the
-cross-platform argument that this post depends on.
+article](/blog/sim-to-real-transfer) is the cluster's
+foundation for why tire-degradation trace shapes carry
+between platforms.
 
 ## What this post is, and what comes next
 

@@ -1,0 +1,133 @@
+---
+// T051 — "for interested developers" footer on /how-it-works.
+// Closes Block C with deep-links to the standards LAP holds itself
+// to + the public sim-integration surface LAP reads from. The
+// audience is a dev who finished /how-it-works and wants to verify
+// the technical claims against canonical references.
+//
+// Path (d) of the original BLOCKED annotation: paths a/b/c (make
+// repos public, ship /docs route, dedicated subdomain) all involve
+// LAP-owned content not yet shippable. Path (d) — link to the
+// public standards LAP already aligns with — is rock-stable and
+// verifiable today. Each href is a real W3C/MDN/EU/vendor URL,
+// not a placeholder; the section ships the deep-links the
+// "interested devs" audience actually wants.
+//
+// Doctrine §1 transparency: surfacing what we hold ourselves to
+// is the strongest "auditable, not opaque" signal we can ship
+// pre-product. Same posture as /product/coaching exposing
+// ADR-013 dotted-snake rule-ids deliberately (T121).
+
+interface DevDoc {
+  href: string;
+  label: string;
+  body: string;
+}
+
+const STANDARDS: DevDoc[] = [
+  {
+    href: 'https://www.w3.org/TR/WCAG21/',
+    label: 'WCAG 2.1',
+    body: 'Web Content Accessibility Guidelines — the bar this site holds itself to. Every public page is axe-clean; the demo video gates lock keyboard, captions, and mobile-responsive contracts.',
+  },
+  {
+    href: 'https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API',
+    label: 'Web Crypto API',
+    body: 'The cryptographic primitives behind the waitlist confirmation token and the unsubscribe token — HMAC-signed, no separate state store between sign and verify.',
+  },
+  {
+    href: 'https://eur-lex.europa.eu/eli/reg/2016/679/oj',
+    label: 'GDPR (EU 2016/679)',
+    body: 'The privacy regulation our /privacy notice and consent flow are built around — Article 13 transparency, Article 7 informed consent, Article 17 erasure rights.',
+  },
+];
+
+const INTEGRATIONS: DevDoc[] = [
+  {
+    href: 'https://www.iracing.com/iracing-telemetry/',
+    label: 'iRacing telemetry',
+    body: 'iRacing’s public telemetry overview — capture format (.ibt) and SDK that the LAP desktop client reads. The "Try it with a real session" path on /demo accepts these files directly.',
+  },
+];
+
+const HEADING_ID = 'how-it-works-devdocs-heading';
+const STANDARDS_HEADING_ID = 'how-it-works-devdocs-standards';
+const INTEGRATIONS_HEADING_ID = 'how-it-works-devdocs-integrations';
+---
+
+<section
+  aria-labelledby={HEADING_ID}
+  class="px-grid-margin border-steel/10 mx-auto mt-24 w-full max-w-6xl border-t pt-24 sm:mt-32 sm:pt-32"
+>
+  <header class="max-w-prose">
+    <p class="text-steel text-caption tracking-wide uppercase">For interested developers</p>
+    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+      Verify the technical claims yourself.
+    </h2>
+    <p class="text-steel text-body mt-5">
+      The standards we hold ourselves to and the public integration surface LAP reads from. Every
+      link goes to a canonical reference — W3C, MDN, EU law, the sim publisher’s own page — so
+      you can cross-check what this site says against the source.
+    </p>
+  </header>
+
+  <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+    <article
+      aria-labelledby={STANDARDS_HEADING_ID}
+      class="border-steel/15 bg-concrete/40 rounded-2 flex flex-col border p-7"
+    >
+      <h3
+        id={STANDARDS_HEADING_ID}
+        class="font-display text-h4 text-chalk tracking-display text-balance"
+      >
+        Standards we follow
+      </h3>
+      <ul class="text-steel text-body leading-body mt-4 flex flex-col gap-5">
+        {
+          STANDARDS.map((doc) => (
+            <li class="flex flex-col gap-1">
+              <a
+                href={doc.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-chalk hover:text-chalk/80 focus-visible:outline-chalk underline underline-offset-4"
+              >
+                {doc.label}
+              </a>
+              <span>{doc.body}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+
+    <article
+      aria-labelledby={INTEGRATIONS_HEADING_ID}
+      class="border-steel/10 bg-concrete/20 rounded-2 flex flex-col border p-7"
+    >
+      <h3
+        id={INTEGRATIONS_HEADING_ID}
+        class="font-display text-h4 text-chalk tracking-display text-balance"
+      >
+        Sim integrations
+      </h3>
+      <ul class="text-steel text-body leading-body mt-4 flex flex-col gap-5">
+        {
+          INTEGRATIONS.map((doc) => (
+            <li class="flex flex-col gap-1">
+              <a
+                href={doc.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-chalk hover:text-chalk/80 focus-visible:outline-chalk underline underline-offset-4"
+              >
+                {doc.label}
+              </a>
+              <span>{doc.body}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+  </div>
+</section>

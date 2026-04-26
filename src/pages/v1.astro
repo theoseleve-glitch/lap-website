@@ -1,0 +1,217 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// T210 — V1 release landing page. Companion to T209's
+// /launch (public-beta page on 2026-07-23). V1 ships
+// 2026-09-23 = end Month 5 = doctrine §9 launch moment.
+//
+// Sprint task qualifier "renders later" — page exists in
+// source today and ships in the static build, but is not
+// featured on the homepage until V1 launch week. Today
+// is Month 1 (2026-04-26); V1 is ~5 months out.
+//
+// Differentiation from /launch: /launch describes what
+// arrives WITH public beta on 2026-07-23 (Driver OS v1 on
+// the web, sim↔real bridge MVP, Stripe live, hand-curated
+// coaching). /v1 describes what V1 ADDS over public beta
+// on 2026-09-23 — Android, Apple Watch / WearOS, coaching
+// library v1, endurance events.
+//
+// Date-anchored copy: "LAP V1 ships on 2026-09-23." Reads
+// accurately whether a visitor lands ahead of V1 or after.
+// On launch day the founder lightly tweaks the leading
+// verb to past tense — no other content changes needed.
+
+const TITLE = 'V1 release — LAP';
+const DESCRIPTION =
+  'LAP V1 ships on 2026-09-23 — Android app, Apple Watch and WearOS companion, coaching library v1 with more than one hundred hand-curated rules, and explicit endurance-event support. Two months after the public beta on 2026-07-23.';
+
+const HERO_HEADING_ID = 'v1-hero-heading';
+const ADDITIONS_HEADING_ID = 'v1-additions-heading';
+const CONTEXT_HEADING_ID = 'v1-context-heading';
+const PRICING_HEADING_ID = 'v1-pricing-heading';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <section aria-labelledby={HERO_HEADING_ID} class="max-w-prose">
+      <p class="text-acid-green text-caption tracking-wide uppercase">
+        V1 release · 2026-09-23
+      </p>
+      <h1
+        id={HERO_HEADING_ID}
+        class="font-display text-h1 text-chalk tracking-display mt-4 text-balance"
+      >
+        LAP V1 ships on 2026-09-23.
+      </h1>
+      <p class="text-steel text-body mt-6 leading-body">
+        Two months after the public beta on 2026-07-23, V1 lands four
+        substantial additions: the Android application, the Apple Watch
+        and WearOS companion for in-session prompts, the coaching library
+        v1 with more than one hundred hand-curated rules, and explicit
+        support for endurance events across multiple stints and driver
+        swaps.
+      </p>
+      <p class="mt-8 flex flex-wrap gap-4">
+        <a
+          href="/waitlist"
+          class="bg-acid-green text-asphalt rounded-2 hover:bg-acid-green/90 focus-visible:outline-chalk inline-block px-6 py-3 text-base font-medium tracking-wide transition"
+        >
+          Join the waitlist
+        </a>
+        <a
+          href="/launch"
+          class="border-steel/40 text-chalk hover:border-chalk rounded-2 inline-block border px-6 py-3 text-base font-medium tracking-wide transition"
+        >
+          Public beta · 2026-07-23
+        </a>
+      </p>
+    </section>
+
+    <section
+      aria-labelledby={ADDITIONS_HEADING_ID}
+      class="border-steel/10 mt-24 max-w-prose border-t pt-16 sm:mt-32 sm:pt-20"
+    >
+      <p class="text-steel text-caption tracking-wide uppercase">
+        What V1 adds
+      </p>
+      <h2
+        id={ADDITIONS_HEADING_ID}
+        class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+      >
+        Four additions over public beta.
+      </h2>
+
+      <div class="mt-12 flex flex-col gap-12">
+        <article>
+          <h3 class="font-display text-h4 text-chalk tracking-display">
+            Android application.
+          </h3>
+          <p class="text-steel text-body mt-3 leading-body">
+            On-track capture from Android phones — the same per-driver
+            capture pipeline that public beta opened on iOS, now on the
+            other half of the European phone market. Karting and track-day
+            programmes that issue Android phones to drivers stop needing a
+            second tool.
+          </p>
+        </article>
+
+        <article>
+          <h3 class="font-display text-h4 text-chalk tracking-display">
+            Apple Watch and WearOS companion.
+          </h3>
+          <p class="text-steel text-body mt-3 leading-body">
+            In-session prompts on the wrist. The companion surfaces the
+            single next drill the driver agreed to during the prep, and
+            collects a one-tap confirmation when the lap was the focus
+            attempt. No tap-typing on a phone between sessions.
+          </p>
+        </article>
+
+        <article>
+          <h3 class="font-display text-h4 text-chalk tracking-display">
+            Coaching library v1 — more than one hundred written rules.
+          </h3>
+          <p class="text-steel text-body mt-3 leading-body">
+            The hand-curated rule library expands from the public-beta
+            seed set to more than one hundred rules across braking,
+            throttle, apex, line shape, and consistency families. Every
+            new rule lands with the same shape — predicate, trigger,
+            prescription, success criterion — and ships in writing,
+            not via a language model.
+          </p>
+        </article>
+
+        <article>
+          <h3 class="font-display text-h4 text-chalk tracking-display">
+            Endurance events.
+          </h3>
+          <p class="text-steel text-body mt-3 leading-body">
+            Multi-stint sessions, driver swaps, and across-stint
+            consistency comparisons land as first-class capture shapes.
+            Useful for VLN and 24h sim races; useful for real-track
+            endurance sessions where driver-pair improvement is the
+            programme metric, not a single-driver lap time.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section
+      aria-labelledby={CONTEXT_HEADING_ID}
+      class="border-steel/10 mt-24 max-w-prose border-t pt-16 sm:mt-32 sm:pt-20"
+    >
+      <p class="text-steel text-caption tracking-wide uppercase">
+        From public beta to V1
+      </p>
+      <h2
+        id={CONTEXT_HEADING_ID}
+        class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+      >
+        Same surface, broader reach.
+      </h2>
+      <p class="text-steel text-body mt-6 leading-body">
+        Public beta on 2026-07-23 ships LAP as a cross-platform driver-
+        development surface for sim and real-world racing — captures from
+        iRacing, Assetto Corsa Competizione, and AMS2 share one driver
+        record with on-track captures from a phone GPS. V1 keeps that
+        framing intact and broadens the reach: more capture surfaces
+        (Android, watch), more rules in the library, more session
+        shapes the brain handles cleanly.
+      </p>
+      <p class="text-steel text-body mt-4 leading-body">
+        The roadmap and the active development log live openly on the
+        <a href="/blog" class="text-acid-green hover:underline">blog</a>.
+        Monthly build-in-public updates name what shipped, what slipped,
+        and what was deliberately left out.
+      </p>
+    </section>
+
+    <section
+      aria-labelledby={PRICING_HEADING_ID}
+      class="border-steel/10 mt-24 max-w-prose border-t pt-16 sm:mt-32 sm:pt-20"
+    >
+      <p class="text-steel text-caption tracking-wide uppercase">Pricing</p>
+      <h2
+        id={PRICING_HEADING_ID}
+        class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+      >
+        Same single tier.
+      </h2>
+      <p class="text-steel text-body mt-6 leading-body">
+        Pricing does not change at V1. The single consumer tier remains
+        <strong class="text-chalk font-medium">€15 per month or €150
+        per year</strong> with a 14-day free trial. Pre-launch waitlist
+        signups remain grandfathered at €12 per month for the first 12
+        months. Multi-seat pricing for racing schools and karting
+        academies stays at the
+        <a href="/for-schools" class="text-acid-green hover:underline"
+          >/for-schools</a
+        > anchor.
+      </p>
+    </section>
+
+    <footer
+      class="px-grid-margin text-steel/80 text-caption mx-auto mt-16 flex w-full max-w-6xl justify-center gap-6 pt-8 font-mono tracking-wide sm:mt-24"
+    >
+      <a
+        href="/how-it-works"
+        class="hover:text-chalk focus-visible:outline-chalk underline underline-offset-4 transition"
+      >
+        How it works
+      </a>
+      <a
+        href="/pricing"
+        class="hover:text-chalk focus-visible:outline-chalk underline underline-offset-4 transition"
+      >
+        Pricing
+      </a>
+      <a
+        href="/blog"
+        class="hover:text-chalk focus-visible:outline-chalk underline underline-offset-4 transition"
+      >
+        Blog
+      </a>
+    </footer>
+  </main>
+</BaseLayout>

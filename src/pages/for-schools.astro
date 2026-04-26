@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// T201 — /for-schools landing shell. Inbound destination of the
+// T062 PricingB2bTeaser link (currently 404 until this page
+// ships). Doctrine 01-STRATEGIC-DOCTRINE.md §6 + §8 frames B2B
+// (racing schools, karting academies) as "door open, outbound
+// starts only in Month 5." The page is the inbound-only surface
+// today — no outbound pitch tone, no committed price (T205 owns
+// the "from €X/seat/mo, contact us" anchor), no fake social
+// proof since there are no customers yet (T184 baseline).
+//
+// Subsequent tasks fill the slots: T202 hero + value-prop +
+// case-study placeholder, T203 form, T204 form → Resend →
+// sales@lap-coach.racing inbox + confirmation, T205 pricing
+// anchor, T206 social-proof slots, T207 press kit (sibling
+// page).
+//
+// Until T203/T204 introduce the form, the inbound contact
+// route is the same mailto pattern T066 ships on /pricing —
+// sales@lap-coach.racing, zero external dependency, rich
+// inbound signal (sender identity + free-form message).
+
+const TITLE = 'For racing schools and karting academies — LAP';
+const DESCRIPTION =
+  'LAP for racing schools and karting academies — coaching at roster scale, multi-seat billing on the roadmap. Outbound conversations start later in the year; the door is open if you want to talk now.';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-acid-green text-caption tracking-wide uppercase">
+        For schools and academies
+      </p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        Coaching at roster scale, for schools and academies.
+      </h1>
+      <p class="text-steel text-body mt-6 leading-body">
+        Racing schools and karting academies run programmes that produce
+        many drivers, many sessions, many development plans — week after
+        week. LAP is built for the individual driver first, but the same
+        capture, the same review, and the same per-driver development
+        plan extend cleanly to a roster.
+      </p>
+      <p class="text-steel text-body mt-4 leading-body">
+        Multi-seat billing and operator-side reporting are roadmap items,
+        not shipping today. The door is open earlier than that — if your
+        programme is the kind LAP should be built around, we want to
+        hear about it.
+      </p>
+      <p class="text-steel text-body mt-8">
+        <a
+          href="mailto:sales@lap-coach.racing?subject=Schools%20%26%20academies%20enquiry"
+          class="text-acid-green hover:underline"
+        >
+          sales@lap-coach.racing
+        </a>
+      </p>
+    </header>
+
+    <footer
+      class="px-grid-margin text-steel/80 text-caption mx-auto mt-16 flex w-full max-w-6xl justify-center gap-6 pt-8 font-mono tracking-wide sm:mt-24"
+    >
+      <a
+        href="/how-it-works"
+        class="hover:text-chalk focus-visible:outline-chalk underline underline-offset-4 transition"
+      >
+        How it works
+      </a>
+      <a
+        href="/pricing"
+        class="hover:text-chalk focus-visible:outline-chalk underline underline-offset-4 transition"
+      >
+        Pricing
+      </a>
+    </footer>
+  </main>
+</BaseLayout>

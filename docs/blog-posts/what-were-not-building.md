@@ -162,7 +162,9 @@ published, named, and explained is harder to drift past,
 because the drift would visibly contradict the public
 commitment. We publish what we are not building because
 the publication is part of how we keep ourselves honest
-about it.
+about it. The recurring [monthly update](/blog/pre-launch-month-in-numbers)
+is the cadence the same discipline runs under: numbers
+attached, including the unflattering ones.
 
 The roadmap of features LAP will ship is a long document.
 The roadmap of features LAP will not ship is a shorter

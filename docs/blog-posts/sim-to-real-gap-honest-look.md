@@ -118,8 +118,11 @@ same drill, with magnitudes recalibrated on the day.
 
 The cross-platform Driver OS — one driver profile that
 travels with the driver across sim and real-world surfaces
-— is what makes the shapes-transfer claim load-bearing in
-a product rather than only in a doctrine document. A
+— is the [positioning argument](/blog/why-im-building-lap-not-motec-clone)
+that distinguishes LAP from the engineering-grade tools
+the same data lives in. It is also what makes the shapes-
+transfer claim load-bearing in a product rather than only
+in a doctrine document. A
 weakness shape extracted on iRacing on Tuesday becomes a
 prescription that can be drilled on Saturday's track day.
 The same trace-reading framework runs on either surface.

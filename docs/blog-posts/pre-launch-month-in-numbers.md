@@ -46,12 +46,16 @@ is the long-form anchor for one pillar of the content
 cluster.
 
 8 supporting posts shipped to date, structured into two
-batches. Batch 1 was 5 technique deep-dives — late braking
-at T1, throttle pickup, apex speed, consistency, tire
-management — each one expanding on a coaching rule the
-rule library will diagnose. Batch 2 is in progress; 3
-founder/product stories shipped this month with 2 more
-queued. The 5-post batch structure is itself a deliberate
+batches. Batch 1 was 5 technique deep-dives — [late
+braking at T1](/blog/late-braking-at-t1), throttle pickup,
+apex speed, [consistency](/blog/consistency-over-raw-pace),
+tire management — each one expanding on a coaching rule
+the rule library will diagnose. Batch 2 is in progress;
+the founder/product stories shipped this month include
+the [coaching-design article](/blog/designing-coaching-drivers-follow)
+on prescription anatomy and the
+[scope-discipline post](/blog/what-were-not-building) on
+features the project will not build. The 5-post batch structure is itself a deliberate
 choice — it forces the cluster to produce internal links
 in volumes that justify a Pillar page rather than a single
 hero article.

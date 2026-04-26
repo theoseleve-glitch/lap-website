@@ -144,12 +144,14 @@ The same prescription anatomy runs on sim and on real-world
 surfaces. The architecture that makes one coaching surface
 ship across both — the cross-platform Driver OS —
 is the same one that the [sim-to-real transfer
-article](/blog/sim-to-real-transfer) develops in detail. A
-weakness shape extracted on iRacing on Tuesday produces a
-drill name, a success criterion, and a review cadence. The
-driver runs the drill on Saturday at the track and adapts.
-Same anatomy, same loop, magnitudes recalibrated on the
-day.
+article](/blog/sim-to-real-transfer) develops in detail,
+and the magnitudes-do-not-transfer caveat that the
+[founder-voice version](/blog/sim-to-real-gap-honest-look)
+develops in plainer language. A weakness shape extracted
+on iRacing on Tuesday produces a drill name, a success
+criterion, and a review cadence. The driver runs the drill
+on Saturday at the track and adapts. Same anatomy, same
+loop, magnitudes recalibrated on the day.
 
 Without that unification, a driver who runs both surfaces
 receives two disconnected coaching streams — one for the

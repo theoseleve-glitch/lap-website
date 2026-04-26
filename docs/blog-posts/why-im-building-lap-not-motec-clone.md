@@ -141,7 +141,10 @@ coach); semi-pro sponsored drivers in series with a paid
 engineer attached (different product entirely, and not what
 LAP is trying to be). The development-plan framework runs on
 any tool the driver already pays for; LAP automates the
-bookkeeping for a specific persona, not for everyone.
+bookkeeping for a specific persona, not for everyone. The
+companion piece to this post — [what we're explicitly not
+building](/blog/what-were-not-building) — names the scope
+exclusions that follow from this persona choice.
 
 ## Why this matters now
 

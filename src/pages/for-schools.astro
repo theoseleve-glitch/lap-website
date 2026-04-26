@@ -40,10 +40,13 @@ const DESCRIPTION =
 
 const HERO_HEADING_ID = 'for-schools-hero-heading';
 const VALUE_PROP_HEADING_ID = 'for-schools-value-prop-heading';
+const PRICING_HEADING_ID = 'for-schools-pricing-heading';
 const CASE_STUDY_HEADING_ID = 'for-schools-case-study-heading';
 
 const MAILTO =
   'mailto:sales@lap-coach.racing?subject=Schools%20%26%20academies%20enquiry';
+const MAILTO_PRICING =
+  'mailto:sales@lap-coach.racing?subject=Schools%20%26%20academies%20pricing';
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
@@ -155,6 +158,41 @@ const MAILTO =
           </p>
         </article>
       </div>
+    </section>
+
+    <section
+      aria-labelledby={PRICING_HEADING_ID}
+      class="border-steel/10 mt-24 max-w-prose border-t pt-16 sm:mt-32 sm:pt-20"
+    >
+      <p class="text-steel text-caption tracking-wide uppercase">Pricing</p>
+      <h2
+        id={PRICING_HEADING_ID}
+        class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+      >
+        From €10 per seat per month.
+      </h2>
+      <p class="text-steel text-body mt-6 leading-body">
+        Multi-seat pricing starts from
+        <strong class="text-chalk font-medium">€10 per seat per month</strong>
+        for programmes of 10 or more drivers. The number is finalised in
+        conversation — we work backwards from your roster size, your
+        session cadence, and the support level your programme expects, and
+        we put the final figure in writing before anything is signed.
+      </p>
+      <p class="text-steel text-body mt-4 leading-body">
+        Programmes under 10 drivers usually fit better at the consumer
+        €15 per month tier; we set them up the same way and bill per
+        driver, no separate B2B contract needed.
+      </p>
+      <p class="text-steel text-body mt-8">
+        <a href="#for-schools-form-heading" class="text-acid-green hover:underline"
+          >Send an inquiry &rarr;</a
+        >
+        &nbsp;or&nbsp;
+        <a href={MAILTO_PRICING} class="text-acid-green hover:underline"
+          >sales@lap-coach.racing</a
+        > for a quote.
+      </p>
     </section>
 
     <div class="border-steel/10 mt-24 border-t pt-16 sm:mt-32 sm:pt-20">

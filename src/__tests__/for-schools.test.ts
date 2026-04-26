@@ -121,17 +121,35 @@ describe('T201: doctrine-aligned copy (ADR-004 + anti-overclaim)', () => {
     expect(lower).not.toMatch(/\brealistic\b/);
   });
 
-  test('no committed price number — T205 owns the pricing anchor', async () => {
-    // Before T205 lands the "from €X/seat/mo, contact us" anchor,
-    // the shell must not leak a euro amount. Locks the discipline
-    // that pricing lives in exactly one place.
+  test('every € price in body uses anchor framing (T205: not committed rate)', async () => {
+    // T205 introduces the multi-seat anchor "from €N per seat
+    // per month" plus a cross-reference to the consumer €15
+    // tier for small programmes. Both are legitimate references
+    // because each is contextually framed — "from" signals an
+    // anchor, "consumer" signals an existing committed tier.
+    // The rule the page must enforce: a bare unframed €N
+    // anywhere is a B2B commitment we never made; lock that
+    // every €N has "from" or "consumer" framing within 80 chars
+    // of clean text before it. HTML tags stripped first because
+    // Astro container injects data-astro-source-* debugging
+    // attributes that would otherwise dominate any positional
+    // window.
     const html = await render();
-    // The mailto subject can include URL-encoded chars but should
-    // not contain a € price token. Strip <head> to focus on body
-    // content where the visible copy lives.
     const bodyMatch = html.match(/<body[\s\S]*<\/body>/i);
     expect(bodyMatch).not.toBeNull();
-    expect(bodyMatch![0]).not.toMatch(/€\s*\d+/);
+    const cleanBody = bodyMatch![0]
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .toLowerCase();
+    const matches = [...cleanBody.matchAll(/€\s*\d+/g)];
+    for (const m of matches) {
+      const idx = m.index ?? 0;
+      const prefix = cleanBody.slice(Math.max(0, idx - 80), idx);
+      expect(
+        prefix,
+        `€ price "${m[0]}" must be preceded by "from" or "consumer" within 80 chars of clean text; got: "${prefix}"`,
+      ).toMatch(/\b(from|consumer)\b/);
+    }
   });
 
   test('no fake social proof ("X academies trust us" / "X schools use")', async () => {
@@ -338,6 +356,87 @@ describe('T202: case-study placeholder (honest "no pilot yet" framing)', () => {
         `case-study blockquote contains an attribution pattern that would be a fabricated testimonial: ${bq}`,
       ).not.toMatch(/[—–][\s]+[A-Z][a-zA-Z]+/);
     }
+  });
+});
+
+describe('T205: multi-seat pricing anchor (not commit)', () => {
+  test('pricing section is a labelled landmark with paired H2', async () => {
+    const html = await render();
+    const sectionMatch = html.match(
+      /<section[^>]+aria-labelledby="(for-schools-pricing[^"]+)"/,
+    );
+    expect(
+      sectionMatch,
+      'a <section aria-labelledby="for-schools-pricing-...">  must exist',
+    ).not.toBeNull();
+    const labelId = sectionMatch![1];
+    expect(html).toMatch(new RegExp(`<h2[^>]+id="${labelId}"`));
+  });
+
+  test('page surfaces "from €N per seat per month" anchor', async () => {
+    // Concrete number anchors expectations; "from" signals the
+    // rate is directional, not a binding offer. Doctrine §6 + §8
+    // commits B2B pricing to "anchor, not commit."
+    const html = await render();
+    expect(html.toLowerCase()).toMatch(
+      /from\s+[^.]*€\s*\d+\s+per\s+seat\s+per\s+month|from\s+[^.]*€\s*\d+\s*\/\s*seat\s*\/\s*(?:mo|month)/,
+    );
+  });
+
+  test('B2B anchor price is in the €5..€14 range', async () => {
+    // Below consumer €15/mo single tier (T058) — a B2B that
+    // costs MORE than consumer would invert the quantity
+    // discount and break positioning. ≥ €5 catches obvious
+    // typos (e.g., €1, €0). The 12-month founder rate is €12;
+    // the B2B anchor should differ from it to avoid collision.
+    const html = await render();
+    const match = html.toLowerCase().match(/from\s+[^.]*?€\s*(\d+)/);
+    expect(
+      match,
+      'page must surface a "from €N" anchor with N a positive integer',
+    ).not.toBeNull();
+    const n = Number.parseInt(match![1], 10);
+    expect(n).toBeGreaterThanOrEqual(5);
+    expect(n).toBeLessThan(15);
+  });
+
+  test('pricing section signals "anchor, not commit" framing', async () => {
+    // Words like "quote", "in conversation", "scales with",
+    // "depending on", "varies", "finalised in" make explicit
+    // that the published number is directional. Lock that at
+    // least one such marker lives in the rendered body so the
+    // anchor never drifts into a binding-rate posture.
+    const html = await render();
+    const lower = html.toLowerCase();
+    const markers = [
+      /\bquote\b/,
+      /\bin conversation\b/,
+      /\bscales? with\b/,
+      /\bdepending on\b/,
+      /\bvaries\b/,
+      /\bfinalised\b/,
+      /\bfinalized\b/,
+      /\bwork backwards\b/,
+    ];
+    expect(
+      markers.some((re) => re.test(lower)),
+      'pricing section must surface at least one anchor-not-commit marker',
+    ).toBe(true);
+  });
+
+  test('pricing section routes to the inbound contact (form anchor or mailto)', async () => {
+    // The exemplar text from the sprint is "from €X/seat/mo,
+    // contact us." The "contact us" CTA should resolve to the
+    // ForSchoolsForm (#anchor) or the sales mailto — both are
+    // load-bearing inbound channels.
+    const html = await render();
+    const sectionMatch = html.match(
+      /<section[^>]+aria-labelledby="for-schools-pricing[^"]+"[\s\S]*?<\/section>/,
+    );
+    expect(sectionMatch, 'pricing section must be findable').not.toBeNull();
+    expect(sectionMatch![0]).toMatch(
+      /href="(?:#for-schools-form[^"]*|mailto:sales@lap-coach\.racing[^"]*)"/,
+    );
   });
 });
 

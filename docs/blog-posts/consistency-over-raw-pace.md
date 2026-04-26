@@ -113,7 +113,10 @@ usually means the tires are degrading faster than the
 driver is compensating, or the driver is fatiguing, or
 both. The drift signal is visible in the trace as
 brake-pressure required to hit the same deceleration
-climbing across laps. The fix is on the management side:
+climbing across laps. [The tire-management
+deep-dive](/blog/tire-management-endurance) walks through
+the endurance-stint version of this fix end to end. At the
+session-level, the response is on the management side:
 shorter stints, more conservative tire usage early, or
 fitness work between sessions.
 
@@ -123,9 +126,12 @@ stint are 1.5 seconds slower because of a single corner
 that the driver flubs. Spike patterns isolate a specific
 corner's reliability problem. The fix is the corner-phase
 diagnose work — a worked example of the diagnose step
-applied to one corner at a time. The driver who fixes the
-spike-pattern corner will see the median tighten by half a
-second per stint without ever changing their fastest lap.
+applied to one corner at a time. [The apex-speed
+deep-dive](/blog/apex-speed-corner-commitment) walks
+through one such corner-phase analysis end to end. The
+driver who fixes the spike-pattern corner will see the
+median tighten by half a second per stint without ever
+changing their fastest lap.
 
 ## The drill: chasing the median deliberately
 

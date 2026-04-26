@@ -111,7 +111,9 @@ fix is on the entry side: trail-brake further in, hold the
 release shape that [the trail-braking
 explainer](/blog/what-is-trail-braking) names, and let the
 front load carry into rotation rather than cutting it
-short.
+short. [The late-braking-at-T1
+deep-dive](/blog/late-braking-at-t1) walks through the
+entry-side trace shapes end to end.
 
 The over-committer shows MIN_SPEED at or above reference
 but exit speed below reference and a noticeable rear-yaw

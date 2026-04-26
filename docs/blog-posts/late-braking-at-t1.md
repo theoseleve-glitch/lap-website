@@ -179,9 +179,11 @@ proper trace makes the diagnose step measurably easier.
 ## What this post is, and what comes next
 
 Late braking at T1 is one weakness shape. Trail braking,
-throttle pickup, apex speed, mid-corner balance, exit-phase
-oversteer — each has a comparable trace signature, a
-matching physics failure mode, and a drill that follows the
+[throttle pickup](/blog/throttle-pickup-smooth-vs-aggressive),
+[apex speed](/blog/apex-speed-corner-commitment), mid-corner
+balance, exit-phase oversteer — each has a comparable trace
+signature, a matching physics failure mode, and a drill that
+follows the
 same five-verb structure. The framework belongs to the
 reader regardless of which corner is causing the problem
 this week, and regardless of whether the data comes from a

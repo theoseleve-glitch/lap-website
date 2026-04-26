@@ -31,10 +31,13 @@ points.
 
 Smooth pickup works on corners where the rear contact patch
 is still sliding sideways through the apex and the radius is
-opening gradually as the car unwinds the steering. The
-gradual ramp matches the gradual recovery of grip: every new
-percentage of throttle arrives just as the rear axle has
-just enough additional traction to absorb it. Long sweepers
+opening gradually as the car unwinds the steering. What
+[apex speed](/blog/apex-speed-corner-commitment) the corner
+landed at is what determines how much grip the rear axle has
+left over for throttle in the first place. The gradual ramp
+matches the gradual recovery of grip: every new percentage
+of throttle arrives just as the rear axle has just enough
+additional traction to absorb it. Long sweepers
 with long straights afterward — Spa's Pouhon, Suzuka's
 130R, the iRacing Nordschleife sweepers between Aremberg
 and Karussell — reward the smooth shape because the corner

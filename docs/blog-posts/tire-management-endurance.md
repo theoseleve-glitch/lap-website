@@ -41,8 +41,8 @@ that hold pace across laps thirty to forty when the
 inconsistent driver is now climbing the lap-time chart at
 half a second per lap. Race result depends on the median
 lap of the stint, not the single fastest one — the
-[consistency post](/blog/driver-development-plan) develops
-that argument; endurance amplifies it.
+[consistency post](/blog/consistency-over-raw-pace)
+develops that argument; endurance amplifies it.
 
 ## What "tire degradation" actually shows in the trace
 

@@ -10,29 +10,42 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 // the "from €X/seat/mo, contact us" anchor), no fake social
 // proof since there are no customers yet (T184 baseline).
 //
-// Subsequent tasks fill the slots: T202 hero + value-prop +
-// case-study placeholder, T203 form, T204 form → Resend →
-// sales@lap-coach.racing inbox + confirmation, T205 pricing
-// anchor, T206 social-proof slots, T207 press kit (sibling
-// page).
+// T202 — hero is now an aria-labelled landmark with a primary
+// CTA linking to the sales mailto. Two new sections land below:
+// (1) value-prop section with three items — per-driver
+// development plans, one surface for sim and real, hand-curated
+// rules — each tied to existing doctrine and pillar work.
+// (2) case-study placeholder section that honestly signals no
+// pilot has run yet, with an explicit "ships here after our
+// first programme" note rather than a fabricated testimonial.
 //
-// Until T203/T204 introduce the form, the inbound contact
-// route is the same mailto pattern T066 ships on /pricing —
-// sales@lap-coach.racing, zero external dependency, rich
-// inbound signal (sender identity + free-form message).
+// Subsequent tasks fill the remaining slots: T203 form, T204
+// form → Resend → sales@lap-coach.racing inbox + confirmation,
+// T205 pricing anchor, T206 social-proof slots, T207 press kit
+// (sibling page).
 
 const TITLE = 'For racing schools and karting academies — LAP';
 const DESCRIPTION =
   'LAP for racing schools and karting academies — coaching at roster scale, multi-seat billing on the roadmap. Outbound conversations start later in the year; the door is open if you want to talk now.';
+
+const HERO_HEADING_ID = 'for-schools-hero-heading';
+const VALUE_PROP_HEADING_ID = 'for-schools-value-prop-heading';
+const CASE_STUDY_HEADING_ID = 'for-schools-case-study-heading';
+
+const MAILTO =
+  'mailto:sales@lap-coach.racing?subject=Schools%20%26%20academies%20enquiry';
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
   <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
-    <header class="max-w-prose">
+    <section aria-labelledby={HERO_HEADING_ID} class="max-w-prose">
       <p class="text-acid-green text-caption tracking-wide uppercase">
         For schools and academies
       </p>
-      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+      <h1
+        id={HERO_HEADING_ID}
+        class="font-display text-h1 text-chalk tracking-display mt-4 text-balance"
+      >
         Coaching at roster scale, for schools and academies.
       </h1>
       <p class="text-steel text-body mt-6 leading-body">
@@ -48,15 +61,106 @@ const DESCRIPTION =
         programme is the kind LAP should be built around, we want to
         hear about it.
       </p>
-      <p class="text-steel text-body mt-8">
+      <p class="mt-8">
         <a
-          href="mailto:sales@lap-coach.racing?subject=Schools%20%26%20academies%20enquiry"
-          class="text-acid-green hover:underline"
+          href={MAILTO}
+          class="bg-acid-green text-asphalt rounded-2 hover:bg-acid-green/90 focus-visible:outline-chalk inline-block px-6 py-3 text-base font-medium tracking-wide transition"
         >
-          sales@lap-coach.racing
+          Talk to us about your programme
         </a>
       </p>
-    </header>
+    </section>
+
+    <section
+      aria-labelledby={VALUE_PROP_HEADING_ID}
+      class="border-steel/10 mt-24 max-w-prose border-t pt-16 sm:mt-32 sm:pt-20"
+    >
+      <p class="text-steel text-caption tracking-wide uppercase">
+        What a programme gets
+      </p>
+      <h2
+        id={VALUE_PROP_HEADING_ID}
+        class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+      >
+        Coaching ops, scaled to a roster.
+      </h2>
+
+      <div class="mt-12 flex flex-col gap-12">
+        <article>
+          <h3 class="font-display text-h4 text-chalk tracking-display">
+            Per-driver development plans, week to week.
+          </h3>
+          <p class="text-steel text-body mt-3 leading-body">
+            Every session a driver runs becomes a per-driver development
+            plan: weakness shape, drill, success criterion, review
+            cadence. The same Pillar 4 framework that surfaces for an
+            individual subscriber, applied across your whole roster
+            without anyone retyping a coaching note.
+          </p>
+        </article>
+
+        <article>
+          <h3 class="font-display text-h4 text-chalk tracking-display">
+            One surface for sim and real.
+          </h3>
+          <p class="text-steel text-body mt-3 leading-body">
+            The same capture and the same review handle iRacing and
+            AMS2 sessions on the school's rigs, GPS captures from the
+            kart-track day, and on-track sessions from the academy's
+            test days. If your programme runs both — most do — the
+            per-driver record stays continuous between platforms
+            instead of fragmenting across tools.
+          </p>
+        </article>
+
+        <article>
+          <h3 class="font-display text-h4 text-chalk tracking-display">
+            Hand-curated rules, traceable to a written source.
+          </h3>
+          <p class="text-steel text-body mt-3 leading-body">
+            No language-model-generated coaching narrative. Every
+            prescription a driver receives traces to a hand-curated
+            written rule the LAP coaching team maintains in public.
+            That matters when a parent or programme director asks
+            why a particular drill was chosen — there is a defensible
+            answer, every time.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section
+      aria-labelledby={CASE_STUDY_HEADING_ID}
+      class="border-steel/10 mt-24 max-w-prose border-t pt-16 sm:mt-32 sm:pt-20"
+    >
+      <p class="text-steel text-caption tracking-wide uppercase">
+        Case study
+      </p>
+      <h2
+        id={CASE_STUDY_HEADING_ID}
+        class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+      >
+        From the first programme.
+      </h2>
+      <p class="text-steel text-body mt-6 leading-body">
+        A case study ships here after our first programme wraps. It
+        will be published with the operator's permission and will
+        name the academy, the cohort size, the corner pattern that
+        became the focus of the term, and the per-driver outcomes
+        measured against the development-plan criteria the operator
+        and we set together at the start.
+      </p>
+      <p class="text-steel text-body mt-4 leading-body">
+        Until then this slot stays a placeholder. We would rather
+        wait for a real cohort review than fill it with a fabricated
+        quote. If your programme could be the first one, the inbound
+        link is the same as the hero — write to
+        <a
+          href={MAILTO}
+          class="text-acid-green hover:underline"
+        >sales@lap-coach.racing</a>.
+      </p>
+    </section>
 
     <footer
       class="px-grid-margin text-steel/80 text-caption mx-auto mt-16 flex w-full max-w-6xl justify-center gap-6 pt-8 font-mono tracking-wide sm:mt-24"

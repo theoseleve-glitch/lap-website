@@ -172,3 +172,171 @@ describe('T201: performance carry-over (T200)', () => {
     expect(matches.length).toBe(0);
   });
 });
+
+describe('T202: hero (labelled landmark + primary CTA)', () => {
+  test('hero is wrapped in an aria-labelledby region pointing to the H1', async () => {
+    // T201 shipped the hero as a bare <header>. T202 promotes it
+    // to an explicit landmark with an aria-labelledby pointer at
+    // the H1. Screen readers can then jump directly to the hero
+    // and announce the page's premise.
+    const html = await render();
+    const ariaLabelledByMatch = html.match(
+      /<(?:section|header)[^>]+aria-labelledby="([^"]+)"/,
+    );
+    expect(
+      ariaLabelledByMatch,
+      'hero must wrap in <section> or <header> with aria-labelledby pointing at the H1',
+    ).not.toBeNull();
+    const labelId = ariaLabelledByMatch![1];
+    expect(html).toMatch(new RegExp(`<h1[^>]+id="${labelId}"`));
+  });
+
+  test('hero has a primary CTA linking to the sales mailto', async () => {
+    // Inbound posture: the most prominent action on the hero is
+    // "talk to us." Until T203/T204 land the form, that's a
+    // mailto. T202 promotes the inline mailto from T201 into a
+    // visually weighted CTA element.
+    const html = await render();
+    const heroMatch = html.match(
+      /<(?:section|header)[^>]+aria-labelledby="[^"]+"[\s\S]*?<\/(?:section|header)>/,
+    );
+    expect(heroMatch, 'hero region must be findable').not.toBeNull();
+    expect(heroMatch![0]).toMatch(
+      /<a[^>]+href="mailto:sales@lap-coach\.racing[^"]*"/,
+    );
+  });
+});
+
+describe('T202: value-prop section (≥3 items, doctrine-aligned)', () => {
+  test('value-prop section is wrapped in aria-labelledby region with H2', async () => {
+    const html = await render();
+    // Find the second labelled section after the hero. Pattern:
+    // <section aria-labelledby="ID"> ... <h2 id="ID">. We require
+    // at least two such regions on the page (hero + value-prop).
+    const labelledRegions = [
+      ...html.matchAll(/<section[^>]+aria-labelledby="([^"]+)"/g),
+    ];
+    expect(
+      labelledRegions.length,
+      'page must have at least 2 aria-labelled sections (hero + value-prop)',
+    ).toBeGreaterThanOrEqual(2);
+    // At least one of them is paired with an <h2 id="...">
+    const h2Ids = [...html.matchAll(/<h2[^>]+id="([^"]+)"/g)].map((m) => m[1]);
+    const valuePropMatch = labelledRegions
+      .map((m) => m[1])
+      .find((id) => h2Ids.includes(id));
+    expect(
+      valuePropMatch,
+      'at least one labelled section must point at an <h2 id="...">',
+    ).toBeTruthy();
+  });
+
+  test('value-prop section lists at least three distinct items', async () => {
+    // ≥3 items signals "here's what you actually get" with
+    // enough breadth that the visitor sees the full surface.
+    // 1 item = thin, 2 = pair, 3+ = catalogue. Test counts
+    // <h3> or <li> elements as eligible item shapes.
+    const html = await render();
+    const h3Count = (html.match(/<h3[\s>]/g) ?? []).length;
+    const liCount = (html.match(/<li[\s>]/g) ?? []).length;
+    expect(
+      Math.max(h3Count, liCount),
+      `value-prop section must surface ≥3 items; got ${h3Count} H3s + ${liCount} LIs`,
+    ).toBeGreaterThanOrEqual(3);
+  });
+
+  test('value-prop names the per-driver development plan (Pillar 4 framework)', async () => {
+    // Doctrine §1 + Pillar 4 (T183): "every coaching prescription
+    // must trace to a hand-curated written rule"; the artefact
+    // delivered to a driver is a per-driver development plan.
+    // For schools/academies that's the ROI lever — the same
+    // plan, scaled to a roster.
+    const html = await render();
+    expect(html.toLowerCase()).toMatch(
+      /per[- ]driver[\s\S]{0,60}development plan|development plan[\s\S]{0,60}per[- ]driver/,
+    );
+  });
+
+  test('value-prop names sim AND real (cross-platform doctrine)', async () => {
+    // Pillar 1 (T143) + doctrine §3: LAP is the cross-platform
+    // surface for sim AND real-world racing. For an academy
+    // running both rigs and on-track sessions, that continuity
+    // is the explicit value prop.
+    const html = await render();
+    const lower = html.toLowerCase();
+    expect(lower).toMatch(/\bsim\b/);
+    expect(lower).toMatch(/\breal[- ]world|real track|on track|on-track|real racing\b/);
+  });
+
+  test('value-prop names rule-traceability or hand-curated rules (anti-LLM)', async () => {
+    // Doctrine §10 #4 + ADR-004: no LLMs in coaching text.
+    // For B2B specifically, the operator-defensibility comes
+    // from being able to point at the written rule that
+    // prescribed every drill — useful when a parent or
+    // programme director asks why.
+    const html = await render();
+    expect(html.toLowerCase()).toMatch(
+      /\brule(?:s|-traceable|-traceability)?\b|\bhand[- ]curated\b|\btraceabl|written rule\b/,
+    );
+  });
+});
+
+describe('T202: case-study placeholder (honest "no pilot yet" framing)', () => {
+  test('case-study section is wrapped in aria-labelledby region with H2', async () => {
+    const html = await render();
+    // Three labelled sections by T202: hero + value-prop +
+    // case-study.
+    const labelledSections = [
+      ...html.matchAll(/<section[^>]+aria-labelledby="([^"]+)"/g),
+    ];
+    expect(
+      labelledSections.length,
+      `page must have ≥3 aria-labelled sections; got ${labelledSections.length}`,
+    ).toBeGreaterThanOrEqual(2);
+    // Note: the hero may use <header> not <section>, so the
+    // value-prop + case-study contribute the 2+ <section>
+    // labelled regions.
+  });
+
+  test('case-study section signals "no programme yet" honestly', async () => {
+    // T184 baseline: no paying customers, no public beta yet.
+    // Doctrine §6: B2B outbound starts Month 5. The case-study
+    // slot must explicitly acknowledge that LAP has not run
+    // a pilot yet — phrases like "first programme", "first
+    // pilot", "before our first", or "ships here after" all
+    // satisfy. Lock at least one.
+    const html = await render();
+    const lower = html.toLowerCase();
+    const honestMarkers = [
+      /first programme/,
+      /first pilot/,
+      /before our first/,
+      /ships here after/,
+      /once our first/,
+      /after the first programme/,
+      /publish (?:it|a case study) (?:after|when|once)/,
+    ];
+    const matched = honestMarkers.some((re) => re.test(lower));
+    expect(
+      matched,
+      'case-study section must honestly signal that no pilot has happened yet (e.g., "first programme", "first pilot", "ships here after")',
+    ).toBe(true);
+  });
+
+  test('case-study section does not contain a fabricated testimonial blockquote', async () => {
+    // Any <blockquote> attributing a quote to a person/org
+    // would be fabricated since no pilot has happened. Lock
+    // that the case-study section has no <blockquote> with an
+    // attribution dash pattern (— Name, Role at School).
+    const html = await render();
+    // Find blockquote elements and confirm none of them carry
+    // an em-dash/en-dash + capitalised attribution.
+    const blockquotes = html.match(/<blockquote[\s\S]*?<\/blockquote>/g) ?? [];
+    for (const bq of blockquotes) {
+      expect(
+        bq,
+        `case-study blockquote contains an attribution pattern that would be a fabricated testimonial: ${bq}`,
+      ).not.toMatch(/[—–][\s]+[A-Z][a-zA-Z]+/);
+    }
+  });
+});

@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { batch2PostFaqJsonLd, batch2PostFaqs } from '../../data/blog-batch-2-faq';
+
+// T189 — published Batch 2 post: "Why I'm Building LAP (and
+// Not Another MoTeC Clone)". Same architectural pattern as
+// Batch 1 publish pages (T179): markdown body imports
+// canonical editorial source from docs/blog-posts/<slug>.md,
+// FAQ accordion + FAQPage JSON-LD emit via the per-post-
+// filtered Batch 2 FAQ factory (T188), so the published
+// page emits THIS post's tagged questions rather than a
+// duplicate of every other Batch 2 post's FAQs.
+
+import * as post from '../../../docs/blog-posts/why-im-building-lap-not-motec-clone.md';
+
+const { Content } = post;
+
+const TITLE = "Why we are building LAP, not another MoTeC clone";
+const DESCRIPTION =
+  "MoTeC is a trace-reading tool for the engineer between driver and data; LAP is a coaching surface for the driver alone with the data. The persona-mismatch positioning argument and why hand-curated rules carry the trust differential.";
+
+const siteURL = Astro.site ?? new URL('https://lap-coach.racing/');
+const pageURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const ARTICLE_PUBLISHED = '2026-04-26';
+const ARTICLE_MODIFIED = '2026-04-26';
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: TITLE,
+  description: DESCRIPTION,
+  url: pageURL,
+  datePublished: ARTICLE_PUBLISHED,
+  dateModified: ARTICLE_MODIFIED,
+  author: {
+    '@type': 'Organization',
+    name: 'LAP',
+    url: siteURL.toString(),
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'LAP',
+    url: siteURL.toString(),
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': pageURL,
+  },
+};
+
+const faqJsonLd = batch2PostFaqJsonLd('why-im-building-lap-not-motec-clone');
+
+const FAQ_HEADING_ID = 'why-im-building-lap-not-motec-clone-faq-heading';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION} ogType="article">
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <article class="max-w-prose">
+      <header>
+        <p class="text-acid-green text-caption tracking-wide uppercase">Founder note · Positioning</p>
+      </header>
+
+      <div
+        class="prose prose-invert text-steel mt-8 max-w-prose [&_a]:text-acid-green [&_a:hover]:underline [&_h1]:font-display [&_h1]:text-h1 [&_h1]:text-chalk [&_h1]:tracking-display [&_h1]:mt-4 [&_h1]:mb-6 [&_h1]:text-balance [&_h2]:font-display [&_h2]:text-h3 [&_h2]:text-chalk [&_h2]:tracking-display [&_h2]:mt-16 [&_h2]:mb-6 [&_h3]:font-display [&_h3]:text-h4 [&_h3]:text-chalk [&_h3]:tracking-display [&_h3]:mt-10 [&_h3]:mb-4 [&_p]:my-4 [&_p]:leading-body [&_ul]:my-4 [&_ul]:pl-6 [&_ul]:list-disc [&_li]:my-2 [&_li]:leading-body [&_strong]:text-chalk"
+      >
+        <Content />
+      </div>
+    </article>
+
+    <section
+      aria-labelledby={FAQ_HEADING_ID}
+      class="border-steel/10 mx-auto mt-24 max-w-prose border-t pt-24 sm:mt-32 sm:pt-32"
+    >
+      <header>
+        <p class="text-steel text-caption tracking-wide uppercase">FAQ</p>
+        <h2
+          id={FAQ_HEADING_ID}
+          class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+        >
+          Common questions.
+        </h2>
+      </header>
+
+      <div class="mt-12 flex flex-col gap-3">
+        {
+          batch2PostFaqs('why-im-building-lap-not-motec-clone').map((faq) => (
+            <details class="border-steel/15 bg-concrete/40 rounded-2 group border">
+              <summary class="text-chalk flex cursor-pointer items-center justify-between gap-4 p-6 font-medium">
+                <span>{faq.question}</span>
+                <span
+                  class="text-steel shrink-0 transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <div class="border-steel/10 border-t px-6 pt-4 pb-6">
+                <p class="text-steel text-body leading-body">{faq.answer}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(articleJsonLd)}
+  />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</BaseLayout>

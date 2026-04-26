@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { batch2PostFaqJsonLd, batch2PostFaqs } from '../../data/blog-batch-2-faq';
+
+// T189 — published Batch 2 post: "The Pre-launch Month in
+// Numbers". First of a recurring monthly build-in-public
+// update format; reports concrete numerals from the actual
+// codebase plus the load-bearing "what was NOT done"
+// section.
+
+import * as post from '../../../docs/blog-posts/pre-launch-month-in-numbers.md';
+
+const { Content } = post;
+
+const TITLE = 'The pre-launch month in numbers';
+const DESCRIPTION =
+  "First of a recurring monthly build-in-public update for LAP. The numbers attached, including the unflattering ones: 19 ADRs, 4 pillar articles, 8 supporting posts, 156 sprint tasks, no paying customers and no public beta yet, by deliberate scope.";
+
+const siteURL = Astro.site ?? new URL('https://lap-coach.racing/');
+const pageURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const ARTICLE_PUBLISHED = '2026-04-26';
+const ARTICLE_MODIFIED = '2026-04-26';
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: TITLE,
+  description: DESCRIPTION,
+  url: pageURL,
+  datePublished: ARTICLE_PUBLISHED,
+  dateModified: ARTICLE_MODIFIED,
+  author: {
+    '@type': 'Organization',
+    name: 'LAP',
+    url: siteURL.toString(),
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'LAP',
+    url: siteURL.toString(),
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': pageURL,
+  },
+};
+
+const faqJsonLd = batch2PostFaqJsonLd('pre-launch-month-in-numbers');
+
+const FAQ_HEADING_ID = 'pre-launch-month-in-numbers-faq-heading';
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION} ogType="article">
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <article class="max-w-prose">
+      <header>
+        <p class="text-acid-green text-caption tracking-wide uppercase">Build in public · Month 1</p>
+      </header>
+
+      <div
+        class="prose prose-invert text-steel mt-8 max-w-prose [&_a]:text-acid-green [&_a:hover]:underline [&_h1]:font-display [&_h1]:text-h1 [&_h1]:text-chalk [&_h1]:tracking-display [&_h1]:mt-4 [&_h1]:mb-6 [&_h1]:text-balance [&_h2]:font-display [&_h2]:text-h3 [&_h2]:text-chalk [&_h2]:tracking-display [&_h2]:mt-16 [&_h2]:mb-6 [&_h3]:font-display [&_h3]:text-h4 [&_h3]:text-chalk [&_h3]:tracking-display [&_h3]:mt-10 [&_h3]:mb-4 [&_p]:my-4 [&_p]:leading-body [&_ul]:my-4 [&_ul]:pl-6 [&_ul]:list-disc [&_li]:my-2 [&_li]:leading-body [&_strong]:text-chalk"
+      >
+        <Content />
+      </div>
+    </article>
+
+    <section
+      aria-labelledby={FAQ_HEADING_ID}
+      class="border-steel/10 mx-auto mt-24 max-w-prose border-t pt-24 sm:mt-32 sm:pt-32"
+    >
+      <header>
+        <p class="text-steel text-caption tracking-wide uppercase">FAQ</p>
+        <h2
+          id={FAQ_HEADING_ID}
+          class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+        >
+          Common questions.
+        </h2>
+      </header>
+
+      <div class="mt-12 flex flex-col gap-3">
+        {
+          batch2PostFaqs('pre-launch-month-in-numbers').map((faq) => (
+            <details class="border-steel/15 bg-concrete/40 rounded-2 group border">
+              <summary class="text-chalk flex cursor-pointer items-center justify-between gap-4 p-6 font-medium">
+                <span>{faq.question}</span>
+                <span
+                  class="text-steel shrink-0 transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <div class="border-steel/10 border-t px-6 pt-4 pb-6">
+                <p class="text-steel text-body leading-body">{faq.answer}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(articleJsonLd)}
+  />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</BaseLayout>

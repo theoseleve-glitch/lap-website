@@ -1,0 +1,47 @@
+---
+// T192 — Table of Contents component for blog publish
+// pages. Accepts the heading list that Astro's
+// markdown-import getHeadings() returns, filters to
+// depth-2 (H2 only — H1 is the page title; H3 nesting is
+// overkill for typical 5-7 H2 posts), and renders an
+// ordered list of anchor links to each section.
+
+interface Heading {
+  readonly slug: string;
+  readonly text: string;
+  readonly depth: number;
+}
+
+interface Props {
+  readonly headings: ReadonlyArray<Heading>;
+}
+
+const { headings } = Astro.props;
+const sections = headings.filter((h) => h.depth === 2);
+---
+
+{
+  sections.length > 0 && (
+    <nav
+      aria-label="Table of contents"
+      class="border-steel/15 bg-concrete/40 rounded-2 not-prose border p-6"
+    >
+      <p class="text-acid-green text-caption tracking-wide uppercase">On this page</p>
+      <ol class="mt-4 flex flex-col gap-2">
+        {sections.map((h, i) => (
+          <li class="text-steel text-body leading-body flex gap-3">
+            <span class="text-steel/60 font-display text-caption shrink-0 tabular-nums">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <a
+              href={`#${h.slug}`}
+              class="text-steel hover:text-acid-green transition-colors"
+            >
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}

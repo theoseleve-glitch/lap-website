@@ -1,0 +1,13 @@
+---
+// T192 — Reading-time display component for blog publish
+// pages. Renders a "N min read" label using the result
+// computed by src/utils/reading-time.ts.
+
+interface Props {
+  readonly minutes: number;
+}
+
+const { minutes } = Astro.props;
+---
+
+<span class="text-steel text-caption tracking-wide uppercase">{minutes} min read</span>

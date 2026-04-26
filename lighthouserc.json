@@ -11,7 +11,11 @@
         "http://localhost/product/mobile/index.html",
         "http://localhost/product/bridge/index.html",
         "http://localhost/product/coaching/index.html",
-        "http://localhost/product/driver-profile/index.html"
+        "http://localhost/product/driver-profile/index.html",
+        "http://localhost/blog/index.html",
+        "http://localhost/blog/driver-development-plan/index.html",
+        "http://localhost/blog/what-is-trail-braking/index.html",
+        "http://localhost/blog/why-im-building-lap-not-motec-clone/index.html"
       ],
       "settings": {
         "onlyCategories": ["performance"]
@@ -33,6 +37,12 @@
         },
         {
           "matchingUrlPattern": "^http://localhost/product/(desktop/|mobile/|bridge/|coaching/|driver-profile/)?index\\.html$",
+          "assertions": {
+            "largest-contentful-paint": ["error", { "maxNumericValue": 2000 }]
+          }
+        },
+        {
+          "matchingUrlPattern": "^http://localhost/blog/(?:[^/]+/)?index\\.html$",
           "assertions": {
             "largest-contentful-paint": ["error", { "maxNumericValue": 2000 }]
           }

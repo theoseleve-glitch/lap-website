@@ -44,11 +44,16 @@ collapses back into observation.
 
 The weakness shape names the specific pattern observed in
 the trace — for instance, a two-stage trail-brake release
-with a mid-corner pressure spike, isolated to one
-corner of the lap. The drill name is the explicit action
-with a procedure attached: "hold trail-brake pressure on
-a single continuous taper from turn-in to 50% rotation, no
-secondary pressure application". The success criterion is
+with a mid-corner pressure spike, isolated to one corner
+of the lap. I use this example throughout the post because
+the [trail-brake technique](/blog/what-is-trail-braking)
+has a clear anatomy of its own — turn-in pressure, taper
+profile, release point — which gives a coaching
+prescription a precise vocabulary to land in. The drill
+name is the explicit action with a procedure attached:
+"hold trail-brake pressure on a single continuous taper
+from turn-in to 50% rotation, no secondary pressure
+application". The success criterion is
 the measurable signal that says the drill worked: brake
 pressure shows a monotonic decrease from turn-in to apex,
 no local maximum past 50% of the trail-brake duration. The

@@ -1,0 +1,106 @@
+---
+// T197 — in-article newsletter signup. Reuses the existing
+// /api/waitlist endpoint (T091/T092) — one email-capture
+// pipeline, one Resend audience, one unsubscribe surface.
+// Same GDPR Article 7 posture and Cloudflare Turnstile
+// spam protection as the dedicated WaitlistForm; the
+// difference is shaping for in-article placement (smaller
+// card, tighter copy, optional post-slug attribution for
+// per-article conversion analytics).
+
+interface Props {
+  /** Slug of the post the embed is rendering on — sent as
+   *  a hidden field so the email-capture pipeline can
+   *  attribute conversions per article. Optional to allow
+   *  reuse outside per-post pages. */
+  readonly postSlug?: string;
+}
+
+const { postSlug } = Astro.props;
+
+const HEADING_ID = postSlug
+  ? `${postSlug}-newsletter-heading`
+  : 'blog-newsletter-heading';
+
+const TURNSTILE_SITE_KEY =
+  import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA';
+---
+
+<form
+  action="/api/waitlist"
+  method="post"
+  aria-labelledby={HEADING_ID}
+  class="border-steel/15 bg-concrete/40 rounded-2 not-prose mx-auto mt-16 flex max-w-prose flex-col gap-5 border p-6 sm:p-8"
+>
+  <header>
+    <p class="text-acid-green text-caption tracking-wide uppercase">Get the next one</p>
+    <h3
+      id={HEADING_ID}
+      class="font-display text-h4 text-chalk tracking-display mt-2 text-balance"
+    >
+      Articles like this, one email when the next lands.
+    </h3>
+    <p class="text-steel text-body mt-3">
+      Long-form coaching pieces and monthly build-in-public updates. No drip cadence,
+      no marketing automation; just the next article when it ships.
+    </p>
+  </header>
+
+  <div class="flex flex-col gap-2 sm:flex-row sm:items-end">
+    <div class="flex flex-1 flex-col gap-2">
+      <label
+        for={postSlug ? `${postSlug}-newsletter-email` : 'blog-newsletter-email'}
+        class="text-chalk text-body font-medium"
+      >
+        Email
+      </label>
+      <input
+        id={postSlug ? `${postSlug}-newsletter-email` : 'blog-newsletter-email'}
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        class="bg-asphalt border-steel/30 text-chalk placeholder:text-steel/60 focus-visible:border-chalk focus-visible:outline-chalk text-body rounded-1 border px-4 py-3 transition focus-visible:outline-2 focus-visible:outline-offset-2"
+      />
+    </div>
+    <button
+      type="submit"
+      class="bg-chalk text-asphalt hover:bg-chalk/90 focus-visible:outline-chalk text-body inline-flex items-center justify-center px-7 py-3 font-medium transition"
+    >
+      Subscribe
+    </button>
+  </div>
+
+  <label
+    for={postSlug ? `${postSlug}-newsletter-consent` : 'blog-newsletter-consent'}
+    class="text-steel text-caption leading-body flex items-start gap-3"
+  >
+    <input
+      id={postSlug ? `${postSlug}-newsletter-consent` : 'blog-newsletter-consent'}
+      name="consent"
+      type="checkbox"
+      required
+      class="border-steel/40 bg-asphalt text-chalk focus-visible:outline-chalk mt-1 size-4 shrink-0 rounded-sm border focus-visible:outline-2 focus-visible:outline-offset-2"
+    />
+    <span>
+      I agree to receive new-article emails from LAP. See our
+      <a
+        href="/privacy"
+        class="text-chalk hover:text-acid-green underline underline-offset-4 transition"
+      >
+        privacy notice
+      </a>
+      for how we handle your data. Unsubscribe anytime from any email.
+    </span>
+  </label>
+
+  {postSlug && <input type="hidden" name="source" value={`blog/${postSlug}`} />}
+
+  <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY}></div>
+</form>
+
+<script
+  is:inline
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer></script>

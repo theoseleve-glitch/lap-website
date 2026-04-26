@@ -1,0 +1,58 @@
+---
+import { findRelatedPosts } from '../utils/related-posts';
+
+// T195 — RelatedPosts component. Renders a small section
+// of related-article cards on a blog publish page. Scoring
+// algorithm lives in src/utils/related-posts.ts; this
+// component is the rendering surface.
+
+interface Props {
+  /** Slug of the current post — used to find related siblings. */
+  readonly slug: string;
+  /** Maximum cards to render (default 3). */
+  readonly limit?: number;
+}
+
+const { slug, limit = 3 } = Astro.props;
+const related = findRelatedPosts(slug, limit);
+
+const HEADING_ID = `${slug}-related-heading`;
+---
+
+{
+  related.length > 0 && (
+    <aside
+      aria-labelledby={HEADING_ID}
+      class="border-steel/10 mx-auto mt-24 max-w-prose border-t pt-24 sm:mt-32 sm:pt-32"
+    >
+      <header>
+        <p class="text-steel text-caption tracking-wide uppercase">Related</p>
+        <h2
+          id={HEADING_ID}
+          class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
+        >
+          Articles in the same neighbourhood.
+        </h2>
+      </header>
+
+      <ul class="mt-12 grid gap-6 sm:grid-cols-3">
+        {related.map((post) => (
+          <li>
+            <a
+              href={`/blog/${post.slug}`}
+              class="border-steel/15 bg-concrete/40 hover:border-acid-green/60 rounded-2 group flex h-full flex-col border p-6 transition-colors"
+            >
+              <h3 class="font-display text-h4 text-chalk tracking-display text-balance">
+                {post.title}
+              </h3>
+              <p class="text-steel text-body mt-3 line-clamp-4">{post.description}</p>
+              <p class="text-acid-green text-caption mt-6 tracking-wide uppercase">
+                Read article →
+              </p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  )
+}

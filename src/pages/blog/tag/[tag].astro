@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import {
+  listAllTags,
+  postsByTag,
+  type BlogTag,
+} from '../../../data/blog-index';
+
+// T194 — dynamic tag-filtered listing pages. Astro's
+// getStaticPaths emits one static page per BlogTag listed
+// in BLOG_INDEX, so /blog/tag/<tag> renders the subset of
+// posts that carry the tag. The tag taxonomy is closed
+// (typed union BlogTag), so a typo at the BLOG_INDEX entry
+// site fails at compile time before producing an orphan
+// route.
+
+export const getStaticPaths = () =>
+  listAllTags().map((tag) => ({
+    params: { tag },
+    props: { tag },
+  }));
+
+interface Props {
+  readonly tag: BlogTag;
+}
+
+const { tag } = Astro.props;
+const posts = postsByTag(tag);
+
+const TAG_LABELS: Readonly<Record<BlogTag, string>> = {
+  braking: 'Braking',
+  throttle: 'Throttle',
+  apex: 'Apex',
+  consistency: 'Consistency',
+  'sim-vs-real': 'Sim versus real',
+  'coaching-framework': 'Coaching framework',
+  positioning: 'Positioning',
+  'build-in-public': 'Build in public',
+};
+
+const tagLabel = TAG_LABELS[tag];
+const TITLE = `${tagLabel} — articles tagged ${tag}`;
+const DESCRIPTION = `Every article in the LAP blog cluster tagged with "${tag}". Filtered to ${posts.length} ${posts.length === 1 ? 'article' : 'articles'} that cover the topic from a coaching, technique, or doctrine angle.`;
+
+const siteURL = Astro.site ?? new URL('https://lap-coach.racing/');
+const pageURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  url: pageURL,
+  name: TITLE,
+  description: DESCRIPTION,
+  hasPart: posts.map((p) => ({
+    '@type': 'Article',
+    headline: p.title,
+    description: p.description,
+    url: new URL(`/blog/${p.slug}`, siteURL).toString(),
+    datePublished: p.datePublished,
+  })),
+};
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION}>
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
+    <header class="max-w-prose">
+      <p class="text-acid-green text-caption tracking-wide uppercase">
+        Tag · {tag}
+      </p>
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
+        {tagLabel}.
+      </h1>
+      <p class="text-steel text-body mt-6">
+        {posts.length} {posts.length === 1 ? 'article' : 'articles'} tagged
+        with <code class="text-chalk">{tag}</code> in the blog cluster.
+      </p>
+      <p class="mt-6">
+        <a
+          href="/blog"
+          class="text-acid-green text-caption tracking-wide uppercase hover:underline"
+        >
+          ← All articles
+        </a>
+      </p>
+    </header>
+
+    <ul class="mt-16 grid gap-6 sm:mt-20 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        posts.map((post) => (
+          <li>
+            <a
+              href={`/blog/${post.slug}`}
+              class="border-steel/15 bg-concrete/40 hover:border-acid-green/60 rounded-2 group flex h-full flex-col border p-6 transition-colors"
+            >
+              <h2 class="font-display text-h4 text-chalk tracking-display text-balance">
+                {post.title}
+              </h2>
+              <p class="text-steel text-body mt-3 line-clamp-4">{post.description}</p>
+              <p class="text-acid-green text-caption mt-6 tracking-wide uppercase">
+                Read article →
+              </p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(collectionJsonLd)}
+  />
+</BaseLayout>

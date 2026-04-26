@@ -19,6 +19,24 @@ export type BlogCategory =
   | 'technique-deep-dive'
   | 'founder-story';
 
+/**
+ * Typed taxonomy of post tags. Closed union so a typo at
+ * the entry site fails at compile time rather than
+ * producing an orphan tag page.
+ */
+export const BLOG_TAGS = [
+  'braking',
+  'throttle',
+  'apex',
+  'consistency',
+  'sim-vs-real',
+  'coaching-framework',
+  'positioning',
+  'build-in-public',
+] as const;
+
+export type BlogTag = (typeof BLOG_TAGS)[number];
+
 export interface BlogPostIndexEntry {
   /** URL slug — page lives at /blog/{slug} */
   readonly slug: string;
@@ -28,6 +46,8 @@ export interface BlogPostIndexEntry {
   readonly description: string;
   /** Cluster category for grouping on the listing page. */
   readonly category: BlogCategory;
+  /** Topic tags for filtering on /blog/tag/[tag] pages. */
+  readonly tags: ReadonlyArray<BlogTag>;
   /** ISO 8601 publication date (YYYY-MM-DD). */
   readonly datePublished: string;
 }
@@ -40,6 +60,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'What carries over from sim training to real-world driving, and what does not. The mental model transfers; the seat-of-pants calibration does not.',
     category: 'pillar',
+    tags: ['sim-vs-real'],
     datePublished: '2026-04-26',
   },
   {
@@ -48,6 +69,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'How to measure trail braking in your own telemetry, the front-axle physics behind why it works, and the trace signatures that distinguish clean technique from a stab-and-lift release.',
     category: 'pillar',
+    tags: ['braking'],
     datePublished: '2026-04-26',
   },
   {
@@ -56,6 +78,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'Six tools across six dimensions. Which is the right tool for which workflow, and why the comparison universe sorts cleanly by persona rather than by feature checklist.',
     category: 'pillar',
+    tags: ['positioning'],
     datePublished: '2026-04-26',
   },
   {
@@ -64,6 +87,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'Diagnose, prescribe, execute, measure, adapt. Five framework verbs that close the loop on practice between sessions, run on whichever telemetry tool the driver already uses.',
     category: 'pillar',
+    tags: ['coaching-framework'],
     datePublished: '2026-04-26',
   },
 
@@ -74,6 +98,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'Three signatures in the brake-pressure trace that distinguish late-but-rotating from late-and-broken at Turn 1, and why peak-pressure timing is the leading indicator.',
     category: 'technique-deep-dive',
+    tags: ['braking'],
     datePublished: '2026-04-26',
   },
   {
@@ -82,6 +107,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'When the corner radius asks for a smooth ramp from zero to full, and when it asks for stab-and-plateau. The traction-circle physics that decides which the trace should show.',
     category: 'technique-deep-dive',
+    tags: ['throttle'],
     datePublished: '2026-04-26',
   },
   {
@@ -90,6 +116,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'Why minimum speed at the apex is a better leading indicator than fastest lap, and how the under-committer / over-committer distinction sorts the lap-time deficit into two opposite fixes.',
     category: 'technique-deep-dive',
+    tags: ['apex'],
     datePublished: '2026-04-26',
   },
   {
@@ -98,6 +125,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'Why race results depend on the median lap, not the fastest. The standard-deviation discipline, the spike-pattern failure mode, and how to measure consistency from session data.',
     category: 'technique-deep-dive',
+    tags: ['consistency'],
     datePublished: '2026-04-26',
   },
   {
@@ -106,6 +134,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'How to read the leading indicators of tire degradation in the brake-pressure trace eight laps before the lap-time signal arrives, and why endurance amplifies the consistency asymmetry.',
     category: 'technique-deep-dive',
+    tags: ['consistency'],
     datePublished: '2026-04-26',
   },
 
@@ -116,6 +145,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'MoTeC is a trace-reading tool for the engineer between driver and data; LAP is a coaching surface for the driver alone with the data. The persona-mismatch positioning argument.',
     category: 'founder-story',
+    tags: ['positioning'],
     datePublished: '2026-04-26',
   },
   {
@@ -124,6 +154,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'Shapes transfer between sim and real, magnitudes do not. The doctrine claim made concrete with the four magnitudes that will not transfer: tire feel, G-force, fear, weather adaptation.',
     category: 'founder-story',
+    tags: ['sim-vs-real'],
     datePublished: '2026-04-26',
   },
   {
@@ -132,6 +163,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'A followable prescription has anatomy: weakness shape, drill name, success criterion, review cadence. Why "be smoother on entry" is observation-shaped and not prescription-shaped.',
     category: 'founder-story',
+    tags: ['coaching-framework'],
     datePublished: '2026-04-26',
   },
   {
@@ -140,6 +172,7 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'First of a recurring monthly build-in-public update. The numbers attached, including the unflattering ones: 19 ADRs, 4 pillars, 8 supporting posts, no paying customers yet.',
     category: 'founder-story',
+    tags: ['build-in-public'],
     datePublished: '2026-04-26',
   },
   {
@@ -148,6 +181,24 @@ export const BLOG_INDEX: ReadonlyArray<BlogPostIndexEntry> = [
     description:
       'Six exclusions documented in public — language-model coaching, real-time in-cockpit coaching, racing-team-engineer tooling, gamification, setup widgets, and prescriptions when the rule library cannot diagnose.',
     category: 'founder-story',
+    tags: ['positioning', 'build-in-public'],
     datePublished: '2026-04-26',
   },
 ];
+
+/** Returns the deduplicated set of tags actually used by posts. */
+export const listAllTags = (): ReadonlyArray<BlogTag> => {
+  const seen = new Set<BlogTag>();
+  for (const post of BLOG_INDEX) {
+    for (const tag of post.tags) {
+      seen.add(tag);
+    }
+  }
+  return Array.from(seen);
+};
+
+/** Filters BLOG_INDEX to posts that include the given tag. */
+export const postsByTag = (
+  tag: BlogTag,
+): ReadonlyArray<BlogPostIndexEntry> =>
+  BLOG_INDEX.filter((p) => p.tags.includes(tag));

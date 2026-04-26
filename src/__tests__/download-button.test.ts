@@ -22,7 +22,7 @@
 // The actual click-handler attachment is a page-level one-liner
 // when T110/T114 unblock: querySelectorAll('[data-download-
 // platform]').forEach(el => el.addEventListener('click', () =>
-// captureDownloadInitiated({ platform: el.dataset.downloadPlatform,
+// captureDownloadClicked({ platform: el.dataset.downloadPlatform,
 // source: el.dataset.downloadSource })). vitest runs in Node env
 // without a DOM, so wiring stays out of this contract.
 

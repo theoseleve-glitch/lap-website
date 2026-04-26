@@ -1,19 +1,18 @@
-// T128 — unit tests for the PostHog `downloads_initiated` event
-// helper. Mirrors the T103 waitlist-events pattern: a small, typed,
-// pure module that pages import and call from a click handler.
+// T128 + T218 — unit tests for the PostHog `download_clicked`
+// event helper. T128 introduced the helper as `downloads_initiated`;
+// T218 renamed the canonical event + function to `download_clicked`
+// / `captureDownloadClicked` so the marketing-event vocabulary is
+// uniform (verb_noun) across signup_clicked, demo_viewed,
+// pricing_viewed, waitlist_submitted, download_clicked. No
+// production analytics data exists pre-launch (today is 2026-04-26,
+// public beta opens 2026-07-23), so the rename is a free move.
 //
-// Why ship the helper before the buttons exist (T110/T114 blocked
-// on real artifacts): the analytics primitive is the stable API.
-// When T110 unblocks (GitHub Releases of the desktop client) and
-// T114 unblocks (Play Store listing), they just import the helper
-// and attach it to their click handlers — no analytics design at
-// the moment the button arrives. Same pattern that worked for
-// T103 → T091 wiring on the waitlist funnel.
-//
-// Event name is locked at "downloads_initiated" (plural) per
-// sprint spec. Property shape { platform, source } supports
-// the obvious downstream funnel analysis (group by platform,
-// filter by source page).
+// Pages that surface a download CTA (T110 GitHub Releases on
+// /product/desktop, T114 Play Store badge on /product/mobile,
+// both currently BLOCKED on shipped artifacts) import this helper
+// and call it from the click handler. Property shape
+// { platform, source } supports the obvious downstream funnel
+// analysis (group by platform, filter by source page).
 
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
@@ -32,12 +31,12 @@ afterEach(() => {
   vi.resetModules();
 });
 
-describe('T128: captureDownloadInitiated — fires the downloads_initiated event', () => {
-  test('windows + product-desktop fires downloads_initiated with both properties', async () => {
-    const { captureDownloadInitiated } = await import('../scripts/download-events');
-    captureDownloadInitiated({ platform: 'windows', source: 'product-desktop' });
+describe('T218: captureDownloadClicked — fires the download_clicked event', () => {
+  test('windows + product-desktop fires download_clicked with both properties', async () => {
+    const { captureDownloadClicked } = await import('../scripts/download-events');
+    captureDownloadClicked({ platform: 'windows', source: 'product-desktop' });
     expect(captureMock).toHaveBeenCalledTimes(1);
-    expect(captureMock).toHaveBeenCalledWith('downloads_initiated', {
+    expect(captureMock).toHaveBeenCalledWith('download_clicked', {
       platform: 'windows',
       source: 'product-desktop',
     });
@@ -47,9 +46,9 @@ describe('T128: captureDownloadInitiated — fires the downloads_initiated event
     // Same source, different platform — both must be captured
     // independently for the funnel to differentiate Windows vs
     // macOS conversion rates per source page.
-    const { captureDownloadInitiated } = await import('../scripts/download-events');
-    captureDownloadInitiated({ platform: 'macos', source: 'product-desktop' });
-    expect(captureMock).toHaveBeenCalledWith('downloads_initiated', {
+    const { captureDownloadClicked } = await import('../scripts/download-events');
+    captureDownloadClicked({ platform: 'macos', source: 'product-desktop' });
+    expect(captureMock).toHaveBeenCalledWith('download_clicked', {
       platform: 'macos',
       source: 'product-desktop',
     });
@@ -60,9 +59,9 @@ describe('T128: captureDownloadInitiated — fires the downloads_initiated event
     // the second canonical caller of the helper. Locking the
     // android+product-mobile pair here means T114 doesn't have
     // to invent the event shape when it unblocks.
-    const { captureDownloadInitiated } = await import('../scripts/download-events');
-    captureDownloadInitiated({ platform: 'android', source: 'product-mobile' });
-    expect(captureMock).toHaveBeenCalledWith('downloads_initiated', {
+    const { captureDownloadClicked } = await import('../scripts/download-events');
+    captureDownloadClicked({ platform: 'android', source: 'product-mobile' });
+    expect(captureMock).toHaveBeenCalledWith('download_clicked', {
       platform: 'android',
       source: 'product-mobile',
     });
@@ -73,9 +72,9 @@ describe('T128: captureDownloadInitiated — fires the downloads_initiated event
     // Pre-launch this is dormant, but keeping the platform in
     // the union means the App Store CTA can wire up cleanly
     // when it ships — no API change needed at that moment.
-    const { captureDownloadInitiated } = await import('../scripts/download-events');
-    captureDownloadInitiated({ platform: 'ios', source: 'product-mobile' });
-    expect(captureMock).toHaveBeenCalledWith('downloads_initiated', {
+    const { captureDownloadClicked } = await import('../scripts/download-events');
+    captureDownloadClicked({ platform: 'ios', source: 'product-mobile' });
+    expect(captureMock).toHaveBeenCalledWith('download_clicked', {
       platform: 'ios',
       source: 'product-mobile',
     });
@@ -86,9 +85,9 @@ describe('T128: captureDownloadInitiated — fires the downloads_initiated event
     // a "Download" CTA could land on the homepage hero. Locking
     // 'homepage' in the source union ahead of time prevents a
     // future copy edit from inventing a new source string.
-    const { captureDownloadInitiated } = await import('../scripts/download-events');
-    captureDownloadInitiated({ platform: 'windows', source: 'homepage' });
-    expect(captureMock).toHaveBeenCalledWith('downloads_initiated', {
+    const { captureDownloadClicked } = await import('../scripts/download-events');
+    captureDownloadClicked({ platform: 'windows', source: 'homepage' });
+    expect(captureMock).toHaveBeenCalledWith('download_clicked', {
       platform: 'windows',
       source: 'homepage',
     });
@@ -99,9 +98,9 @@ describe('T128: captureDownloadInitiated — fires the downloads_initiated event
     // should produce TWO events — they're showing platform
     // indecision, which is itself a useful funnel signal. Don't
     // accidentally introduce a "fired-once" guard.
-    const { captureDownloadInitiated } = await import('../scripts/download-events');
-    captureDownloadInitiated({ platform: 'windows', source: 'product-desktop' });
-    captureDownloadInitiated({ platform: 'macos', source: 'product-desktop' });
+    const { captureDownloadClicked } = await import('../scripts/download-events');
+    captureDownloadClicked({ platform: 'windows', source: 'product-desktop' });
+    captureDownloadClicked({ platform: 'macos', source: 'product-desktop' });
     expect(captureMock).toHaveBeenCalledTimes(2);
   });
 });

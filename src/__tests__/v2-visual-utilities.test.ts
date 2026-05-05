@@ -77,3 +77,23 @@ describe('V2 March visual utilities — font-body', () => {
     expect(body).toMatch(/line-height\s*:\s*var\(--lh-body\)/);
   });
 });
+
+describe('V2 March visual utilities — layout primitives', () => {
+  test('.prose-max enforces 65ch via --max-prose token', () => {
+    const body = ruleBody(GLOBAL_CSS, '.prose-max');
+    expect(body).not.toBeNull();
+    expect(body).toMatch(/max-width\s*:\s*var\(--max-prose\)/);
+  });
+  test('.tabular-nums uses mono font + tabular-nums', () => {
+    const body = ruleBody(GLOBAL_CSS, '.tabular-nums');
+    expect(body).not.toBeNull();
+    expect(body).toMatch(/font-family\s*:\s*var\(--font-mono\)/);
+    expect(body).toMatch(/font-variant-numeric\s*:\s*tabular-nums/);
+  });
+  test('.cta-nowrap pins min-width and prevents wrap', () => {
+    const body = ruleBody(GLOBAL_CSS, '.cta-nowrap');
+    expect(body).not.toBeNull();
+    expect(body).toMatch(/white-space\s*:\s*nowrap/);
+    expect(body).toMatch(/min-width\s*:\s*8rem/);
+  });
+});

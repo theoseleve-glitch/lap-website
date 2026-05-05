@@ -254,3 +254,23 @@ html {
   font-weight: 400;
   line-height: var(--lh-body);
 }
+
+/* ── V2 March layout primitives ──────────────────────────────────────────── */
+.prose-max {
+  max-width: var(--max-prose);
+}
+
+/* `.tabular-nums` — overrides Tailwind's `tabular-nums` (which only sets
+ * font-variant-numeric) with the V2 expectation of *also* swapping the
+ * font-family to mono. Pricing tables and lap-time HUDs depend on the
+ * mono swap; if a future change reverts to Tailwind's variant-only
+ * version, the lap-time columns mis-align. */
+.tabular-nums {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.cta-nowrap {
+  white-space: nowrap;
+  min-width: 8rem;
+}

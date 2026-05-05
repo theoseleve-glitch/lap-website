@@ -98,6 +98,22 @@
   --focus-ring-color: var(--accent);
 
   --touch-min: 44px;
+
+  /* Spacing — 4 px base unit. Ported verbatim from V2 src/styles/tokens.css.
+     Phase-3 room components consume these via var() inside hand-authored CSS. */
+  --space-px: 1px;
+  --space-0-5: 4px;
+  --space-1: 8px;
+  --space-1-5: 12px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-10: 80px;
+  --space-12: 96px;
+  --space-16: 128px;
 }
 
 /* Accent overrides applied per section via data-accent — kept from the old system

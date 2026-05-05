@@ -27,12 +27,13 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  /* 2% chalk tint via color-mix() — tracks --color-chalk through brand changes. */
   background: repeating-linear-gradient(
     0deg,
     transparent 0,
     transparent 3px,
-    rgba(240, 237, 229, 0.02) 3px,
-    rgba(240, 237, 229, 0.02) 4px
+    color-mix(in srgb, var(--color-chalk) 2%, transparent) 3px,
+    color-mix(in srgb, var(--color-chalk) 2%, transparent) 4px
   );
   z-index: 1;
 }

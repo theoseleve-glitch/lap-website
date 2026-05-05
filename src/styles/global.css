@@ -319,8 +319,8 @@ html {
 /* ── V2 March text-shimmer (Vercel-inspired) ─────────────────────────────────
  * Gold highlight sweeps across text via animated background-position +
  * background-clip:text. Preferred use: hero monument headlines.
- * Hex literal for the shimmer tint is intentional — the gradient stop
- * is a colour-mix that doesn't map to a single token. */
+ * The pit-orange tint at 80% opacity uses color-mix() so a future brand-
+ * colour change to --color-pit-orange propagates here automatically. */
 @keyframes text-shimmer {
   0% { background-position: 100% 50%; }
   100% { background-position: -100% 50%; }
@@ -331,7 +331,7 @@ html {
     105deg,
     var(--color-chalk) 0%,
     var(--color-chalk) 35%,
-    rgba(201, 168, 76, 0.8) 50%,
+    color-mix(in srgb, var(--color-pit-orange) 80%, transparent) 50%,
     var(--color-chalk) 65%,
     var(--color-chalk) 100%
   );
@@ -346,8 +346,8 @@ html {
  * Rotating conic-gradient creates a light beam tracing card edges on hover.
  * The ::before is the spinning gradient, ::after is the inner fill that
  * masks everything except the 1 px edge — producing the animated border
- * illusion. Both rgba() literals (gold + chalk) are tint variants of
- * --color-pit-orange / --color-chalk; same intent comment as text-shimmer. */
+ * illusion. Both gradient tints use color-mix() so they track --color-
+ * pit-orange / --color-chalk through any future brand-colour change. */
 @keyframes beam-spin {
   to {
     transform: rotate(360deg);
@@ -373,10 +373,10 @@ html {
   background: conic-gradient(
     from 0deg,
     transparent 0%,
-    rgba(201, 168, 76, 0.6) 6%,
+    color-mix(in srgb, var(--color-pit-orange) 60%, transparent) 6%,
     transparent 14%,
     transparent 50%,
-    rgba(240, 237, 229, 0.15) 56%,
+    color-mix(in srgb, var(--color-chalk) 15%, transparent) 56%,
     transparent 64%
   );
   animation: beam-spin 4s linear infinite;

@@ -1,0 +1,16 @@
+---
+interface Props {
+  href?: string;
+  ariaLabel?: string;
+}
+
+const { href = '/', ariaLabel = 'LAP — home' } = Astro.props;
+---
+
+<a
+  href={href}
+  aria-label={ariaLabel}
+  class="font-monument text-h3 inline-block text-chalk hover:text-chalk/80 transition-colors"
+>
+  LAP
+</a>

@@ -1,6 +1,9 @@
 ---
 import { Font } from 'astro:assets';
 import '../styles/global.css';
+import SiteHeader from '../components/chrome/SiteHeader.astro';
+import SiteFooter from '../components/chrome/SiteFooter.astro';
+import TimecodeCounter from '../components/chrome/TimecodeCounter.astro';
 
 interface Props {
   title: string;
@@ -80,7 +83,10 @@ const jsonLd = {
       import '../scripts/marketing-events';
     </script>
   </head>
-  <body class="bg-asphalt text-chalk min-h-screen">
+  <body class="bg-asphalt text-chalk min-h-screen pb-12">
+    <SiteHeader />
     <slot />
+    <SiteFooter />
+    <TimecodeCounter />
   </body>
 </html>

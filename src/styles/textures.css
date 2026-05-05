@@ -1,0 +1,75 @@
+/*
+ * V2 March texture utilities — LIGHTER VARIANT (decision 2b, plan
+ * 2026-05-05-v2-march-visual-foundation.md).
+ *
+ * Two cuts vs. V2's verbatim src/styles/textures.css at commit 324c5830:
+ *   1. `.texture-grain` omits scroll-attachment scrolling behavior.
+ *      Reason: known mobile-Safari paint regressor; LCP target is
+ *      <1.5 s on mobile 4G (CLAUDE.md), so we can't afford the
+ *      compositor repaint on every scroll event.
+ *   2. `.texture-grain` does NOT include the SVG-noise pseudo-element.
+ *      Reason: full-screen paint cost; the radial + grid + scanlines
+ *      preserve >90% of the perceived V2 atmosphere without it.
+ *
+ * If a future fidelity pass restores either cut, update this header
+ * and the v2-visual-textures.test.ts canaries simultaneously.
+ */
+
+/* Brutalist grid overlay — ambient gold glow + 56 px crosshatch + scanlines. */
+.texture-grain {
+  position: relative;
+  background-image: var(--bg-radial-1), var(--bg-grid);
+  background-size: auto, 56px 56px;
+}
+
+.texture-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 3px,
+    rgba(240, 237, 229, 0.02) 3px,
+    rgba(240, 237, 229, 0.02) 4px
+  );
+  z-index: 1;
+}
+
+/* Dither — subtle dot grid. Ported verbatim from V2; cheap. */
+.texture-dither {
+  position: relative;
+}
+
+.texture-dither::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: radial-gradient(circle, var(--color-chalk) 1px, transparent 1px);
+  background-size: 4px 4px;
+  z-index: 1;
+}
+
+/* Scanlines — for photography wells. Ported verbatim from V2. */
+.texture-scanlines {
+  position: relative;
+}
+
+.texture-scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    var(--color-chalk) 1px,
+    var(--color-chalk) 2px
+  );
+  z-index: 1;
+}

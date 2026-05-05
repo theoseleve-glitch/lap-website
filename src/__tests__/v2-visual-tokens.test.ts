@@ -112,3 +112,29 @@ describe('V2 March visual tokens — layered backgrounds', () => {
     );
   });
 });
+
+describe('V2 March visual tokens — chart palette', () => {
+  test.each([
+    ['--chart-series-1', '#22C55E'],
+    ['--chart-series-2', '#3B82F6'],
+    ['--chart-series-3', '#F59E0B'],
+    ['--chart-series-4', '#EF4444'],
+    ['--chart-series-5', '#A78BFA'],
+    ['--chart-series-6', '#EC4899'],
+  ])('declares %s = %s', (name, value) => {
+    const escaped = name.replace(/-/g, '\\-');
+    // Hex matching is case-insensitive (V2 uses uppercase, but lowercase is
+    // valid CSS — don't fail a future lowercase pass).
+    const re = new RegExp(`${escaped}\\s*:\\s*${value}\\s*;`, 'i');
+    expect(GLOBAL_CSS).toMatch(re);
+  });
+});
+
+describe('V2 March visual tokens — touch + shadow-e0', () => {
+  test('declares --touch-min = 44px', () => {
+    expect(GLOBAL_CSS).toMatch(/--touch-min\s*:\s*44px\s*;/);
+  });
+  test('declares --shadow-e0 = none', () => {
+    expect(GLOBAL_CSS).toMatch(/--shadow-e0\s*:\s*none\s*;/);
+  });
+});

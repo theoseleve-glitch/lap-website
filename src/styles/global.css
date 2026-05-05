@@ -60,6 +60,9 @@
   --radius-4: 16px;
 
   /* Elevation */
+  /* Elevation ladder — e0 (none) lets utility classes index 0–4 without
+     special-casing. */
+  --shadow-e0: none;
   --shadow-e1: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-e2: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.35);
   --shadow-e3: 0 8px 24px rgba(0, 0, 0, 0.55), 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -160,6 +163,15 @@
   --bg-radial-3: none;
   --bg-grid: linear-gradient(rgba(240, 237, 229, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(240, 237, 229, 0.06) 1px, transparent 1px);
+
+  /* Chart palette — series colours used by Phase-3 telemetry sculptures and
+     pricing-graph illustrations. Verbatim from V2 src/styles/tokens.css. */
+  --chart-series-1: #22c55e;
+  --chart-series-2: #3b82f6;
+  --chart-series-3: #f59e0b;
+  --chart-series-4: #ef4444;
+  --chart-series-5: #a78bfa;
+  --chart-series-6: #ec4899;
 }
 
 /* Accent overrides applied per section via data-accent — kept from the old system

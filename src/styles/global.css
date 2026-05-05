@@ -152,6 +152,14 @@
   --ease-sector-gate: cubic-bezier(0, 0, 0.2, 1);
   --ease-pit-enter: cubic-bezier(0.8, 0, 1, 1);
   --ease-pit-exit: cubic-bezier(0, 0, 0.2, 1);
+
+  /* Layered background system. Consumed by .texture-grain (src/styles/textures.css).
+     Verbatim from V2 src/styles/tokens.css. */
+  --bg-radial-1: radial-gradient(1200px 720px at 10% -10%, rgba(201, 168, 76, 0.04), transparent 68%);
+  --bg-radial-2: none;
+  --bg-radial-3: none;
+  --bg-grid: linear-gradient(rgba(240, 237, 229, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 237, 229, 0.06) 1px, transparent 1px);
 }
 
 /* Accent overrides applied per section via data-accent — kept from the old system

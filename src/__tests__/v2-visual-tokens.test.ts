@@ -92,3 +92,23 @@ describe('V2 March visual tokens — easing', () => {
     expect(GLOBAL_CSS).toMatch(re);
   });
 });
+
+describe('V2 March visual tokens — layered backgrounds', () => {
+  test('declares --bg-radial-1 with the gold radial-gradient', () => {
+    expect(GLOBAL_CSS).toMatch(
+      /--bg-radial-1\s*:\s*radial-gradient\(1200px\s+720px\s+at\s+10%\s+-10%,\s*rgba\(201,\s*168,\s*76,\s*0\.04\),\s*transparent\s+68%\)\s*;/,
+    );
+  });
+  test('declares --bg-radial-2 = none', () => {
+    expect(GLOBAL_CSS).toMatch(/--bg-radial-2\s*:\s*none\s*;/);
+  });
+  test('declares --bg-radial-3 = none', () => {
+    expect(GLOBAL_CSS).toMatch(/--bg-radial-3\s*:\s*none\s*;/);
+  });
+  test('declares --bg-grid as 1px crosshatch on rgba(240,237,229,0.06)', () => {
+    expect(GLOBAL_CSS).toContain('--bg-grid:');
+    expect(GLOBAL_CSS).toMatch(
+      /--bg-grid\s*:\s*linear-gradient\(rgba\(240,\s*237,\s*229,\s*0\.06\)\s+1px,\s*transparent\s+1px\),\s*linear-gradient\(90deg,\s*rgba\(240,\s*237,\s*229,\s*0\.06\)\s+1px,\s*transparent\s+1px\)\s*;/,
+    );
+  });
+});

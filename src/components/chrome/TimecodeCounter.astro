@@ -1,0 +1,42 @@
+---
+// Server-renders a placeholder time (00:00:00 UTC) — the inline script
+// (deferred, client-side) replaces it on first tick. We don't pre-render the
+// real UTC because the build is static and a stale "20:42:18 UTC" baked into
+// every page would be misleading. The placeholder keeps layout stable; the
+// script swaps it within ~16ms of first paint.
+---
+
+<aside
+  aria-hidden="true"
+  class="fixed bottom-0 left-0 right-0 z-timecode flex items-center justify-between px-4 py-2 font-telemetry text-tiny text-steel border-t border-steel/20 bg-asphalt/85 backdrop-blur-sm"
+>
+  <span data-timecode-utc>
+    <time>00:00:00</time> UTC
+  </span>
+  <span data-timecode-elapsed>
+    SESSION <time>+00:00</time>
+  </span>
+</aside>
+
+<script>
+  const utcEl = document.querySelector('[data-timecode-utc] time');
+  const elapsedEl = document.querySelector('[data-timecode-elapsed] time');
+  const start = performance.now();
+  const tick = () => {
+    if (utcEl) {
+      const now = new Date();
+      const hh = String(now.getUTCHours()).padStart(2, '0');
+      const mm = String(now.getUTCMinutes()).padStart(2, '0');
+      const ss = String(now.getUTCSeconds()).padStart(2, '0');
+      utcEl.textContent = `${hh}:${mm}:${ss}`;
+    }
+    if (elapsedEl) {
+      const elapsed = Math.floor((performance.now() - start) / 1000);
+      const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      const s = String(elapsed % 60).padStart(2, '0');
+      elapsedEl.textContent = `+${m}:${s}`;
+    }
+  };
+  tick();
+  setInterval(tick, 1000);
+</script>

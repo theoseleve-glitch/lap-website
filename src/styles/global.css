@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './textures.css';
 
 /*
  * LAP design tokens — ported from Analysis/V2_claude_ai/lap-website/src/styles/tokens.css

@@ -62,3 +62,13 @@ describe('V2 March textures — .texture-dither + .texture-scanlines', () => {
     expect(css).toMatch(/repeating-linear-gradient\(/);
   });
 });
+
+describe('V2 March textures — wired into global.css', () => {
+  test('global.css imports textures.css', () => {
+    const globalCss = readFileSync(
+      resolve(process.cwd(), 'src/styles/global.css'),
+      'utf8',
+    );
+    expect(globalCss).toMatch(/@import\s+['"]\.\/textures\.css['"]/);
+  });
+});

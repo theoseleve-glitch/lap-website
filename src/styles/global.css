@@ -114,6 +114,21 @@
   --space-10: 80px;
   --space-12: 96px;
   --space-16: 128px;
+
+  /* Z-layer ordering. Locks chrome stack: panels < stamps < delta < hud < drs <
+     finish-line < sector < timecode < nav < overlay < cursor. */
+  --z-base: 0;
+  --z-panels: 10;
+  --z-stamps: 20;
+  --z-delta: 30;
+  --z-hud: 35;
+  --z-drs: 36;
+  --z-finish-line: 37;
+  --z-sector: 40;
+  --z-timecode: 50;
+  --z-nav: 60;
+  --z-overlay: 100;
+  --z-cursor: 999;
 }
 
 /* Accent overrides applied per section via data-accent — kept from the old system

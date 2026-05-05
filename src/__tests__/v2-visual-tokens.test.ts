@@ -35,3 +35,24 @@ describe('V2 March visual tokens — spacing scale', () => {
     expect(GLOBAL_CSS).toMatch(re);
   });
 });
+
+describe('V2 March visual tokens — z-layers', () => {
+  test.each([
+    ['--z-base', '0'],
+    ['--z-panels', '10'],
+    ['--z-stamps', '20'],
+    ['--z-delta', '30'],
+    ['--z-hud', '35'],
+    ['--z-drs', '36'],
+    ['--z-finish-line', '37'],
+    ['--z-sector', '40'],
+    ['--z-timecode', '50'],
+    ['--z-nav', '60'],
+    ['--z-overlay', '100'],
+    ['--z-cursor', '999'],
+  ])('declares %s = %s', (name, value) => {
+    const escaped = name.replace(/-/g, '\\-');
+    const re = new RegExp(`${escaped}\\s*:\\s*${value}\\s*;`);
+    expect(GLOBAL_CSS).toMatch(re);
+  });
+});

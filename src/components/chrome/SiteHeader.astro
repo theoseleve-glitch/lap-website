@@ -1,0 +1,18 @@
+---
+import LapWordmark from './LapWordmark.astro';
+import SectorTabs from './SectorTabs.astro';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = Astro.url.pathname } = Astro.props;
+---
+
+<header
+  role="banner"
+  class="sticky top-0 z-nav flex items-center justify-between gap-4 border-b border-steel/20 bg-asphalt/90 px-grid-margin py-3 backdrop-blur-sm"
+>
+  <LapWordmark />
+  <SectorTabs currentPath={currentPath} />
+</header>

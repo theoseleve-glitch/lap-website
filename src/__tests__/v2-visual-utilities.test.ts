@@ -196,3 +196,10 @@ describe('V2 March visual effects — marquee-scroll keyframes', () => {
     );
   });
 });
+
+describe('V2 March visual effects — ::selection', () => {
+  test('::selection uses --accent on --color-asphalt', () => {
+    expect(GLOBAL_CSS).toMatch(/::selection\s*\{[^}]*background\s*:\s*var\(--accent\)/);
+    expect(GLOBAL_CSS).toMatch(/::selection\s*\{[^}]*color\s*:\s*var\(--color-asphalt\)/);
+  });
+});

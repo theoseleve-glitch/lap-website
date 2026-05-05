@@ -418,3 +418,9 @@ html {
     transform: translateX(-50%);
   }
 }
+
+/* ── V2 March selection ──────────────────────────────────────────────────── */
+::selection {
+  background: var(--accent);
+  color: var(--color-asphalt);
+}

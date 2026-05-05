@@ -1,0 +1,44 @@
+---
+interface SectorTab {
+  label: string;
+  sector: string;
+  href: string;
+}
+
+interface Props {
+  currentPath?: string;
+}
+
+const TABS: SectorTab[] = [
+  { label: 'Pricing', sector: 'P', href: '/pricing' },
+  { label: 'How it works', sector: 'H', href: '/how-it-works' },
+  { label: 'Demo', sector: 'D', href: '/demo' },
+  { label: 'Blog', sector: 'B', href: '/blog' },
+  { label: 'For schools', sector: 'S', href: '/for-schools' },
+];
+
+const { currentPath = Astro.url.pathname } = Astro.props;
+
+// Path-prefix match — so /blog/<slug> highlights /blog. Each TAB.href is
+// a non-empty string starting with '/', so startsWith('/foo') correctly
+// matches '/foo' and '/foo/bar' without false-matching '/'.
+const isCurrent = (href: string) => currentPath.startsWith(href);
+---
+
+<nav role="navigation" aria-label="Primary" class="flex gap-grid-gutter">
+  {TABS.map((tab) => (
+    <a
+      href={tab.href}
+      class:list={[
+        'group flex flex-col items-center gap-1 px-3 py-2 text-chalk transition-opacity hover:opacity-80',
+        isCurrent(tab.href) && 'border-b-2 border-pit-orange',
+      ]}
+      aria-current={isCurrent(tab.href) ? 'page' : undefined}
+    >
+      <span class="font-telemetry text-tiny text-steel group-hover:text-chalk">
+        {tab.sector}
+      </span>
+      <span class="font-body text-caption">{tab.label}</span>
+    </a>
+  ))}
+</nav>

@@ -1,0 +1,67 @@
+---
+interface FooterColumn {
+  heading: string;
+  links: { label: string; href: string }[];
+}
+
+const COLUMNS: FooterColumn[] = [
+  {
+    heading: 'Product',
+    links: [
+      { label: 'Pricing', href: '/pricing' },
+      { label: 'How it works', href: '/how-it-works' },
+      { label: 'Demo', href: '/demo' },
+      { label: 'Changelog', href: '/v1' },
+    ],
+  },
+  {
+    heading: 'Company',
+    links: [
+      { label: 'For schools', href: '/for-schools' },
+      { label: 'Press', href: '/press' },
+      { label: 'Blog', href: '/blog' },
+    ],
+  },
+  {
+    heading: 'Legal',
+    links: [
+      { label: 'Privacy', href: '/privacy' },
+      { label: 'Refund policy', href: '/refund-policy' },
+    ],
+  },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer
+  role="contentinfo"
+  class="border-t border-steel/20 bg-asphalt mt-12 px-grid-margin py-8 text-chalk"
+>
+  <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
+    {COLUMNS.map((column) => (
+      <div>
+        <h2 class="font-telemetry text-tiny text-steel mb-3">{column.heading}</h2>
+        <ul class="space-y-2">
+          {column.links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="font-body text-caption text-chalk hover:text-chalk/80 transition-opacity"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+
+    <div class="flex flex-col items-start gap-3">
+      <span class="font-monument text-h3 text-chalk">LAP</span>
+      <p class="font-body text-caption text-steel">
+        © {year} LAP. Every lap, one step better.
+      </p>
+    </div>
+  </div>
+</footer>

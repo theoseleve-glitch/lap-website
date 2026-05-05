@@ -117,6 +117,31 @@ test('T029 "After every session" section lands below the hero', async () => {
   expect(html).toMatch(/Outcome measured/);
 });
 
+test('C09 renders MarqueeStrip with racing keywords between Hero and AfterEverySession', async () => {
+  // Integration check: the MarqueeStrip component (C09) is mounted between
+  // Hero and AfterEverySession with seven racing-domain keywords that mirror
+  // V2's MARQUEE_TOP array. The marquee is a CSS-only animation with no JS.
+  // This test verifies: (1) all marquee items appear, (2) placement is correct
+  // (after Hero, before AfterEverySession), and (3) the component renders
+  // without breaking the homepage's DOM flow.
+  const html = await render();
+  // Sanity: all seven marquee items present
+  expect(html).toMatch(/TELEMETRY/);
+  expect(html).toMatch(/LAP ANALYSIS/);
+  expect(html).toMatch(/CORNER COACHING/);
+  expect(html).toMatch(/PERFORMANCE SCORING/);
+  expect(html).toMatch(/SESSION DEBRIEF/);
+  expect(html).toMatch(/DATA ENGINEERING/);
+  expect(html).toMatch(/TRACK MAPPING/);
+  // Order check: MarqueeStrip appears after Hero's headline
+  const heroIdx = html.indexOf('Every lap, one step better');
+  const marqueeIdx = html.indexOf('TELEMETRY');
+  expect(marqueeIdx).toBeGreaterThan(heroIdx);
+  // MarqueeStrip appears before AfterEverySession's heading
+  const afterSessionIdx = html.indexOf('After every session');
+  expect(afterSessionIdx).toBeGreaterThan(marqueeIdx);
+});
+
 test('T030 "Sim and real" bridge section lands on the homepage, after T029', async () => {
   // Integration check: homepage mounts the SimAndReal section with its
   // locked heading, both H3 sub-beats, and the shape-vs-intensity

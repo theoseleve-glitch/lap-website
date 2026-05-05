@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import DriverProfilePreview from '../components/DriverProfilePreview.astro';
+import MarqueeStrip from '../components/ui/MarqueeStrip.astro';
 import AfterEverySession from '../components/AfterEverySession.astro';
 import SimAndReal from '../components/SimAndReal.astro';
 import BuiltForSeriousSimRacers from '../components/BuiltForSeriousSimRacers.astro';
@@ -40,6 +41,10 @@ const SECONDARY_CTA = {
     >
       <DriverProfilePreview slot="visual" />
     </Hero>
+    <MarqueeStrip
+      items={['TELEMETRY', 'LAP ANALYSIS', 'CORNER COACHING', 'PERFORMANCE SCORING', 'SESSION DEBRIEF', 'DATA ENGINEERING', 'TRACK MAPPING']}
+      speed={35}
+    />
     <AfterEverySession />
     <SimAndReal />
     <BuiltForSeriousSimRacers />

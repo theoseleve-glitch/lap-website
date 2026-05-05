@@ -175,3 +175,16 @@ describe('V2 March visual effects — beam-card', () => {
     expect(afterBody).toMatch(/background\s*:\s*var\(--color-concrete[^)]*\)/);
   });
 });
+
+describe('V2 March visual effects — radio-bar', () => {
+  test('@keyframes radio-wave animates height 3px → 12px → 3px', () => {
+    expect(GLOBAL_CSS).toMatch(
+      /@keyframes\s+radio-wave\s*\{[\s\S]*?0%[\s\S]*?100%[\s\S]*?height\s*:\s*3px[\s\S]*?50%[\s\S]*?height\s*:\s*12px[\s\S]*?\}/,
+    );
+  });
+  test('.radio-bar applies the radio-wave animation', () => {
+    const body = ruleBody(GLOBAL_CSS, '.radio-bar');
+    expect(body).not.toBeNull();
+    expect(body).toMatch(/animation\s*:\s*radio-wave\s+0\.8s\s+ease-in-out\s+infinite/);
+  });
+});

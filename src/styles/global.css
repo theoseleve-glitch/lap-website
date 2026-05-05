@@ -393,3 +393,18 @@ html {
   inset: 1px;
   background: var(--color-concrete);
 }
+
+/* ── V2 March radio-bar waveform ─────────────────────────────────────────── */
+@keyframes radio-wave {
+  0%,
+  100% {
+    height: 3px;
+  }
+  50% {
+    height: 12px;
+  }
+}
+
+.radio-bar {
+  animation: radio-wave 0.8s ease-in-out infinite;
+}

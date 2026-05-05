@@ -313,3 +313,29 @@ html {
     position: relative;
   }
 }
+
+/* ── V2 March text-shimmer (Vercel-inspired) ─────────────────────────────────
+ * Gold highlight sweeps across text via animated background-position +
+ * background-clip:text. Preferred use: hero monument headlines.
+ * Hex literal for the shimmer tint is intentional — the gradient stop
+ * is a colour-mix that doesn't map to a single token. */
+@keyframes text-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: -100% 50%; }
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    105deg,
+    var(--color-chalk) 0%,
+    var(--color-chalk) 35%,
+    rgba(201, 168, 76, 0.8) 50%,
+    var(--color-chalk) 65%,
+    var(--color-chalk) 100%
+  );
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: text-shimmer 6s ease-in-out infinite;
+}

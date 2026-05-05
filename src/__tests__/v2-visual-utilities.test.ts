@@ -120,3 +120,24 @@ describe('V2 March visual utilities — section containers', () => {
     expect(body).toMatch(/overflow\s*:\s*hidden/);
   });
 });
+
+describe('V2 March visual effects — text-shimmer', () => {
+  test('@keyframes text-shimmer is declared', () => {
+    expect(GLOBAL_CSS).toMatch(/@keyframes\s+text-shimmer\s*\{/);
+  });
+  test('animates background-position from 100% 50% → -100% 50%', () => {
+    // Match across the keyframe block (multiline) — use [\s\S] not . so
+    // the dot-doesn't-match-newline default doesn't break us.
+    expect(GLOBAL_CSS).toMatch(
+      /@keyframes\s+text-shimmer\s*\{[\s\S]*?100%\s+50%[\s\S]*?-100%\s+50%[\s\S]*?\}/,
+    );
+  });
+  test('.text-shimmer applies background-clip: text + transparent color', () => {
+    const body = ruleBody(GLOBAL_CSS, '.text-shimmer');
+    expect(body).not.toBeNull();
+    expect(body).toMatch(/background-clip\s*:\s*text/);
+    expect(body).toMatch(/-webkit-background-clip\s*:\s*text/);
+    expect(body).toMatch(/color\s*:\s*transparent/);
+    expect(body).toMatch(/animation\s*:\s*text-shimmer\s+6s/);
+  });
+});

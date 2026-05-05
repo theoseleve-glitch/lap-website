@@ -35,6 +35,17 @@ export default defineConfig({
         subsets: ['latin'],
         fallbacks: ['ui-monospace', 'monospace'],
       },
+      {
+        provider: fontProviders.google(),
+        name: 'Space Mono',
+        cssVariable: '--font-space-mono',
+        // Google Fonts ships Space Mono in 400 + 700 only. We keep 400 (default)
+        // and 700 (used for emphasis); skip 500/600 (would auto-substitute).
+        weights: [400, 700],
+        styles: ['normal'],
+        subsets: ['latin'],
+        fallbacks: ['Space Mono', 'Fira Code', 'Courier New', 'monospace'],
+      },
     ],
   },
   vite: {

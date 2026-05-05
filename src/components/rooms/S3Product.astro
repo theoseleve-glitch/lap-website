@@ -1,0 +1,45 @@
+---
+// src/components/rooms/S3Product.astro — Phase 3 / T05
+
+const STAGES = [
+  { code: '01 / LOG',         heading: 'Capture every lap', body: 'iRacing, ACC, AMS2, RaceBox, RaceChrono — one capture format, every platform.' },
+  { code: '02 / PROCESS',     heading: 'Clean the signal',  body: 'GPS noise filter, lap split, corner detection, resample to a uniform distance grid.' },
+  { code: '03 / ANALYZE',     heading: 'Diagnose the lap',  body: 'Pedal traces, G-G envelope, time-delta — every chart pinned to the metre where the difference happened.' },
+  { code: '04 / SCORE',       heading: 'Four-pillar grade', body: 'Pace / Consistency / Execution / Robustness, each /25 — the lowest pillar is your biggest opportunity.' },
+  { code: '05 / TRACK',       heading: 'Build the profile', body: 'Cross-session overlay, per-corner trend, weekly progression — the driver profile that follows you.' },
+  { code: '06 / STRATEGIZE',  heading: 'Plan the race',     body: 'Stint-pace projection, tyre-life trend, fuel consumption — race-day decisions on data, not gut.' },
+  { code: '07 / PREPARE',     heading: 'Ship the next session', body: 'A drill sized to one practice, a target metric, and a measurable pass / fail next time out.' },
+];
+---
+
+<section
+  aria-label="Product ecosystem pipeline"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-7xl border-t py-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="font-telemetry text-pit-orange">05 / SECTOR 3 · PRODUCT PIPELINE</p>
+    <h2 class="font-display font-monument text-h2 tracking-display mt-4 text-balance">
+      <span class="text-chalk block">One system from raw session</span>
+      <span class="text-pit-orange block">to next-session action.</span>
+    </h2>
+    <p class="text-steel text-body font-body mt-5 max-w-prose">
+      Logging, analysis, progression, and race tools — connected.
+    </p>
+  </header>
+
+  <ol class="mt-14 flex flex-col gap-4">
+    {STAGES.map((s) => (
+      <li class="flex">
+        <article class="beam-card rounded-2 grid w-full grid-cols-[auto_1fr] gap-6 p-7 md:grid-cols-[140px_1fr]">
+          <p class="font-telemetry text-pit-orange">{s.code}</p>
+          <div>
+            <h3 class="font-display font-monument text-h4 text-chalk tracking-display text-balance">
+              {s.heading}
+            </h3>
+            <p class="text-steel text-body font-body mt-2">{s.body}</p>
+          </div>
+        </article>
+      </li>
+    ))}
+  </ol>
+</section>

@@ -1,0 +1,44 @@
+---
+// src/components/rooms/PremiumLayer.astro — Phase 3 / T07
+
+const FEATURES = [
+  { code: '01', kicker: 'DEEP CORNER ANALYSIS',      heading: 'Find the tenths hiding inside corners',          body: 'Per-segment entry / apex / exit decomposition with cause attribution.' },
+  { code: '02', kicker: 'ADVANCED DRIVER PROFILING', heading: 'See your habits across cars, tracks, conditions', body: 'A profile that survives the next car, the next track, the next weather.' },
+  { code: '03', kicker: 'DYNAMIC RACE STRATEGY',     heading: 'Plan the stint, not just the lap',               body: 'Pace projection, tyre-life trend, fuel use, pit-window math — your race plan.' },
+  { code: '04', kicker: 'SETUP UNDERSTANDING',       heading: 'Read what the car is telling you',               body: 'Damper, brake-bias, diff settings translated into "what your driving needs to change".' },
+  { code: '05', kicker: 'PROGRESSION INTELLIGENCE',  heading: 'Track week-over-week',                            body: 'Closed weakness count, open prescriptions, next session target — at a glance.' },
+  { code: '06', kicker: 'UNLIMITED ANALYSIS',        heading: 'No session-count limits',                         body: 'Upload, analyse, compare — as much as a serious schedule needs.' },
+];
+---
+
+<section
+  aria-label="Premium performance layer"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-7xl border-t py-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="font-telemetry text-pit-orange">07 / PREMIUM LAYER · PERFORMANCE TIER</p>
+    <h2 class="font-display font-monument text-h2 text-chalk tracking-display mt-4 text-balance">
+      Premium unlocks the performance layer.
+    </h2>
+    <p class="text-steel text-body font-body mt-5 max-w-prose">
+      Go beyond visibility. Understand patterns, optimise decisions, improve faster.
+    </p>
+  </header>
+
+  <ul class="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {FEATURES.map((f) => (
+      <li class="flex">
+        <article class="beam-card rounded-2 relative flex flex-1 flex-col p-7">
+          <span aria-hidden="true" class="font-display font-monument text-pit-orange/10 absolute top-4 right-6 text-7xl tabular-nums leading-none">
+            {f.code}
+          </span>
+          <p class="font-telemetry text-pit-orange relative">{f.kicker}</p>
+          <h3 class="font-display font-monument text-h4 text-chalk tracking-display relative mt-3 text-balance">
+            {f.heading}
+          </h3>
+          <p class="text-steel text-body font-body relative mt-3">{f.body}</p>
+        </article>
+      </li>
+    ))}
+  </ul>
+</section>

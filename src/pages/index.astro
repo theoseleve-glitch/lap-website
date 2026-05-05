@@ -1,56 +1,45 @@
 ---
+// src/pages/index.astro — Phase 3 wiring. The April-23 sections are
+// retired in T12; this commit imports the 10 V2 March rooms in canonical
+// order. StartGrid keeps the strategic-doctrine-locked headline + subhead
+// (T023/T024) so homepage-level copy regression tests stay green.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
-import DriverProfilePreview from '../components/DriverProfilePreview.astro';
+import StartGrid from '../components/rooms/StartGrid.astro';
+import SessionProof from '../components/rooms/SessionProof.astro';
+import S1Pain from '../components/rooms/S1Pain.astro';
+import S2Versus from '../components/rooms/S2Versus.astro';
+import S3Product from '../components/rooms/S3Product.astro';
+import SimFirst from '../components/rooms/SimFirst.astro';
+import PremiumLayer from '../components/rooms/PremiumLayer.astro';
+import Garage from '../components/rooms/Garage.astro';
+import PitStop from '../components/rooms/PitStop.astro';
+import Podium from '../components/rooms/Podium.astro';
 import MarqueeStrip from '../components/ui/MarqueeStrip.astro';
-import AfterEverySession from '../components/AfterEverySession.astro';
-import SimAndReal from '../components/SimAndReal.astro';
-import BuiltForSeriousSimRacers from '../components/BuiltForSeriousSimRacers.astro';
-import ToolComparison from '../components/ToolComparison.astro';
-import NotForYouIf from '../components/NotForYouIf.astro';
-import FinalCta from '../components/FinalCta.astro';
-import SocialProof from '../components/SocialProof.astro';
-
-// Hero copy + CTAs locked by the T022-T026 staged sequence:
-//   T023 — headline (Option B from 01-STRATEGIC-DOCTRINE.md §2)
-//   T024 — subhead (ecosystem pitch: category + cross-platform + progression)
-//   T025 — primary CTA → https://app.lap-coach.racing/signup
-//   T026 — secondary CTA → /how-it-works (same-origin; route lands in T042)
-// Every constant below is covered by Vitest + Playwright regression tests
-// in src/__tests__/homepage.test.ts and tests/e2e/home.spec.ts.
-const HEADLINE = 'Every lap, one step better.';
-const SUBHEAD =
-  'The cross-platform Driver OS that turns every sim and real-world session into measurable progress.';
-const PRIMARY_CTA = {
-  text: 'Start 14-day trial',
-  href: 'https://app.lap-coach.racing/signup',
-};
-const SECONDARY_CTA = {
-  text: 'See how it works',
-  href: '/how-it-works',
-};
 ---
 
 <BaseLayout title="LAP — Every lap, one step better.">
   <main>
-    <Hero
-      headline={HEADLINE}
-      subhead={SUBHEAD}
-      primaryCta={PRIMARY_CTA}
-      secondaryCta={SECONDARY_CTA}
-    >
-      <DriverProfilePreview slot="visual" />
-    </Hero>
+    <StartGrid />
     <MarqueeStrip
-      items={['TELEMETRY', 'LAP ANALYSIS', 'CORNER COACHING', 'PERFORMANCE SCORING', 'SESSION DEBRIEF', 'DATA ENGINEERING', 'TRACK MAPPING']}
+      items={[
+        'TELEMETRY',
+        'LAP ANALYSIS',
+        'CORNER COACHING',
+        'PERFORMANCE SCORING',
+        'SESSION DEBRIEF',
+        'DATA ENGINEERING',
+        'TRACK MAPPING',
+      ]}
       speed={35}
     />
-    <AfterEverySession />
-    <SimAndReal />
-    <BuiltForSeriousSimRacers />
-    <ToolComparison />
-    <NotForYouIf />
-    <FinalCta />
-    <SocialProof />
+    <SessionProof />
+    <S1Pain />
+    <S2Versus />
+    <S3Product />
+    <SimFirst />
+    <PremiumLayer />
+    <Garage />
+    <PitStop />
+    <Podium />
   </main>
 </BaseLayout>

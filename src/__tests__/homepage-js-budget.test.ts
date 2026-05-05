@@ -52,13 +52,14 @@ test('T037: homepage ships <100 kB of gzipped JS on first load', () => {
   expect(total, message).toBeLessThan(JS_BUDGET_BYTES);
 });
 
-test('T037: homepage bundles at least the Hero + BaseLayout chunks', () => {
+test('T037: homepage bundles at least the StartGrid + BaseLayout chunks', () => {
   // Sanity check on the parser: the index.html should reference the
-  // Hero animation script (T027) and the BaseLayout script (which
-  // holds the PostHog / Sentry client bridge). If either disappears
-  // from the script refs, something upstream has changed the rendering
-  // posture and the budget measurement would be silently incomplete.
+  // StartGrid animation script (Phase 3 / T01 — same hero-motion JS that
+  // T027's Hero used to import) and the BaseLayout script (which holds
+  // the PostHog / Sentry client bridge). If either disappears from the
+  // script refs, something upstream has changed the rendering posture
+  // and the budget measurement would be silently incomplete.
   const scripts = homepageJsFiles();
-  expect(scripts.some((s) => /Hero\.astro/.test(s))).toBe(true);
+  expect(scripts.some((s) => /StartGrid\.astro/.test(s))).toBe(true);
   expect(scripts.some((s) => /BaseLayout\.astro/.test(s))).toBe(true);
 });

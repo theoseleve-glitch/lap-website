@@ -1,0 +1,70 @@
+---
+// src/components/rooms/Garage.astro — Phase 3 / T08
+
+const STATS = [
+  { figure: '+2,000', label: 'IRATING GAINED' },
+  { figure: '12',     label: 'PODIUM FIGHTS' },
+  { figure: '14',     label: 'STAGE PIPELINE' },
+];
+
+const TESTIMONIALS = [
+  { kicker: 'CLEARER DEBRIEFS', quote: 'The first week, I stopped guessing why a lap was slow — the chart told me, and the drill was waiting.', slot: 'BETA SLOT 1 · July 2026' },
+  { kicker: 'FASTER PROGRESS',  quote: 'Six weeks in, my P1 lap on the Saturday split fell forty hundredths. Same car, same track, different inputs.', slot: 'BETA SLOT 2 · July 2026' },
+  { kicker: 'LESS GUESSWORK',   quote: 'I used to log a session, look at the trace, and shrug. The four-pillar score told me exactly which pillar to attack first.', slot: 'BETA SLOT 3 · July 2026' },
+];
+---
+
+<section
+  aria-label="Build story and proof"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-7xl border-t py-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="font-telemetry text-pit-orange">08 / GARAGE · BUILD STORY</p>
+    <h2 class="font-display font-monument text-h2 text-chalk tracking-display mt-4 text-balance">
+      Built from real progression.
+    </h2>
+    <p class="text-steel text-body font-body mt-5 max-w-prose">
+      LAP exists because improving as a driver should not require becoming your own engineer.
+    </p>
+  </header>
+
+  <article class="beam-card rounded-2 mt-14 grid grid-cols-1 gap-8 p-8 md:grid-cols-[1fr_auto] md:p-10">
+    <div class="prose-max">
+      <p class="text-chalk text-body font-body leading-body">
+        I built LAP because I lived the problem — six telemetry tabs open, no plan for Thursday's
+        practice, three years of 1:42.9 laps that wouldn't move. The first version of LAP was a
+        scoring spreadsheet. The current version is the system I wish I had four seasons ago: one
+        capture format, four-pillar scoring, a drill sized to the next session.
+      </p>
+    </div>
+    <aside aria-hidden="true" class="bg-pit-orange text-asphalt font-display font-monument flex h-24 w-24 shrink-0 items-center justify-center text-5xl shadow-e3 md:translate-x-4">
+      L
+    </aside>
+  </article>
+
+  <ul class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+    {STATS.map((s) => (
+      <li class="flex">
+        <article class="beam-card rounded-2 flex flex-1 flex-col p-7">
+          <span class="font-display font-monument text-h2 text-pit-orange tabular-nums leading-none">
+            {s.figure}
+          </span>
+          <span class="font-telemetry text-steel mt-3">{s.label}</span>
+        </article>
+      </li>
+    ))}
+  </ul>
+
+  <ul class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+    {TESTIMONIALS.map((t) => (
+      <li class="flex">
+        <article class="beam-card rounded-2 flex flex-1 flex-col p-7">
+          <span aria-hidden="true" class="font-display font-monument text-pit-orange/30 text-6xl leading-none">“</span>
+          <p class="font-telemetry text-pit-orange mt-3">{t.kicker}</p>
+          <p class="text-chalk text-body font-body mt-3">{t.quote}</p>
+          <p class="font-telemetry text-steel/60 mt-6">{t.slot}</p>
+        </article>
+      </li>
+    ))}
+  </ul>
+</section>

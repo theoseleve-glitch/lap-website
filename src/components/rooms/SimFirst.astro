@@ -1,0 +1,69 @@
+---
+// src/components/rooms/SimFirst.astro — Phase 3 / T06
+
+const RATIONALES = [
+  { code: '01', heading: 'FASTER ONBOARDING',     body: 'A capture before lunch, a debrief after lunch — the loop closes inside one session.' },
+  { code: '02', heading: 'UNLIMITED REPETITION',  body: 'No tow, no tyres, no fuel — repeat the same corner forty times until the brake-release shape is the one you wanted.' },
+  { code: '03', heading: 'IDEAL FOR PROGRESSION', body: 'A controlled environment to isolate one input change at a time — identical car, identical track, weekly cadence.' },
+  { code: '04', heading: 'SAME ANALYSIS ENGINE',  body: 'Same scoring, same driver profile, same drills — the sim weeks compound into your real-world capability.' },
+];
+
+const ACTIVE = ['iRacing', 'Assetto Corsa Competizione', 'Automobilista 2', 'rFactor 2', 'RaceChrono Pro', 'RaceBox'];
+const EXPANDING = ['Real-life kart sessions', 'Real-life car (OBD-II live)', 'MoTeC i2 import', 'Harry\'s Lap Timer'];
+---
+
+<section
+  aria-label="Sim-racing early access"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-7xl border-t py-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="font-telemetry text-pit-orange">06 / SIM FIRST · BRIDGE TO REAL</p>
+    <h2 class="font-display font-monument text-h2 tracking-display mt-4 text-balance">
+      <span class="text-chalk block">Built for progression.</span>
+      <span class="text-pit-orange block">Starting with sim racing.</span>
+    </h2>
+    <p class="text-steel text-body font-body mt-5 max-w-prose">
+      Early access focuses on sim drivers first. The full ecosystem expands from there.
+    </p>
+  </header>
+
+  <ul class="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2">
+    {RATIONALES.map((r) => (
+      <li class="flex">
+        <article class="beam-card rounded-2 relative flex flex-1 flex-col p-7">
+          <span aria-hidden="true" class="font-display font-monument text-pit-orange/20 absolute top-4 right-6 text-7xl tabular-nums leading-none">
+            {r.code}
+          </span>
+          <h3 class="font-telemetry text-pit-orange relative">{r.heading}</h3>
+          <p class="text-steel text-body font-body mt-3 relative">{r.body}</p>
+        </article>
+      </li>
+    ))}
+  </ul>
+
+  <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+    <article class="border-pit-orange/40 bg-concrete/40 rounded-2 border p-7">
+      <p class="font-telemetry text-pit-orange">ACTIVE NOW</p>
+      <ul class="mt-4 flex flex-col gap-2">
+        {ACTIVE.map((p) => (
+          <li class="text-chalk text-body font-body flex items-center gap-3">
+            <span aria-hidden="true" class="bg-acid-green inline-block h-2 w-2 rounded-full" />
+            {p}
+          </li>
+        ))}
+      </ul>
+    </article>
+
+    <article class="border-steel/30 bg-asphalt rounded-2 border p-7">
+      <p class="font-telemetry text-steel">EXPANDING NEXT</p>
+      <ul class="mt-4 flex flex-col gap-2">
+        {EXPANDING.map((p) => (
+          <li class="text-chalk text-body font-body flex items-center gap-3">
+            <span aria-hidden="true" class="bg-steel inline-block h-2 w-2 rounded-full" />
+            {p}
+          </li>
+        ))}
+      </ul>
+    </article>
+  </div>
+</section>

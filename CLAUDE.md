@@ -45,9 +45,32 @@ this up automatically. Phase-2 plan:
 - **`src/components/chrome/TimecodeCounter.astro`** — bottom-fixed UTC clock + page-elapsed strip; ~600 B inline script, runs after first paint.
 - **`src/components/chrome/SiteHeader.astro`** — sticky `<header role="banner">` composing LapWordmark + SectorTabs at `--z-nav`.
 - **`src/components/chrome/SiteFooter.astro`** — `<footer role="contentinfo">` with Product / Company / Legal columns + brand stamp.
-- **`src/components/ui/MarqueeStrip.astro`** — server-rendered scrolling text strip; consumes Phase-1 `@keyframes marquee-scroll`. Props: `items`, `speed` (default 30s), `separator` (default `•`), `reverse`. Mounted on homepage between Hero and AfterEverySession.
+- **`src/components/ui/MarqueeStrip.astro`** — server-rendered scrolling text strip; consumes Phase-1 `@keyframes marquee-scroll`. Props: `items`, `speed` (default 30s), `separator` (default `•`), `reverse`. Mounted on homepage between StartGrid and SessionProof.
 
 **Phase-2 explicitly does NOT include:** racing-HUD elements (DeltaStrip, DrsLabel, FinishLine, PitWheel, IndexOverlay, SectorGateSweep, TimingTower, MiniTrackMap, CustomCursor) — these are V2 components but not core identity. Phase 3 home rooms add some of these in-flow; Phase 4 fits remaining ones to other pages if budget allows.
+
+## Homepage rooms — V2 March port (Phase 3 complete 2026-05-05)
+
+The April-23 home sections (`Hero`, `AfterEverySession`, `SimAndReal`,
+`BuiltForSeriousSimRacers`, `ToolComparison`, `NotForYouIf`) are retired.
+The homepage now flows through ten V2 March rooms in canonical order, all
+under `src/components/rooms/`. Phase-3 plan:
+`docs/superpowers/plans/2026-05-05-v2-march-rooms.md`.
+
+- **`StartGrid.astro`** (T01) — replaces Hero. `.room.texture-grain` wrapper, V2 SIM-RACING badge, `font-monument text-shimmer` headline, gold pit-orange CTA, embedded DriverProfilePreview. Keeps doctrine-locked headline / subhead (T023 / T024). Imports `scripts/hero-motion.ts` for the data-hero-animate stagger.
+- **`SessionProof.astro`** (T02) — three offset `.beam-card` tiles: YOUR SCORE / YOUR DEBRIEF / YOUR PROGRESSION with semantic colour coding (`text-safety-red` for losses, `text-acid-green` for fixes).
+- **`S1Pain.astro`** (T03) — 2-card "typical driver stack vs LAP ecosystem" with INCLUDED acid-green badges on every LAP module.
+- **`S2Versus.astro`** (T04) — dual-headline "They time laps. We coach drivers." with overlapping TIMING-FIRST / COACHING-FIRST cards and three pillar `.beam-card`s below.
+- **`S3Product.astro`** (T05) — vertical sequence of 7 `.beam-card` stages (01 LOG → 07 PREPARE) with telemetry codes and monument body headings. (V2's GSAP horizontal scroll-pin deferred to Phase 4.)
+- **`SimFirst.astro`** (T06) — 4 rationale cards with `font-monument text-pit-orange/20` ghost numerals + ACTIVE NOW / EXPANDING NEXT platform split.
+- **`PremiumLayer.astro`** (T07) — 3-column 6-card feature grid with kicker-headline-body and corner-numeral ghost glyphs.
+- **`Garage.astro`** (T08) — founder narrative panel with offset gold "L" badge + 3 stat cards + 3 testimonial slots reserved for July beta (`BETA SLOT 1/2/3 · July 2026`, no fabricated names per Doctrine §10).
+- **`PitStop.astro`** (T09) — single-tier pricing card with both billing options (BEST VALUE acid-green badge on annual), feature list, gold CTA, GDPR-COMPLIANT trust strip, "See full pricing →" link to `/pricing`. (V2's billing toggle / FAQ accordion / feature matrix deferred to Phase 4.)
+- **`Podium.astro`** (T10) — `.room.texture-grain` chequered-flag close. `font-monument text-shimmer` headline, gold CTA, IntersectionObserver fires `podium_reach` PostHog event at 50% visibility.
+
+`FinalCta.astro` and `SocialProof.astro` are kept (used by `/demo`, `/how-it-works`); their Phase-2.5 atmospheric uplift stays. `DriverProfilePreview.astro` is kept (embedded inside StartGrid).
+
+**Phase-3 explicitly does NOT include:** GSAP scroll-pinning in S3Product, count-up animation on Garage stats, billing toggle / FAQ accordion / feature matrix in PitStop, magnetic cursor / split-text / custom cursor anywhere. These are Phase-4 polish if JS budget allows.
 
 ## /loop rules
 - Read sprint file, pick next `[ ]`, complete fully.

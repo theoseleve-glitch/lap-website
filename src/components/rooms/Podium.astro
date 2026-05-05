@@ -1,0 +1,55 @@
+---
+// src/components/rooms/Podium.astro — Phase 3 / T10
+---
+
+<section
+  class="room texture-grain px-grid-margin border-pit-orange/15 mx-auto w-full max-w-7xl border-t py-24 text-center sm:py-32"
+  aria-label="Final CTA — checkered flag"
+  data-podium-reach
+>
+  <p class="font-telemetry text-pit-orange">10 / PODIUM · CHEQUERED FLAG</p>
+  <h2
+    class="font-display font-monument text-shimmer text-h1 mx-auto mt-6 max-w-wide tracking-display text-balance"
+  >
+    Your driving deserves <span class="text-pit-orange">better than guesswork.</span>
+  </h2>
+  <p class="text-steel text-body font-body mx-auto mt-6 max-w-prose">
+    Run a lap. Get your report. See what changes.
+  </p>
+
+  <div class="mt-10 flex justify-center">
+    <a
+      href="https://app.lap-coach.racing/signup"
+      rel="noopener"
+      class="bg-pit-orange text-asphalt hover:bg-pit-orange/90 focus-visible:outline-pit-orange text-body font-mono inline-flex items-center justify-center px-8 py-3 font-medium tracking-wide uppercase transition"
+    >
+      Start free — try the demo dashboard
+    </a>
+  </div>
+
+  <p class="font-telemetry text-steel/80 mt-6">
+    Fourteen days free. Then €15 a month, or €150 a year and save €30.
+  </p>
+</section>
+
+<script>
+  if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+    const node = document.querySelector('[data-podium-reach]');
+    if (node) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              const ph = (window as unknown as { posthog?: { capture: (e: string) => void } }).posthog;
+              ph?.capture('podium_reach');
+              io.disconnect();
+              break;
+            }
+          }
+        },
+        { threshold: 0.5 },
+      );
+      io.observe(node);
+    }
+  }
+</script>

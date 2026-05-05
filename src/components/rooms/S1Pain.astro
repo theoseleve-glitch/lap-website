@@ -1,0 +1,67 @@
+---
+// src/components/rooms/S1Pain.astro — Phase 3 / T03
+
+const TYPICAL_STACK = [
+  { name: 'Telemetry app', cost: '€20 / mo' },
+  { name: 'Lap-time logger', cost: '€8 / mo' },
+  { name: 'Notebook for setup', cost: '€5 / mo' },
+  { name: 'Coach hourly', cost: '€60 / hr' },
+  { name: 'Scoring spreadsheet', cost: 'free, fragile' },
+  { name: 'Strategy planner', cost: '€12 / mo' },
+];
+
+const LAP_STACK = [
+  'Capture across iRacing / ACC / AMS2 / phone',
+  'Lap split + corner detection (auto)',
+  'Four-pillar score with grade',
+  'Driver-facing debrief & drill prescription',
+  'Cross-session reference overlay',
+  'Theoretical perfect-lap solver',
+  'Race-strategy planner v2',
+];
+---
+
+<section
+  aria-label="Fragmented tools problem"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-7xl border-t py-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="font-telemetry text-pit-orange">03 / SECTOR 1 · TOOL FRAGMENTATION</p>
+    <h2 class="font-display font-monument text-h2 text-chalk tracking-display mt-4 text-balance">
+      Stop stacking tools.
+    </h2>
+    <p class="text-steel text-body font-body mt-5 max-w-prose">
+      What many drivers pay for separately, LAP brings together in one system.
+    </p>
+  </header>
+
+  <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
+    <article class="bg-asphalt border-steel/20 rounded-2 flex flex-col border p-7">
+      <h3 class="font-telemetry text-steel">THE TYPICAL DRIVER STACK</h3>
+      <dl class="mt-4 flex flex-col gap-3">
+        {TYPICAL_STACK.map((t) => (
+          <div class="flex items-center justify-between">
+            <dt class="text-chalk text-body font-body">{t.name}</dt>
+            <dd class="font-telemetry text-steel tabular-nums">{t.cost}</dd>
+          </div>
+        ))}
+      </dl>
+      <p class="font-telemetry text-steel mt-6">6 tools, 6 logins, no connection</p>
+    </article>
+
+    <article class="beam-card rounded-2 flex flex-col p-7">
+      <h3 class="font-telemetry text-pit-orange">THE LAP ECOSYSTEM</h3>
+      <ul class="mt-4 flex flex-col gap-3">
+        {LAP_STACK.map((line) => (
+          <li class="flex items-center justify-between gap-3">
+            <span class="text-chalk text-body font-body">{line}</span>
+            <span class="font-telemetry bg-acid-green/10 text-acid-green border-acid-green/30 inline-block border px-2 py-0.5">
+              INCLUDED
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p class="font-telemetry text-steel mt-6">One ecosystem. Everything connected.</p>
+    </article>
+  </div>
+</section>

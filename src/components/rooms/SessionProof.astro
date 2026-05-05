@@ -1,0 +1,90 @@
+---
+// src/components/rooms/SessionProof.astro
+// V2 March SessionProof room. Phase 3 / T02.
+
+const PILLARS = [
+  { name: 'Pace', score: 19 },
+  { name: 'Consistency', score: 22 },
+  { name: 'Execution', score: 17 },
+  { name: 'Robustness', score: 14 },
+];
+
+const DEBRIEF = [
+  { label: 'LOSS', value: '-0.41 s in T6 (Spa, Bus Stop)', tone: 'text-safety-red' },
+  { label: 'CAUSE', value: 'Trail-brake released 8 m too early at apex', tone: 'text-steel' },
+  { label: 'WHAT TO CHANGE', value: 'Hold 12 % brake to apex × next 3 sessions', tone: 'text-acid-green' },
+];
+
+const PROGRESSION = [
+  { week: 'Week 1', score: 58, delta: '+0' },
+  { week: 'Week 3', score: 65, delta: '+7' },
+  { week: 'Week 6', score: 72, delta: '+14' },
+];
+---
+
+<section
+  aria-label="What you get after every session"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-7xl border-t py-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="font-telemetry text-pit-orange">02 / SESSION CARDS · POST-RACE WRAP</p>
+    <h2 class="font-display font-monument text-h2 text-chalk tracking-display mt-4 text-balance">
+      Every session ends with a clear next step.
+    </h2>
+    <p class="text-steel text-body font-body mt-5 max-w-prose">
+      Not just telemetry. A driver-ready debrief with decisions, not dashboards.
+    </p>
+  </header>
+
+  <ol class="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
+    <li class="flex md:translate-y-4">
+      <article class="beam-card rounded-2 flex flex-1 flex-col p-7">
+        <span class="font-telemetry text-pit-orange">YOUR SCORE</span>
+        <div class="mt-4 flex items-baseline gap-3">
+          <span class="font-display font-monument text-h2 text-chalk tabular-nums leading-none">72</span>
+          <span class="text-steel text-caption">/100</span>
+        </div>
+        <dl class="mt-5 flex flex-col gap-2">
+          {PILLARS.map((p) => (
+            <div class="flex items-center justify-between">
+              <dt class="text-steel text-caption">{p.name}</dt>
+              <dd class="font-telemetry text-chalk tabular-nums">{p.score}/25</dd>
+            </div>
+          ))}
+        </dl>
+      </article>
+    </li>
+
+    <li class="flex">
+      <article class="beam-card rounded-2 flex flex-1 flex-col p-7">
+        <span class="font-telemetry text-pit-orange">YOUR DEBRIEF</span>
+        <dl class="mt-4 flex flex-col gap-3">
+          {DEBRIEF.map((d) => (
+            <div>
+              <dt class={`font-telemetry ${d.tone}`}>{d.label}</dt>
+              <dd class="text-chalk text-body font-body mt-1">{d.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </article>
+    </li>
+
+    <li class="flex md:-translate-y-4">
+      <article class="beam-card rounded-2 flex flex-1 flex-col p-7">
+        <span class="font-telemetry text-pit-orange">YOUR PROGRESSION</span>
+        <ol class="mt-4 flex flex-col gap-3">
+          {PROGRESSION.map((p) => (
+            <li class="flex items-center gap-3">
+              <span class="text-steel text-caption w-16 shrink-0">{p.week}</span>
+              <div class="bg-asphalt relative h-1.5 flex-1 overflow-hidden rounded-full">
+                <div class="bg-pit-orange absolute inset-y-0 left-0 rounded-full" style={`width: ${p.score}%`} />
+              </div>
+              <span class="font-telemetry text-chalk tabular-nums w-10 text-right">{p.score}</span>
+              <span class="font-telemetry text-acid-green w-12 text-right">{p.delta}</span>
+            </li>
+          ))}
+        </ol>
+      </article>
+    </li>
+  </ol>
+</section>

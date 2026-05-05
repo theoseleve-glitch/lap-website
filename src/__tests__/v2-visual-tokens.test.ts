@@ -56,3 +56,39 @@ describe('V2 March visual tokens — z-layers', () => {
     expect(GLOBAL_CSS).toMatch(re);
   });
 });
+
+describe('V2 March visual tokens — duration', () => {
+  test.each([
+    ['--duration-micro', '420ms'],
+    ['--duration-room', '900ms'],
+    ['--duration-monument', '1400ms'],
+    ['--duration-sector-gate', '400ms'],
+    ['--duration-drs', '2000ms'],
+    ['--duration-pit', '600ms'],
+    ['--duration-finish', '600ms'],
+  ])('declares %s = %s', (name, value) => {
+    const escaped = name.replace(/-/g, '\\-');
+    const re = new RegExp(`${escaped}\\s*:\\s*${value}\\s*;`);
+    expect(GLOBAL_CSS).toMatch(re);
+  });
+});
+
+describe('V2 March visual tokens — easing', () => {
+  test.each([
+    '--ease-inertia',
+    '--ease-overshoot',
+    '--ease-spring',
+    '--ease-snap',
+    '--ease-anticipate',
+    '--ease-sector-gate',
+    '--ease-pit-enter',
+    '--ease-pit-exit',
+  ])('declares %s', (name) => {
+    const escaped = name.replace(/-/g, '\\-');
+    // We don't pin the exact cubic-bezier values here — that creates noisy
+    // test churn whenever the curve gets nudged. We just assert the token
+    // is declared with a cubic-bezier value.
+    const re = new RegExp(`${escaped}\\s*:\\s*cubic-bezier\\(`);
+    expect(GLOBAL_CSS).toMatch(re);
+  });
+});

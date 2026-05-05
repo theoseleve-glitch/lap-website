@@ -37,7 +37,9 @@
      Extended once licensed) is a one-line change here. */
   --font-display: var(--font-space-grotesk);
   --font-body: var(--font-inter);
-  --font-mono: var(--font-jetbrains-mono);
+  /* Space Mono = V2 March telemetry font (decision 1a). JetBrains Mono is
+     still registered in astro.config.mjs but no longer the active mono. */
+  --font-mono: var(--font-space-mono);
 
   /* Type scale — fluid via clamp(). Names mirror the old token set so T022+ markup
      can use `text-h1` / `text-body` etc. verbatim. */

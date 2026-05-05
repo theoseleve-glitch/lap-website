@@ -67,6 +67,9 @@ const jsonLd = {
 
     <Font cssVariable="--font-inter" preload />
     <Font cssVariable="--font-space-grotesk" preload />
+    <!-- Space Mono is the active mono per decision 1a; preload because
+         hero/CTA telemetry labels use it above the fold. -->
+    <Font cssVariable="--font-space-mono" preload />
     <Font cssVariable="--font-jetbrains-mono" />
 
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

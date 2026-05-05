@@ -34,3 +34,27 @@ describe('Astro fonts — Space Mono registration (decision 1a)', () => {
     expect(ASTRO_CONFIG).toMatch(/name\s*:\s*['"]JetBrains\s+Mono['"]/);
   });
 });
+
+describe('Astro fonts — --font-mono now aliases Space Mono', () => {
+  const GLOBAL_CSS = readFileSync(
+    resolve(process.cwd(), 'src/styles/global.css'),
+    'utf8',
+  );
+  const BASE_LAYOUT = readFileSync(
+    resolve(process.cwd(), 'src/layouts/BaseLayout.astro'),
+    'utf8',
+  );
+
+  test('global.css aliases --font-mono to var(--font-space-mono)', () => {
+    expect(GLOBAL_CSS).toMatch(/--font-mono\s*:\s*var\(--font-space-mono\)/);
+  });
+  test('global.css does NOT alias --font-mono to var(--font-jetbrains-mono) any more', () => {
+    expect(GLOBAL_CSS).not.toMatch(/--font-mono\s*:\s*var\(--font-jetbrains-mono\)/);
+  });
+  test('BaseLayout preloads Space Mono', () => {
+    // Astro 5 Fonts API renders <Font cssVariable="..." preload /> for the
+    // weights it ships. The presence of cssVariable="--font-space-mono"
+    // (in any attribute order) is sufficient.
+    expect(BASE_LAYOUT).toMatch(/cssVariable\s*=\s*["']--font-space-mono["']/);
+  });
+});

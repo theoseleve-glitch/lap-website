@@ -274,3 +274,41 @@ html {
   white-space: nowrap;
   min-width: 8rem;
 }
+
+/* ── V2 March section containers ─────────────────────────────────────────── */
+.grid-lap {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: var(--grid-gutter);
+  padding-inline: var(--grid-margin);
+}
+
+/* `.room` — every narrative section in the V2 homepage wraps in this.
+ * 100vh + flex-center mirrors the cinematic scroll-pin pattern.
+ * The `min-height: auto !important` mobile override lives in the
+ * reduced-motion media query block (already imported) — see V2's
+ * src/styles/reduced-motion.css for the exact pattern.
+ *
+ * Phase-3 will add `<section class="room">…</section>` wrappers to
+ * StartGrid, S1Pain, etc.; this class lands ahead of those components
+ * so subagents can verify integration without rebuild churn. */
+.room {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Mobile clamp — `.room` releases its 100vh floor on narrow viewports and
+ * when [data-scroll-pin] elements are forced static. Matches V2's
+ * src/styles/reduced-motion.css behaviour without us adding a separate file. */
+@media (max-width: 767px) {
+  .room {
+    min-height: auto;
+  }
+  [data-scroll-pin] {
+    position: relative;
+  }
+}

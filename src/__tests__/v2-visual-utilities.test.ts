@@ -97,3 +97,26 @@ describe('V2 March visual utilities — layout primitives', () => {
     expect(body).toMatch(/min-width\s*:\s*8rem/);
   });
 });
+
+describe('V2 March visual utilities — section containers', () => {
+  test('.grid-lap renders a 12-col grid with token gutters/margins', () => {
+    const body = ruleBody(GLOBAL_CSS, '.grid-lap');
+    expect(body).not.toBeNull();
+    expect(body).toMatch(/display\s*:\s*grid/);
+    expect(body).toMatch(
+      /grid-template-columns\s*:\s*repeat\(var\(--grid-columns\),\s*1fr\)/,
+    );
+    expect(body).toMatch(/gap\s*:\s*var\(--grid-gutter\)/);
+    expect(body).toMatch(/padding-inline\s*:\s*var\(--grid-margin\)/);
+  });
+  test('.room is a full-viewport scroll-pin container', () => {
+    const body = ruleBody(GLOBAL_CSS, '.room');
+    expect(body).not.toBeNull();
+    expect(body).toMatch(/position\s*:\s*relative/);
+    expect(body).toMatch(/min-height\s*:\s*100vh/);
+    expect(body).toMatch(/display\s*:\s*flex/);
+    expect(body).toMatch(/flex-direction\s*:\s*column/);
+    expect(body).toMatch(/justify-content\s*:\s*center/);
+    expect(body).toMatch(/overflow\s*:\s*hidden/);
+  });
+});

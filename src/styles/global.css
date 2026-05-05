@@ -222,3 +222,35 @@ html {
     scroll-behavior: auto !important;
   }
 }
+
+/* ── V2 March typography utilities ──────────────────────────────────────────
+ * Three composed primitives. Use as one-shot classes in markup, e.g.
+ *   <h1 class="font-monument">…</h1>
+ *   <span class="font-telemetry">SECTOR 03</span>
+ *   <p class="font-body">…</p>
+ * The tokens they reference (--font-display, --ls-display, --text-telemetry, …)
+ * are declared in the @theme block (font tokens) and :root (typography
+ * scalar tokens) above.
+ */
+.font-monument {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-display);
+  line-height: var(--lh-display);
+}
+
+.font-telemetry {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wide);
+  font-size: var(--text-telemetry);
+  line-height: var(--lh-label);
+}
+
+.font-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: var(--lh-body);
+}

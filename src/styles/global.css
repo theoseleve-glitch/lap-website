@@ -424,3 +424,43 @@ html {
   background: var(--accent);
   color: var(--color-asphalt);
 }
+
+/* ── V2 March .room microinteractions ────────────────────────────────────────
+ * Scoped to `.room` so chrome/nav links (Phase 2) keep default styling.
+ * The :not() chain excludes pit-* and stamp-* component links, which carry
+ * their own treatments. */
+.room a:not(.no-underline):not([class*="pit-"]):not([class*="stamp-"]) {
+  position: relative;
+  text-decoration: none;
+}
+
+.room a:not(.no-underline):not([class*="pit-"]):not([class*="stamp-"])::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width var(--duration-micro) var(--ease-inertia);
+}
+
+.room a:not(.no-underline):not([class*="pit-"]):not([class*="stamp-"]):hover::after {
+  width: 100%;
+}
+
+.room button,
+.room [role="button"] {
+  transition: transform var(--duration-micro) var(--ease-spring);
+}
+
+.room button:hover,
+.room [role="button"]:hover {
+  opacity: 0.85;
+}
+
+.room button:active,
+.room [role="button"]:active {
+  transform: scale(0.97);
+  transition-duration: 60ms;
+}

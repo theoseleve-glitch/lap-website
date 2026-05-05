@@ -203,3 +203,32 @@ describe('V2 March visual effects — ::selection', () => {
     expect(GLOBAL_CSS).toMatch(/::selection\s*\{[^}]*color\s*:\s*var\(--color-asphalt\)/);
   });
 });
+
+describe('V2 March microinteractions — .room link underline', () => {
+  test('.room a (with exclusions) sets position:relative + no underline', () => {
+    expect(GLOBAL_CSS).toMatch(
+      /\.room\s+a:not\(\.no-underline\):not\(\[class\*="pit-"\]\):not\(\[class\*="stamp-"\]\)\s*\{[\s\S]*?position\s*:\s*relative[\s\S]*?text-decoration\s*:\s*none/,
+    );
+  });
+  test('.room a::after grows from width:0 → 100% on hover', () => {
+    expect(GLOBAL_CSS).toMatch(
+      /\.room\s+a:not\(\.no-underline\):not\(\[class\*="pit-"\]\):not\(\[class\*="stamp-"\]\)::after\s*\{[\s\S]*?width\s*:\s*0[\s\S]*?\}/,
+    );
+    expect(GLOBAL_CSS).toMatch(
+      /\.room\s+a:not\(\.no-underline\):not\(\[class\*="pit-"\]\):not\(\[class\*="stamp-"\]\):hover::after\s*\{[\s\S]*?width\s*:\s*100%/,
+    );
+  });
+});
+
+describe('V2 March microinteractions — .room button rebound', () => {
+  test('.room button + [role="button"] hover sets opacity 0.85', () => {
+    expect(GLOBAL_CSS).toMatch(
+      /\.room\s+button:hover[\s\S]*?\.room\s+\[role="button"\]:hover\s*\{[\s\S]*?opacity\s*:\s*0\.85/,
+    );
+  });
+  test('.room button:active scales to 0.97', () => {
+    expect(GLOBAL_CSS).toMatch(
+      /\.room\s+button:active[\s\S]*?\.room\s+\[role="button"\]:active\s*\{[\s\S]*?transform\s*:\s*scale\(0\.97\)/,
+    );
+  });
+});

@@ -34,6 +34,21 @@ The following utility classes and tokens are available in `src/styles/global.css
 - **Accessibility:** `.high-contrast` user-toggle class on `<html>` swaps colour palette for outdoor use; `prefers-contrast: more` does the same automatically.
 - **Mono font:** `var(--font-mono)` aliases Space Mono (decision 1a); JetBrains Mono is registered but not active.
 
+## Chrome — V2 March port (Phase 2 complete 2026-05-05)
+
+Persistent chrome wired into `src/layouts/BaseLayout.astro`. Every page picks
+this up automatically. Phase-2 plan:
+`docs/superpowers/plans/2026-05-05-v2-march-chrome.md`.
+
+- **`src/components/chrome/LapWordmark.astro`** — brand mark, `font-monument`. Default href `/`, overridable via `href`/`ariaLabel` props.
+- **`src/components/chrome/SectorTabs.astro`** — primary nav (Pricing / How / Demo / Blog / For schools), with `aria-current="page"` highlight on path-prefix match. Sector labels (P/H/D/B/S) in `font-telemetry`.
+- **`src/components/chrome/TimecodeCounter.astro`** — bottom-fixed UTC clock + page-elapsed strip; ~600 B inline script, runs after first paint.
+- **`src/components/chrome/SiteHeader.astro`** — sticky `<header role="banner">` composing LapWordmark + SectorTabs at `--z-nav`.
+- **`src/components/chrome/SiteFooter.astro`** — `<footer role="contentinfo">` with Product / Company / Legal columns + brand stamp.
+- **`src/components/ui/MarqueeStrip.astro`** — server-rendered scrolling text strip; consumes Phase-1 `@keyframes marquee-scroll`. Props: `items`, `speed` (default 30s), `separator` (default `•`), `reverse`. Mounted on homepage between Hero and AfterEverySession.
+
+**Phase-2 explicitly does NOT include:** racing-HUD elements (DeltaStrip, DrsLabel, FinishLine, PitWheel, IndexOverlay, SectorGateSweep, TimingTower, MiniTrackMap, CustomCursor) — these are V2 components but not core identity. Phase 3 home rooms add some of these in-flow; Phase 4 fits remaining ones to other pages if budget allows.
+
 ## /loop rules
 - Read sprint file, pick next `[ ]`, complete fully.
 - Build verification: `pnpm build && pnpm preview` must succeed.

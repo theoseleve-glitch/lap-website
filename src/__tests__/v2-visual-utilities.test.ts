@@ -232,3 +232,22 @@ describe('V2 March microinteractions — .room button rebound', () => {
     );
   });
 });
+
+describe('V2 March visual effects — high-contrast overrides', () => {
+  test('@media (prefers-contrast: more) block exists', () => {
+    expect(GLOBAL_CSS).toMatch(/@media\s*\(\s*prefers-contrast\s*:\s*more\s*\)/);
+  });
+  test('.high-contrast user-toggled class exists', () => {
+    expect(GLOBAL_CSS).toMatch(/\.high-contrast\s*\{/);
+  });
+  test('high-contrast overrides --color-chalk to #FFFFFF', () => {
+    // We don't pin the exact location — there are two declarations
+    // (one in @media, one in .high-contrast). Both should set white.
+    const matches = GLOBAL_CSS.match(/--color-chalk\s*:\s*#FFFFFF/gi);
+    expect(matches).not.toBeNull();
+    expect(matches!.length).toBeGreaterThanOrEqual(2);
+  });
+  test('high-contrast pumps --color-acid-green to a brighter cyan-green', () => {
+    expect(GLOBAL_CSS).toMatch(/--color-acid-green\s*:\s*#00FF66/i);
+  });
+});

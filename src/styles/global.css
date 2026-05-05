@@ -464,3 +464,35 @@ html {
   transform: scale(0.97);
   transition-duration: 60ms;
 }
+
+/* ── V2 March high-contrast overrides ────────────────────────────────────────
+ * Trackside / outdoor use. System-detected via prefers-contrast:more, and
+ * user-toggled via the .high-contrast class on <html>. Both blocks redeclare
+ * the same overrides so neither path depends on the other being present. */
+@media (prefers-contrast: more) {
+  :root {
+    --color-asphalt: #000000;
+    --color-concrete: #0a0a0a;
+    --color-chalk: #ffffff;
+    --color-steel: #d4d4d4;
+    --color-muted: #bbbbbb;
+    --border-color-default: rgba(255, 255, 255, 0.4);
+    --border-color-muted: rgba(255, 255, 255, 0.25);
+    --color-acid-green: #00ff66;
+    --color-safety-red: #ff3333;
+    --color-marshal-yellow: #ffe033;
+  }
+}
+
+.high-contrast {
+  --color-asphalt: #000000;
+  --color-concrete: #0a0a0a;
+  --color-chalk: #ffffff;
+  --color-steel: #d4d4d4;
+  --color-muted: #bbbbbb;
+  --border-color-default: rgba(255, 255, 255, 0.4);
+  --border-color-muted: rgba(255, 255, 255, 0.25);
+  --color-acid-green: #00ff66;
+  --color-safety-red: #ff3333;
+  --color-marshal-yellow: #ffe033;
+}

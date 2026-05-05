@@ -408,3 +408,13 @@ html {
 .radio-bar {
   animation: radio-wave 0.8s ease-in-out infinite;
 }
+
+/* ── V2 March marquee-scroll (Basement-inspired) ──────────────────────────────── */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

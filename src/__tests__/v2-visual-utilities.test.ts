@@ -188,3 +188,11 @@ describe('V2 March visual effects — radio-bar', () => {
     expect(body).toMatch(/animation\s*:\s*radio-wave\s+0\.8s\s+ease-in-out\s+infinite/);
   });
 });
+
+describe('V2 March visual effects — marquee-scroll keyframes', () => {
+  test('@keyframes marquee-scroll translates from 0 → -50%', () => {
+    expect(GLOBAL_CSS).toMatch(
+      /@keyframes\s+marquee-scroll\s*\{[\s\S]*?from\s*\{\s*transform\s*:\s*translateX\(0\)\s*;?\s*\}[\s\S]*?to\s*\{\s*transform\s*:\s*translateX\(-50%\)\s*;?\s*\}\s*\}/,
+    );
+  });
+});

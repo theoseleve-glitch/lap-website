@@ -141,3 +141,37 @@ describe('V2 March visual effects — text-shimmer', () => {
     expect(body).toMatch(/animation\s*:\s*text-shimmer\s+6s/);
   });
 });
+
+describe('V2 March visual effects — beam-card', () => {
+  test('@keyframes beam-spin is declared and rotates 360deg', () => {
+    expect(GLOBAL_CSS).toMatch(/@keyframes\s+beam-spin\s*\{[\s\S]*?to\s*\{\s*transform\s*:\s*rotate\(360deg\)\s*;?\s*\}\s*\}/);
+  });
+  test('.beam-card creates positioned overflow-hidden container', () => {
+    const body = ruleBody(GLOBAL_CSS, '.beam-card');
+    expect(body).not.toBeNull();
+    expect(body).toMatch(/position\s*:\s*relative/);
+    expect(body).toMatch(/overflow\s*:\s*hidden/);
+    expect(body).toMatch(/z-index\s*:\s*0/);
+  });
+  test('.beam-card::before holds the spinning conic-gradient (initially opacity 0)', () => {
+    expect(GLOBAL_CSS).toMatch(/\.beam-card::before/);
+    const beforeMatch = GLOBAL_CSS.match(/\.beam-card::before\s*\{([^}]*)\}/);
+    expect(beforeMatch).not.toBeNull();
+    const beforeBody = beforeMatch![1];
+    expect(beforeBody).toMatch(/conic-gradient\(/);
+    expect(beforeBody).toMatch(/animation\s*:\s*beam-spin\s+4s\s+linear\s+infinite/);
+    expect(beforeBody).toMatch(/opacity\s*:\s*0/);
+  });
+  test('.beam-card:hover::before reveals the beam (opacity 1)', () => {
+    expect(GLOBAL_CSS).toMatch(/\.beam-card:hover::before\s*\{[^}]*opacity\s*:\s*1/);
+  });
+  test('.beam-card::after masks the inside, leaving a 1px edge', () => {
+    expect(GLOBAL_CSS).toMatch(/\.beam-card::after/);
+    const afterMatch = GLOBAL_CSS.match(/\.beam-card::after\s*\{([^}]*)\}/);
+    expect(afterMatch).not.toBeNull();
+    const afterBody = afterMatch![1];
+    expect(afterBody).toMatch(/inset\s*:\s*1px/);
+    // We accept either the bare token or with fallback (V2 used `var(--concrete, #141414)`).
+    expect(afterBody).toMatch(/background\s*:\s*var\(--color-concrete[^)]*\)/);
+  });
+});

@@ -339,3 +339,57 @@ html {
   color: transparent;
   animation: text-shimmer 6s ease-in-out infinite;
 }
+
+/* ── V2 March beam-card (Linear-inspired) ────────────────────────────────────
+ * Rotating conic-gradient creates a light beam tracing card edges on hover.
+ * The ::before is the spinning gradient, ::after is the inner fill that
+ * masks everything except the 1 px edge — producing the animated border
+ * illusion. Both rgba() literals (gold + chalk) are tint variants of
+ * --color-pit-orange / --color-chalk; same intent comment as text-shimmer. */
+@keyframes beam-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.beam-card {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.beam-card::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  margin-top: -100%;
+  margin-left: -100%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(201, 168, 76, 0.6) 6%,
+    transparent 14%,
+    transparent 50%,
+    rgba(240, 237, 229, 0.15) 56%,
+    transparent 64%
+  );
+  animation: beam-spin 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.beam-card:hover::before {
+  opacity: 1;
+}
+
+.beam-card::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 1px;
+  background: var(--color-concrete);
+}

@@ -36,14 +36,17 @@ const HEADING_ID = 'not-for-you-if-heading';
 
 <section
   aria-labelledby={HEADING_ID}
-  class="px-grid-margin border-steel/10 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
 >
   <header class="max-w-prose">
-    <p class="text-steel text-caption tracking-wide uppercase">Who this isn&apos;t for</p>
-    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+    <p class="font-telemetry text-safety-red">Who this isn&apos;t for</p>
+    <h2
+      id={HEADING_ID}
+      class="font-display font-monument text-h2 text-chalk tracking-display mt-4 text-balance"
+    >
       Not for you if&hellip;
     </h2>
-    <p class="text-steel text-body mt-5">
+    <p class="text-steel text-body font-body mt-5">
       Four cases where LAP will not do what you need. Better to know now than four days into a
       trial.
     </p>
@@ -52,9 +55,9 @@ const HEADING_ID = 'not-for-you-if-heading';
   <ul class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-6">
     {
       BULLETS.map((b) => (
-        <li class="border-steel/15 bg-concrete/40 rounded-2 flex flex-col border p-6 md:p-7">
-          <p class="text-chalk text-body font-medium">{b.lead}</p>
-          <p class="text-steel text-body leading-body mt-2">{b.body}</p>
+        <li class="border-safety-red/20 bg-concrete/40 rounded-2 flex flex-col border-l-2 p-6 md:p-7">
+          <p class="text-chalk text-body font-mono uppercase tracking-wide">{b.lead}</p>
+          <p class="text-steel text-body font-body leading-body mt-2">{b.body}</p>
         </li>
       ))
     }

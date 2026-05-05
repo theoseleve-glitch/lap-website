@@ -14,14 +14,17 @@ const HEADING_ID = 'social-proof-heading';
 
 <section
   aria-labelledby={HEADING_ID}
-  class="px-grid-margin border-steel/10 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
 >
   <header class="max-w-prose">
-    <p class="text-steel text-caption tracking-wide uppercase">Early feedback</p>
-    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+    <p class="font-telemetry text-pit-orange">Early feedback</p>
+    <h2
+      id={HEADING_ID}
+      class="font-display font-monument text-h2 text-chalk tracking-display mt-4 text-balance"
+    >
       No testimonials until the beta opens.
     </h2>
-    <p class="text-steel text-body mt-5">
+    <p class="text-steel text-body font-body mt-5">
       Public beta opens at the end of July 2026. Until a real beta user has something specific to
       say, these three slots stay reserved.
     </p>
@@ -30,9 +33,9 @@ const HEADING_ID = 'social-proof-heading';
   <ul class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-6">
     {
       Array.from({ length: RESERVED_SLOTS }).map(() => (
-        <li class="border-steel/10 bg-concrete/20 rounded-2 flex flex-col border p-7">
-          <p class="text-steel text-caption tracking-wide uppercase">Reserved</p>
-          <p class="text-steel text-body leading-body mt-4">
+        <li class="border-pit-orange/15 bg-concrete/20 rounded-2 flex flex-col border p-7">
+          <p class="font-telemetry text-pit-orange/80">Reserved</p>
+          <p class="text-steel text-body font-body leading-body mt-4">
             First three beta users &middot; July 2026
           </p>
         </li>

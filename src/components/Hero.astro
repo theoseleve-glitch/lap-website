@@ -22,24 +22,28 @@ const secondaryIsExternal = /^https?:\/\//.test(secondaryCta.href);
 ---
 
 <section
-  class="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-6 py-24 text-center sm:py-32"
+  class="room relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-6 py-24 text-center sm:py-32"
 >
-  <h1 data-hero-animate class="font-display text-h1 max-w-wide tracking-display text-balance">
+  <p class="font-telemetry text-pit-orange mb-6">01 / START GRID · GREEN FLAG</p>
+  <h1
+    data-hero-animate
+    class="font-display font-monument text-h1 text-shimmer max-w-wide tracking-display text-balance"
+  >
     {headline}
   </h1>
-  <p data-hero-animate class="text-steel text-body mt-6 max-w-prose">{subhead}</p>
+  <p data-hero-animate class="text-steel text-body font-body mt-6 max-w-prose">{subhead}</p>
   <div data-hero-animate class="mt-10 flex flex-col gap-4 sm:flex-row sm:gap-5">
     <a
       href={primaryCta.href}
       rel={primaryIsExternal ? 'noopener' : undefined}
-      class="bg-chalk text-asphalt hover:bg-chalk/90 focus-visible:outline-chalk text-body inline-flex items-center justify-center px-7 py-3 font-medium transition"
+      class="bg-pit-orange text-asphalt hover:bg-pit-orange/90 focus-visible:outline-pit-orange text-body font-mono inline-flex items-center justify-center px-7 py-3 font-medium tracking-wide uppercase transition"
     >
       {primaryCta.text}
     </a>
     <a
       href={secondaryCta.href}
       rel={secondaryIsExternal ? 'noopener' : undefined}
-      class="text-chalk border-steel/40 hover:border-chalk focus-visible:outline-chalk text-body inline-flex items-center justify-center border px-7 py-3 transition"
+      class="text-chalk border-pit-orange/40 hover:border-pit-orange focus-visible:outline-chalk text-body font-mono inline-flex items-center justify-center border px-7 py-3 tracking-wide uppercase transition"
     >
       {secondaryCta.text}
     </a>

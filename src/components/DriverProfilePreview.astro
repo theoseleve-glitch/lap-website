@@ -23,21 +23,21 @@ const DIMENSIONS: Dimension[] = [
 ---
 
 <figure
-  class="border-steel/20 bg-concrete rounded-2 shadow-e2 mx-auto w-full max-w-md border p-6 text-left"
+  class="border-pit-orange/30 bg-concrete rounded-2 shadow-e2 mx-auto w-full max-w-md border p-6 text-left"
   role="img"
   aria-label={`Driver Profile preview — overall ${OVERALL_SCORE} out of 100, improving`}
 >
-  <figcaption
-    class="text-steel text-caption flex items-center justify-between tracking-wide uppercase"
-  >
-    <span>Driver Profile</span>
-    <span class="text-steel">Month 1</span>
+  <figcaption class="flex items-center justify-between">
+    <span class="font-telemetry text-pit-orange">Driver Profile</span>
+    <span class="font-telemetry text-steel">Month 1</span>
   </figcaption>
 
   <div aria-hidden="true" class="mt-5 flex items-baseline gap-3">
-    <span class="font-display text-h2 text-chalk leading-none tabular-nums">{OVERALL_SCORE}</span>
+    <span class="font-display font-monument text-h2 text-chalk leading-none tabular-nums">
+      {OVERALL_SCORE}
+    </span>
     <span class="text-steel text-caption">/100</span>
-    <span class="text-acid-green text-caption ml-auto font-mono tracking-wide">{TREND_LABEL}</span>
+    <span class="font-telemetry text-acid-green ml-auto">{TREND_LABEL}</span>
   </div>
 
   <dl aria-hidden="true" class="mt-6 flex flex-col gap-3">
@@ -48,7 +48,7 @@ const DIMENSIONS: Dimension[] = [
           <dd class="flex flex-1 items-center gap-3">
             <div class="bg-asphalt relative h-1.5 flex-1 overflow-hidden rounded-full">
               <div
-                class="bg-chalk absolute inset-y-0 left-0 rounded-full"
+                class="bg-pit-orange absolute inset-y-0 left-0 rounded-full"
                 style={`width: ${score}%`}
               />
             </div>
@@ -63,7 +63,7 @@ const DIMENSIONS: Dimension[] = [
 
   <p
     aria-hidden="true"
-    class="text-steel text-caption border-steel/10 mt-6 border-t pt-4 font-mono tracking-wide"
+    class="font-telemetry text-steel border-pit-orange/15 mt-6 border-t pt-4"
   >
     {SESSION_FOOTER}
   </p>

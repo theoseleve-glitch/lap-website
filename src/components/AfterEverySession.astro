@@ -34,14 +34,17 @@ const HEADING_ID = 'after-every-session-heading';
 
 <section
   aria-labelledby={HEADING_ID}
-  class="px-grid-margin border-steel/10 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
 >
   <header class="max-w-prose">
-    <p class="text-steel text-caption tracking-wide uppercase">The coaching loop</p>
-    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+    <p class="font-telemetry text-pit-orange">The coaching loop</p>
+    <h2
+      id={HEADING_ID}
+      class="font-display font-monument text-h2 text-chalk tracking-display mt-4 text-balance"
+    >
       After every session.
     </h2>
-    <p class="text-steel text-body mt-5">
+    <p class="text-steel text-body font-body mt-5">
       One driver profile, three beats, every lap. Observation turns into a prescription; the
       prescription becomes a number you can hit — or miss — on the next session.
     </p>
@@ -51,12 +54,12 @@ const HEADING_ID = 'after-every-session-heading';
     {
       BEATS.map((beat) => (
         <li class="flex">
-          <article class="border-steel/15 bg-concrete/40 rounded-2 flex flex-1 flex-col border p-7">
-            <span class="text-steel text-caption font-mono tracking-widest">{beat.index}</span>
-            <h3 class="font-display text-h4 text-chalk tracking-display mt-4 text-balance">
+          <article class="beam-card rounded-2 flex flex-1 flex-col p-7">
+            <span class="font-telemetry text-pit-orange text-h5 tabular-nums">{beat.index}</span>
+            <h3 class="font-display font-monument text-h4 text-chalk tracking-display mt-4 text-balance">
               {beat.heading}
             </h3>
-            <p class="text-steel text-body leading-body mt-4">{beat.body}</p>
+            <p class="text-steel text-body font-body mt-4">{beat.body}</p>
           </article>
         </li>
       ))

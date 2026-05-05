@@ -39,14 +39,17 @@ const HEADING_ID = 'built-for-serious-sim-racers-heading';
 
 <section
   aria-labelledby={HEADING_ID}
-  class="px-grid-margin border-steel/10 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
 >
   <header class="max-w-prose">
-    <p class="text-steel text-caption tracking-wide uppercase">Who this is for</p>
-    <h2 id={HEADING_ID} class="font-display text-h2 text-chalk tracking-display mt-4 text-balance">
+    <p class="font-telemetry text-pit-orange">Who this is for</p>
+    <h2
+      id={HEADING_ID}
+      class="font-display font-monument text-h2 text-chalk tracking-display mt-4 text-balance"
+    >
       Built for serious sim racers.
     </h2>
-    <p class="text-steel text-body mt-5">
+    <p class="text-steel text-body font-body mt-5">
       If most of these describe you, you're the driver LAP was built for.
     </p>
   </header>
@@ -54,9 +57,9 @@ const HEADING_ID = 'built-for-serious-sim-racers-heading';
   <ul class="mt-14 flex flex-col gap-5">
     {
       BULLETS.map((b) => (
-        <li class="border-steel/15 bg-concrete/40 rounded-2 border p-6 md:p-7">
-          <p class="text-chalk text-body font-medium">{b.lead}</p>
-          <p class="text-steel text-body leading-body mt-2">{b.body}</p>
+        <li class="border-pit-orange/20 bg-concrete/40 rounded-2 border-l-2 p-6 md:p-7">
+          <p class="text-pit-orange font-mono text-body uppercase tracking-wide">{b.lead}</p>
+          <p class="text-steel text-body font-body leading-body mt-2">{b.body}</p>
         </li>
       ))
     }

@@ -178,7 +178,10 @@ test('T089: related-links footer lands after the FinalCta in document order', as
   // decided not to trial but still want to learn more.
   const html = await render();
   const ctaIdx = html.indexOf('Start 14-day trial');
-  const hiwLinkIdx = html.indexOf('href="/how-it-works"');
+  // Use lastIndexOf: SiteHeader's SectorTabs also links /how-it-works;
+  // we want the page-footer (or SiteFooter) occurrence which lands after
+  // the CTA — the original intent is preserved.
+  const hiwLinkIdx = html.lastIndexOf('href="/how-it-works"');
   expect(ctaIdx).toBeGreaterThan(-1);
   expect(hiwLinkIdx).toBeGreaterThan(ctaIdx);
 });

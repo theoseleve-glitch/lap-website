@@ -1,71 +1,36 @@
 ---
-// src/components/rooms/StartGrid.astro
-// V2 March hero room. Replaces the April-23 Hero. Phase 3 / T01.
+// src/components/rooms/StartGrid.astro — Phase 3.2.
 //
-// Copy is locked by strategic doctrine (01-STRATEGIC-DOCTRINE.md §2 / T023
-// for the headline, T024 for the subhead). The V2 March badge ("SIM-RACING
-// EARLY ACCESS NOW OPEN") and the gold "Transform your driving." accent
-// sit alongside doctrine copy — not in place of it.
-//
-// Right-rail: FiveRedLights reaction-time game (Phase 3.1) — replaces the
-// DriverProfilePreview embed. The score preview now lives in the
-// SessionProof room as the "YOUR SCORE" beam-card.
+// V2 March entrance ritual. Pure minimalist 100vh hero: telemetry kicker,
+// monument+shimmer headline, the five-red-lights press-and-hold gate.
+// The doctrine-locked subhead and CTAs (T024 / T025 / T026) live in the
+// HeroManifest section right below — that section also carries the
+// [data-after-hero] anchor that the lights-out release smooth-scrolls to.
 import FiveRedLights from './FiveRedLights.astro';
 
-const PRIMARY = { text: 'Start 14-day trial', href: 'https://app.lap-coach.racing/signup' };
-const SECONDARY = { text: 'See how it works', href: '/how-it-works' };
 const HEADLINE = 'Every lap, one step better.';
-const SUBHEAD =
-  'The cross-platform Driver OS that turns every sim and real-world session into measurable progress.';
 ---
 
 <section
-  class="room texture-grain px-grid-margin relative mx-auto w-full max-w-6xl py-24 sm:py-32"
+  class="room texture-grain px-grid-margin relative mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center py-16 text-center sm:py-20"
   aria-label="Start grid — what is LAP"
 >
-  <div class="grid-lap grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-16">
-    <div class="text-left">
-      <p class="font-telemetry text-pit-orange mb-6 tracking-wider">
-        01 / START GRID · GREEN FLAG
-      </p>
+  <p
+    class="font-telemetry text-pit-orange mb-8 tracking-[0.3em]"
+    data-hero-animate
+  >
+    01 / START GRID · GREEN FLAG
+  </p>
 
-      <p
-        class="font-telemetry bg-pit-orange/10 text-pit-orange border-pit-orange/30 mb-8 inline-block border px-3 py-1"
-      >
-        SIM-RACING EARLY ACCESS NOW OPEN
-      </p>
+  <h1
+    data-hero-animate
+    class="font-display font-monument text-shimmer text-h1 max-w-wide tracking-display text-balance"
+  >
+    {HEADLINE}
+  </h1>
 
-      <h1
-        data-hero-animate
-        class="font-display font-monument text-shimmer text-h1 max-w-wide tracking-display text-balance"
-      >
-        {HEADLINE}
-      </h1>
-
-      <p data-hero-animate class="text-steel text-body font-body mt-6 max-w-prose">
-        {SUBHEAD}
-      </p>
-
-      <div data-hero-animate class="mt-10 flex flex-col gap-4 sm:flex-row sm:gap-5">
-        <a
-          href={PRIMARY.href}
-          rel="noopener"
-          class="bg-pit-orange text-asphalt hover:bg-pit-orange/90 focus-visible:outline-pit-orange text-body font-mono inline-flex items-center justify-center px-7 py-3 font-medium tracking-wide uppercase transition"
-        >
-          {PRIMARY.text}
-        </a>
-        <a
-          href={SECONDARY.href}
-          class="text-chalk border-pit-orange/40 hover:border-pit-orange focus-visible:outline-chalk text-body font-mono inline-flex items-center justify-center border px-7 py-3 tracking-wide uppercase transition"
-        >
-          {SECONDARY.text}
-        </a>
-      </div>
-    </div>
-
-    <div data-hero-animate>
-      <FiveRedLights />
-    </div>
+  <div data-hero-animate class="mt-14 sm:mt-16">
+    <FiveRedLights />
   </div>
 </section>
 

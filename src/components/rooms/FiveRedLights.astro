@@ -1,37 +1,36 @@
 ---
-// src/components/rooms/FiveRedLights.astro — Phase 3.1 / hero feature.
+// src/components/rooms/FiveRedLights.astro — Phase 3.2 / hero gate.
 //
-// F1 lights-out reaction game. Five lights illuminate one-by-one, all stay
-// lit, then extinguish at a random delay between 0.5 and 3 s — the exact
-// FIA Formula 1 race-start procedure. The user taps as fast as possible
-// after lights-out. Reaction time in ms is shown, with a localStorage-
-// backed personal best and the F1-driver benchmark (~200 ms).
+// V2 March press-and-hold start ritual. Five lights illuminate one by
+// one (1 s each) while the user holds the HOLD button. Release after
+// all 5 are lit → lights extinguish and the page smooth-scrolls to the
+// element marked [data-after-hero]. Release early → lights extinguish,
+// "TOO EARLY" feedback, retry from idle.
 //
-// All state and timing live in the inline <script> below. The component is
-// SSR-safe: SSR emits the idle markup; the script attaches on hydration.
+// Runs on Pointer Events (mouse + touch + pen) with pointer capture so
+// the up event still lands if the user drags off the button. Keyboard
+// fallback: hold Space or Enter while the hero is in view.
+//
+// SSR-safe: SSR emits the idle markup; the inline script attaches on
+// page load.
 ---
 
-<figure
-  class="border-pit-orange/30 bg-concrete rounded-2 shadow-e3 mx-auto w-full max-w-md p-6 text-left"
-  aria-label="Reaction-time game · F1 lights-out start procedure"
+<div
+  class="flex flex-col items-center"
   data-five-red-lights
+  data-start-lights
 >
-  <figcaption class="flex items-center justify-between">
-    <span class="font-telemetry text-pit-orange">REACTION TEST · F1 START</span>
-    <span class="font-telemetry text-steel/70" aria-hidden="true">FIA SEQUENCE</span>
-  </figcaption>
-
   <div
     role="img"
     aria-label="Five start lights"
-    class="bg-asphalt border-steel/30 mt-5 flex items-center justify-between gap-3 rounded-md border p-4"
+    class="bg-asphalt border-steel/30 flex items-center justify-center gap-3 rounded-md border px-5 py-4 sm:gap-4 sm:px-7"
   >
     {[1, 2, 3, 4, 5].map((n) => (
       <span
         data-light={n}
         data-lit="false"
         aria-hidden="true"
-        class="block h-10 w-10 rounded-full border border-safety-red/30 bg-asphalt shadow-[inset_0_0_8px_rgba(0,0,0,0.8)] transition-all duration-200 sm:h-12 sm:w-12"
+        class="block h-10 w-10 rounded-full border border-safety-red/30 bg-asphalt shadow-[inset_0_0_8px_rgba(0,0,0,0.8)] transition-all duration-200 sm:h-14 sm:w-14"
       />
     ))}
   </div>
@@ -39,44 +38,24 @@
   <p
     data-status
     aria-live="polite"
-    class="font-telemetry text-chalk mt-4 min-h-[1.5em] text-center"
+    class="font-telemetry text-pit-orange mt-7 min-h-[1.5em] text-center tracking-widest"
   >
-    Press START. Tap when lights go out.
+    PRESS &amp; HOLD TO BEGIN
   </p>
 
   <button
     type="button"
-    data-tap
-    class="bg-pit-orange text-asphalt hover:bg-pit-orange/90 focus-visible:outline-pit-orange text-body font-mono mt-4 inline-flex w-full items-center justify-center px-7 py-3 font-medium tracking-wide uppercase transition"
+    data-hold
+    aria-label="Press and hold to start the lights-out sequence"
+    class="bg-pit-orange text-asphalt hover:bg-pit-orange/90 focus-visible:outline-pit-orange data-[active=true]:bg-safety-red data-[active=true]:text-chalk font-mono mt-6 inline-flex w-48 cursor-pointer touch-none items-center justify-center px-7 py-4 font-medium tracking-[0.3em] uppercase transition select-none"
   >
-    <span data-tap-label>START</span>
+    <span data-hold-label>HOLD</span>
   </button>
 
-  <dl class="mt-5 grid grid-cols-2 gap-4 text-center">
-    <div>
-      <dt class="font-telemetry text-steel">YOUR LAST</dt>
-      <dd
-        data-result
-        class="font-display font-monument text-h3 text-chalk tabular-nums leading-none mt-1"
-      >
-        — ms
-      </dd>
-    </div>
-    <div>
-      <dt class="font-telemetry text-steel">PERSONAL BEST</dt>
-      <dd
-        data-best
-        class="font-display font-monument text-h3 text-pit-orange tabular-nums leading-none mt-1"
-      >
-        — ms
-      </dd>
-    </div>
-  </dl>
-
-  <p class="font-telemetry text-steel/70 mt-5 text-center">
-    F1 driver: ~200 ms · Average: ~250 ms
+  <p class="font-telemetry text-steel/60 mt-5 text-center tracking-wider">
+    Release after all five lights to launch.
   </p>
-</figure>
+</div>
 
 <style>
   [data-light][data-lit='true'] {
@@ -86,6 +65,11 @@
       0 0 18px rgba(255, 42, 42, 0.85),
       0 0 36px rgba(255, 42, 42, 0.45),
       inset 0 0 6px rgba(255, 255, 255, 0.25);
+  }
+  /* Tactile press affordance — slight inset shadow when actively held. */
+  [data-hold][data-active='true'] {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
   }
 </style>
 
@@ -97,148 +81,144 @@
 
     const lights = Array.from(root.querySelectorAll<HTMLElement>('[data-light]'));
     const status = root.querySelector<HTMLElement>('[data-status]')!;
-    const button = root.querySelector<HTMLButtonElement>('[data-tap]')!;
-    const label = root.querySelector<HTMLElement>('[data-tap-label]')!;
-    const resultEl = root.querySelector<HTMLElement>('[data-result]')!;
-    const bestEl = root.querySelector<HTMLElement>('[data-best]')!;
+    const button = root.querySelector<HTMLButtonElement>('[data-hold]')!;
+    const label = root.querySelector<HTMLElement>('[data-hold-label]')!;
 
-    const STORAGE_KEY = 'lap-five-red-lights-best';
+    const REVEAL_MS = 1000;
+    const TOTAL = lights.length;
 
-    type State = 'idle' | 'arming' | 'waiting' | 'racing' | 'result' | 'jump';
+    type State = 'idle' | 'pressing' | 'ready' | 'released' | 'aborted';
     let state: State = 'idle';
-    const armingTimers: number[] = [];
-    let waitingTimer = 0;
-    let startTime = 0;
+    let timers: number[] = [];
+    let resetTimer = 0;
 
-    let storedBest = 0;
-    try {
-      storedBest = parseInt(localStorage.getItem(STORAGE_KEY) ?? '0', 10) || 0;
-    } catch {
-      storedBest = 0;
-    }
-    if (storedBest > 0) bestEl.textContent = `${storedBest} ms`;
-
-    const setLights = (count: number) => {
+    const setLights = (n: number) => {
       lights.forEach((node, i) => {
-        node.dataset.lit = i < count ? 'true' : 'false';
+        node.dataset.lit = i < n ? 'true' : 'false';
       });
     };
 
-    const clearTimers = () => {
-      armingTimers.forEach((t) => window.clearTimeout(t));
-      armingTimers.length = 0;
-      if (waitingTimer) window.clearTimeout(waitingTimer);
-      waitingTimer = 0;
+    const clearAllTimers = () => {
+      timers.forEach((t) => window.clearTimeout(t));
+      timers = [];
+      if (resetTimer) {
+        window.clearTimeout(resetTimer);
+        resetTimer = 0;
+      }
     };
 
-    const reactionVerdict = (ms: number) => {
-      if (ms < 200) return 'Reaction god. Verstappen tier.';
-      if (ms < 250) return 'F1-tier reaction. Try again?';
-      if (ms < 300) return 'Quick. Try again?';
-      if (ms < 400) return 'Average. Sharpen up — F1 drivers tap ~200 ms.';
-      return 'Try again — F1 drivers tap ~200 ms.';
+    const toIdle = () => {
+      clearAllTimers();
+      setLights(0);
+      button.dataset.active = 'false';
+      label.textContent = 'HOLD';
+      status.textContent = 'PRESS & HOLD TO BEGIN';
+      state = 'idle';
     };
 
-    const arm = () => {
-      state = 'arming';
-      label.textContent = 'WAIT…';
-      status.textContent = 'Steady…';
-      resultEl.textContent = '— ms';
+    const start = () => {
+      if (state === 'pressing' || state === 'ready') return;
+      clearAllTimers();
+      state = 'pressing';
+      button.dataset.active = 'true';
+      label.textContent = 'HOLDING…';
+      status.textContent = 'STEADY…';
       setLights(0);
 
-      for (let i = 1; i <= 5; i++) {
-        armingTimers.push(
-          window.setTimeout(() => setLights(i), i * 1000),
+      for (let i = 1; i <= TOTAL; i++) {
+        timers.push(
+          window.setTimeout(() => {
+            if (state !== 'pressing') return;
+            setLights(i);
+            if (i === TOTAL) {
+              state = 'ready';
+              status.textContent = 'RELEASE TO LAUNCH';
+            }
+          }, i * REVEAL_MS),
         );
       }
-
-      armingTimers.push(
-        window.setTimeout(() => {
-          state = 'waiting';
-          status.textContent = 'Wait for it…';
-          const delay = 500 + Math.random() * 2500;
-          waitingTimer = window.setTimeout(() => {
-            setLights(0);
-            startTime = performance.now();
-            state = 'racing';
-            label.textContent = 'TAP!';
-            status.textContent = 'GO!';
-          }, delay);
-        }, 5500),
-      );
     };
 
-    const finishRace = () => {
-      const ms = Math.round(performance.now() - startTime);
-      state = 'result';
-      resultEl.textContent = `${ms} ms`;
-      status.textContent = reactionVerdict(ms);
-      label.textContent = 'GO AGAIN';
-
-      if (storedBest === 0 || ms < storedBest) {
-        storedBest = ms;
-        bestEl.textContent = `${ms} ms`;
-        try {
-          localStorage.setItem(STORAGE_KEY, String(ms));
-        } catch {
-          /* private mode / quota — silent */
-        }
+    const scrollToNext = () => {
+      const next =
+        document.querySelector<HTMLElement>('[data-after-hero]') ??
+        document.querySelector<HTMLElement>('main > * + *');
+      if (next && typeof next.scrollIntoView === 'function') {
+        next.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     };
 
-    const jumpStart = () => {
-      clearTimers();
-      setLights(0);
-      state = 'jump';
-      status.textContent = 'JUMP START — wait for lights out.';
-      resultEl.textContent = '— ms';
-      label.textContent = 'TRY AGAIN';
-    };
+    const release = () => {
+      if (state !== 'pressing' && state !== 'ready') return;
+      const wasReady = state === 'ready';
+      clearAllTimers();
+      button.dataset.active = 'false';
+      label.textContent = 'HOLD';
 
-    const tap = () => {
-      switch (state) {
-        case 'idle':
-        case 'result':
-        case 'jump':
-          arm();
-          break;
-        case 'racing':
-          finishRace();
-          break;
-        case 'arming':
-        case 'waiting':
-          jumpStart();
-          break;
+      if (wasReady) {
+        state = 'released';
+        setLights(0);
+        status.textContent = 'GO!';
+        // Brief beat so the lights-out moment registers visually before scroll.
+        window.setTimeout(scrollToNext, 220);
+        // Reset hero so a return visit (scroll-up) shows idle prompt again.
+        resetTimer = window.setTimeout(toIdle, 1600);
+      } else {
+        state = 'aborted';
+        setLights(0);
+        status.textContent = 'TOO EARLY — TRY AGAIN';
+        resetTimer = window.setTimeout(() => {
+          if (state === 'aborted') toIdle();
+        }, 1400);
       }
     };
 
-    button.addEventListener('click', tap);
-
-    // Keyboard: Space or Enter when focused on the button already triggers
-    // click natively. Add a window-level Space shortcut so a user reading
-    // the hero can tap without scrolling, but only when the button is in
-    // the viewport — avoids hijacking Space scrolling elsewhere on the
-    // page. (Browsers fire keydown for Space — preventDefault stops the
-    // scroll only when we actually consume the press.)
-    let inView = false;
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) inView = e.isIntersecting;
-        },
-        { threshold: 0.4 },
-      );
-      io.observe(root);
-    }
-
-    window.addEventListener('keydown', (e) => {
-      if (!inView) return;
-      if (e.code !== 'Space' && e.code !== 'Enter') return;
-      const target = e.target as HTMLElement | null;
-      // If the user is typing in an input, leave Space alone.
-      if (target && /^(input|textarea|select)$/i.test(target.tagName)) return;
+    // ── Pointer (mouse + touch + pen) ────────────────────────────────
+    button.addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      tap();
+      try {
+        button.setPointerCapture(e.pointerId);
+      } catch {
+        /* pointer capture is best-effort */
+      }
+      start();
+    });
+    button.addEventListener('pointerup', (e) => {
+      e.preventDefault();
+      release();
+    });
+    button.addEventListener('pointercancel', release);
+    button.addEventListener('lostpointercapture', release);
+
+    // Defensive: if the document loses visibility mid-press, treat as release.
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && (state === 'pressing' || state === 'ready')) {
+        toIdle();
+      }
+    });
+
+    // ── Keyboard (Space / Enter held while hero is in view) ──────────
+    let kbHeld = false;
+    const heroInView = () => {
+      const rect = root.getBoundingClientRect();
+      return rect.bottom > 0 && rect.top < window.innerHeight * 0.6;
+    };
+    window.addEventListener('keydown', (e) => {
+      if (e.code !== 'Space' && e.code !== 'Enter') return;
+      if (kbHeld) return; // ignore auto-repeat
+      const target = e.target as HTMLElement | null;
+      if (target && /^(input|textarea|select)$/i.test(target.tagName)) return;
+      if (!heroInView()) return;
+      e.preventDefault();
+      kbHeld = true;
+      start();
+    });
+    window.addEventListener('keyup', (e) => {
+      if (e.code !== 'Space' && e.code !== 'Enter') return;
+      if (!kbHeld) return;
+      e.preventDefault();
+      kbHeld = false;
+      release();
     });
   })();
 </script>

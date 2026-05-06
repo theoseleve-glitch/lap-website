@@ -5,8 +5,10 @@ import Home from '../pages/index.astro';
 const render = () => AstroContainer.create().then((c) => c.renderToString(Home));
 
 // ── Doctrine-locked copy (T023 / T024) ─────────────────────────────────
-// StartGrid still owns these strings post-Phase 3 — the V2 March visual
-// envelope dresses doctrine copy, doesn't replace it.
+// StartGrid carries T023 (the headline). HeroManifest carries T024 (the
+// subhead) and T025 / T026 (the CTAs) — the V2 March press-and-hold
+// release scrolls to HeroManifest, so both still land "above the fold"
+// in the hero arc.
 
 test('homepage renders the chosen Option B headline verbatim', async () => {
   const html = await render();
@@ -24,7 +26,7 @@ test('homepage uses StartGrid (section landmark + font-display H1)', async () =>
   expect(html).toMatch(/<h1[^>]*class="[^"]*font-display[^"]*"/);
 });
 
-test('homepage renders the locked T024 subhead verbatim', async () => {
+test('homepage renders the locked T024 subhead verbatim (HeroManifest)', async () => {
   const html = await render();
   expect(html).toContain(
     'The cross-platform Driver OS that turns every sim and real-world session into measurable progress.',
@@ -48,7 +50,7 @@ test('homepage copy forbids AI-coach / LLM vocabulary (ADR-004 §4)', async () =
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
 });
 
-// ── Hero-twin CTA contract (T025 / T026) ───────────────────────────────
+// ── Hero-twin CTA contract (T025 / T026) — now in HeroManifest ─────────
 
 test('T025 primary CTA: "Start 14-day trial" → https://app.lap-coach.racing/signup', async () => {
   const html = await render();
@@ -72,21 +74,27 @@ test('T026 secondary CTA omits rel="noopener" on same-origin href', async () => 
   expect(html).not.toMatch(/<a[^>]+href="\/how-it-works"[^>]+rel="noopener"/);
 });
 
-test('StartGrid mounts the FiveRedLights reaction game in the right rail', async () => {
-  // The April-23 DriverProfilePreview moved out of StartGrid in Phase 3.1
-  // — replaced by FiveRedLights, an interactive F1 lights-out reaction
-  // game. The score-card visual lives on as the SessionProof YOUR SCORE
-  // tile (room 02), so the score concept still surfaces above the fold
-  // via the marquee → SessionProof flow.
+// ── Hero entrance: StartGrid + lights gate + scroll target ─────────────
+
+test('StartGrid mounts the FiveRedLights press-and-hold gate', async () => {
   const html = await render();
   expect(html).toMatch(/data-five-red-lights/);
-  expect(html).toMatch(/REACTION TEST · F1 START/);
-  expect(html).toMatch(/aria-label="Reaction-time game/);
+  expect(html).toMatch(/data-hold/);
+  expect(html).toMatch(/PRESS\s*&(?:amp;|)\s*HOLD\s*TO\s*BEGIN/);
+});
+
+test('HeroManifest sits between StartGrid and MarqueeStrip with [data-after-hero]', async () => {
+  const html = await render();
+  expect(html).toMatch(/<section[^>]*\sdata-after-hero/);
+  const startGridIdx = html.indexOf('01 / START GRID');
+  const manifestIdx = html.indexOf('data-after-hero');
+  const marqueeIdx = html.indexOf('TELEMETRY');
+  expect(startGridIdx).toBeGreaterThan(-1);
+  expect(manifestIdx).toBeGreaterThan(startGridIdx);
+  expect(marqueeIdx).toBeGreaterThan(manifestIdx);
 });
 
 // ── Phase 3 V2 March room sequence ─────────────────────────────────────
-// 10 rooms in canonical order, with MarqueeStrip mounted between
-// StartGrid (room 01) and SessionProof (room 02).
 
 test('homepage mounts the 10 V2 March rooms in canonical order', async () => {
   const html = await render();
@@ -110,7 +118,7 @@ test('homepage mounts the 10 V2 March rooms in canonical order', async () => {
   }
 });
 
-test('MarqueeStrip with racing keywords sits between StartGrid and SessionProof', async () => {
+test('MarqueeStrip with racing keywords sits between HeroManifest and SessionProof', async () => {
   const html = await render();
   const keywords = [
     'TELEMETRY',
@@ -123,17 +131,17 @@ test('MarqueeStrip with racing keywords sits between StartGrid and SessionProof'
   ];
   for (const k of keywords) expect(html).toMatch(new RegExp(k));
 
-  const startGridIdx = html.indexOf('01 / START GRID');
+  const manifestIdx = html.indexOf('data-after-hero');
   const marqueeIdx = html.indexOf('TELEMETRY');
   const sessionProofIdx = html.indexOf('02 / SESSION CARDS');
-  expect(startGridIdx).toBeGreaterThan(-1);
-  expect(marqueeIdx).toBeGreaterThan(startGridIdx);
+  expect(manifestIdx).toBeGreaterThan(-1);
+  expect(marqueeIdx).toBeGreaterThan(manifestIdx);
   expect(sessionProofIdx).toBeGreaterThan(marqueeIdx);
 });
 
 // ── Phase 3 surface-level content guards ───────────────────────────────
 
-test('homepage carries the V2 March SIM-RACING badge in StartGrid', async () => {
+test('homepage carries the V2 March SIM-RACING badge in HeroManifest', async () => {
   const html = await render();
   expect(html).toContain('SIM-RACING EARLY ACCESS NOW OPEN');
 });

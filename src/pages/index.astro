@@ -1,10 +1,18 @@
 ---
-// src/pages/index.astro — Phase 3 wiring. The April-23 sections are
-// retired in T12; this commit imports the 10 V2 March rooms in canonical
-// order. StartGrid keeps the strategic-doctrine-locked headline + subhead
-// (T023/T024) so homepage-level copy regression tests stay green.
+// src/pages/index.astro — Phase 3.2.
+//
+// Hero gate flow:
+//   StartGrid       — 100vh entrance, headline + 5-light hold gate
+//   HeroManifest    — subhead + CTAs (the [data-after-hero] anchor)
+//   MarqueeStrip    — racing-keyword tape
+//   Rooms 02–10     — narrative
+//
+// The press-and-hold release in FiveRedLights queries [data-after-hero]
+// and smooth-scrolls to it, so HeroManifest is the next visual moment
+// the user sees after the lights extinguish.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import StartGrid from '../components/rooms/StartGrid.astro';
+import HeroManifest from '../components/rooms/HeroManifest.astro';
 import SessionProof from '../components/rooms/SessionProof.astro';
 import S1Pain from '../components/rooms/S1Pain.astro';
 import S2Versus from '../components/rooms/S2Versus.astro';
@@ -20,6 +28,7 @@ import MarqueeStrip from '../components/ui/MarqueeStrip.astro';
 <BaseLayout title="LAP — Every lap, one step better.">
   <main>
     <StartGrid />
+    <HeroManifest />
     <MarqueeStrip
       items={[
         'TELEMETRY',

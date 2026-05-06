@@ -42,9 +42,17 @@ describe('StartGrid room', () => {
     expect(html).not.toMatch(/<a[^>]+href="\/how-it-works"[^>]+rel="noopener"/);
   });
 
-  test('embeds DriverProfilePreview', async () => {
+  test('embeds FiveRedLights reaction-time game in the right rail', async () => {
     const html = await render();
-    expect(html).toMatch(/role="img"[^>]+aria-label="Driver Profile preview/);
+    expect(html).toMatch(/data-five-red-lights/);
+    expect(html).toMatch(/REACTION TEST · F1 START/);
+    expect(html).toMatch(/aria-label="Reaction-time game/);
+    // Five lights are present
+    for (const n of [1, 2, 3, 4, 5]) {
+      expect(html).toMatch(new RegExp(`data-light="${n}"`));
+    }
+    // CTA button is the gold tap surface
+    expect(html).toMatch(/data-tap[^>]*>/);
     expect(html).toMatch(/bg-pit-orange/);
   });
 

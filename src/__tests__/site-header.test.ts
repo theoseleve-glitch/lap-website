@@ -33,4 +33,18 @@ describe('SiteHeader', () => {
     const html = await render('/blog/some-post');
     expect(html).toMatch(/<a[^>]+href="\/blog"[^>]+aria-current="page"/);
   });
+  test('mounts a primary "Start trial" CTA on the right of the header', async () => {
+    const html = await render();
+    // Header CTA exists, links to signup, opens with rel=noopener, and uses
+    // gold pit-orange. Astro can render the attributes in any order, so the
+    // assertions are order-agnostic.
+    expect(html).toMatch(/<a[^>]*?\sdata-header-cta(?:\s|>)/);
+    const ctaMatch = html.match(/<a[^>]*?\sdata-header-cta[^>]*>[\s\S]*?<\/a>/);
+    expect(ctaMatch).not.toBeNull();
+    const cta = ctaMatch![0];
+    expect(cta).toMatch(/href="https:\/\/app\.lap-coach\.racing\/signup"/);
+    expect(cta).toMatch(/rel="noopener"/);
+    expect(cta).toMatch(/bg-pit-orange/);
+    expect(cta).toMatch(/Start trial/);
+  });
 });

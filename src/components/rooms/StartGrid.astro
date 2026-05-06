@@ -6,7 +6,11 @@
 // for the headline, T024 for the subhead). The V2 March badge ("SIM-RACING
 // EARLY ACCESS NOW OPEN") and the gold "Transform your driving." accent
 // sit alongside doctrine copy — not in place of it.
-import DriverProfilePreview from '../DriverProfilePreview.astro';
+//
+// Right-rail: FiveRedLights reaction-time game (Phase 3.1) — replaces the
+// DriverProfilePreview embed. The score preview now lives in the
+// SessionProof room as the "YOUR SCORE" beam-card.
+import FiveRedLights from './FiveRedLights.astro';
 
 const PRIMARY = { text: 'Start 14-day trial', href: 'https://app.lap-coach.racing/signup' };
 const SECONDARY = { text: 'See how it works', href: '/how-it-works' };
@@ -16,7 +20,7 @@ const SUBHEAD =
 ---
 
 <section
-  class="room texture-grain px-grid-margin relative mx-auto w-full max-w-7xl py-24 sm:py-32"
+  class="room texture-grain px-grid-margin relative mx-auto w-full max-w-6xl py-24 sm:py-32"
   aria-label="Start grid — what is LAP"
 >
   <div class="grid-lap grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-16">
@@ -59,8 +63,8 @@ const SUBHEAD =
       </div>
     </div>
 
-    <div data-hero-animate class="mx-auto w-full max-w-md">
-      <DriverProfilePreview />
+    <div data-hero-animate>
+      <FiveRedLights />
     </div>
   </div>
 </section>

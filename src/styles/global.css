@@ -94,7 +94,10 @@
 
   --grid-columns: 12;
   --grid-gutter: clamp(20px, 2vw, 32px);
-  --grid-margin: clamp(16px, 6vw, 8vw);
+  /* Side gutters — bumped from 16px/8vw to 24px/9rem so room content
+     gets visible breathing room from the viewport edge on tablet and
+     desktop. Mobile floor stays generous (24px ≈ 1.5 × 16px text size). */
+  --grid-margin: clamp(24px, 7vw, 9rem);
 
   --border-color-default: rgba(148, 148, 148, 0.2);
   --border-color-muted: rgba(148, 148, 148, 0.1);

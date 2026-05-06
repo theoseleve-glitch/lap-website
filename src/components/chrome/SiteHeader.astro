@@ -7,12 +7,30 @@ interface Props {
 }
 
 const { currentPath = Astro.url.pathname } = Astro.props;
+const PRIMARY_CTA = {
+  text: 'Start trial',
+  href: 'https://app.lap-coach.racing/signup',
+};
 ---
 
 <header
   role="banner"
-  class="sticky top-0 z-nav flex items-center justify-between gap-4 border-b border-steel/20 bg-asphalt/90 px-grid-margin py-3 backdrop-blur-sm"
+  class="sticky top-0 z-nav border-b border-pit-orange/20 bg-asphalt/85 px-grid-margin py-3 backdrop-blur-md before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-pit-orange/50 before:to-transparent"
 >
-  <LapWordmark />
-  <SectorTabs currentPath={currentPath} />
+  <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
+    <LapWordmark />
+
+    <div class="hidden md:flex">
+      <SectorTabs currentPath={currentPath} />
+    </div>
+
+    <a
+      href={PRIMARY_CTA.href}
+      rel="noopener"
+      data-header-cta
+      class="bg-pit-orange text-asphalt hover:bg-pit-orange/90 focus-visible:outline-pit-orange font-mono inline-flex items-center justify-center px-4 py-2 text-caption font-medium tracking-wide uppercase transition"
+    >
+      {PRIMARY_CTA.text}
+    </a>
+  </div>
 </header>

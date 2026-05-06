@@ -72,9 +72,16 @@ test('T026 secondary CTA omits rel="noopener" on same-origin href', async () => 
   expect(html).not.toMatch(/<a[^>]+href="\/how-it-works"[^>]+rel="noopener"/);
 });
 
-test('T028 renders the DriverProfilePreview inside the StartGrid', async () => {
+test('StartGrid mounts the FiveRedLights reaction game in the right rail', async () => {
+  // The April-23 DriverProfilePreview moved out of StartGrid in Phase 3.1
+  // — replaced by FiveRedLights, an interactive F1 lights-out reaction
+  // game. The score-card visual lives on as the SessionProof YOUR SCORE
+  // tile (room 02), so the score concept still surfaces above the fold
+  // via the marquee → SessionProof flow.
   const html = await render();
-  expect(html).toMatch(/role="img"[^>]+aria-label="Driver Profile preview/);
+  expect(html).toMatch(/data-five-red-lights/);
+  expect(html).toMatch(/REACTION TEST · F1 START/);
+  expect(html).toMatch(/aria-label="Reaction-time game/);
 });
 
 // ── Phase 3 V2 March room sequence ─────────────────────────────────────

@@ -1,42 +1,91 @@
 ---
-// Server-renders a placeholder time (00:00:00 UTC) — the inline script
-// (deferred, client-side) replaces it on first tick. We don't pre-render the
-// real UTC because the build is static and a stale "20:42:18 UTC" baked into
-// every page would be misleading. The placeholder keeps layout stable; the
-// script swaps it within ~16ms of first paint.
+// Bottom HUD strip — three fields:
+//   left  : active sector code + name (driven by sector-change event)
+//   middle: live UTC clock
+//   right : page-elapsed + simulated lap delta
+//
+// aria-hidden — purely decorative for sighted users. UTC and sector are
+// announced via section landmarks elsewhere.
 ---
 
 <aside
   aria-hidden="true"
-  class="fixed bottom-0 left-0 right-0 z-timecode flex items-center justify-between px-4 py-2 font-telemetry text-tiny text-steel border-t border-steel/20 bg-asphalt/85 backdrop-blur-sm"
+  data-timecode-counter
+  class="bg-asphalt/90 fixed bottom-0 left-0 right-0 flex items-center justify-between gap-4 border-t backdrop-blur-md"
+  style="height: 32px; padding: 0 18px; border-top-color: color-mix(in srgb, var(--color-pit-orange) 25%, transparent); z-index: var(--z-timecode);"
 >
-  <span data-timecode-utc>
-    <time>00:00:00</time> UTC
+  <span data-tc-sector class="font-telemetry text-pit-orange tracking-[0.18em] text-[9px]">
+    ▸ SECTOR 01 · START GRID
   </span>
-  <span data-timecode-elapsed>
-    SESSION <time>+00:00</time>
+  <span class="font-telemetry hidden items-center gap-3 text-[9px] tracking-[0.18em] sm:flex">
+    <span data-tc-utc class="text-chalk tabular-nums">00:00:00 UTC</span>
+    <span class="text-steel/40">·</span>
+    <span data-tc-elapsed class="text-steel tabular-nums">PAGE 00:00</span>
+    <span class="text-steel/40">·</span>
+    <span data-tc-delta class="text-acid-green tabular-nums">+0.000 ▼</span>
+  </span>
+  <span class="font-telemetry text-chalk tabular-nums sm:hidden text-[9px] tracking-[0.18em]">
+    <span data-tc-utc>00:00:00 UTC</span>
   </span>
 </aside>
 
+<style>
+  @media (max-width: 767px) {
+    [data-timecode-counter] [data-tc-elapsed],
+    [data-timecode-counter] [data-tc-delta] {
+      display: none;
+    }
+  }
+</style>
+
 <script>
-  const utcEl = document.querySelector('[data-timecode-utc] time');
-  const elapsedEl = document.querySelector('[data-timecode-elapsed] time');
-  const start = performance.now();
-  const tick = () => {
-    if (utcEl) {
-      const now = new Date();
-      const hh = String(now.getUTCHours()).padStart(2, '0');
-      const mm = String(now.getUTCMinutes()).padStart(2, '0');
-      const ss = String(now.getUTCSeconds()).padStart(2, '0');
-      utcEl.textContent = `${hh}:${mm}:${ss}`;
-    }
-    if (elapsedEl) {
-      const elapsed = Math.floor((performance.now() - start) / 1000);
-      const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
-      const s = String(elapsed % 60).padStart(2, '0');
-      elapsedEl.textContent = `+${m}:${s}`;
-    }
-  };
-  tick();
-  setInterval(tick, 1000);
+  (() => {
+    if (typeof window === 'undefined') return;
+    const root = document.querySelector<HTMLElement>('[data-timecode-counter]');
+    if (!root) return;
+
+    const utc = root.querySelector<HTMLElement>('[data-tc-utc]');
+    const elapsed = root.querySelector<HTMLElement>('[data-tc-elapsed]');
+    const delta = root.querySelector<HTMLElement>('[data-tc-delta]');
+    const sector = root.querySelector<HTMLElement>('[data-tc-sector]');
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const start = Date.now();
+    const driftSeed = Math.random() * 1000;
+
+    const tick = () => {
+      const d = new Date();
+      if (utc) {
+        utc.textContent = `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} UTC`;
+      }
+      if (elapsed) {
+        const e = Math.floor((Date.now() - start) / 1000);
+        elapsed.textContent = `PAGE ${pad(Math.floor(e / 60))}:${pad(e % 60)}`;
+      }
+      if (delta) {
+        const ms = Math.sin((Date.now() + driftSeed) / 4000) * 0.5;
+        const sign = ms >= 0 ? '+' : '−';
+        const arrow = ms >= 0 ? '▼' : '▲';
+        delta.textContent = `${sign}${Math.abs(ms).toFixed(3)} ${arrow}`;
+      }
+    };
+
+    tick();
+    window.setInterval(tick, 1000);
+
+    document.addEventListener('sector-change', (e) => {
+      const detail = (e as CustomEvent<{
+        active: { code: string; name: string; accent: string };
+      }>).detail;
+      if (!detail || !sector) return;
+      sector.textContent = `▸ SECTOR ${detail.active.code} · ${detail.active.name.toUpperCase()}`;
+      const accentVar =
+        detail.active.accent === 'red'    ? 'var(--color-safety-red)' :
+        detail.active.accent === 'steel'  ? 'var(--color-steel)' :
+        detail.active.accent === 'purple' ? 'var(--color-racing-purple)' :
+        detail.active.accent === 'green'  ? 'var(--color-acid-green)' :
+                                             'var(--color-pit-orange)';
+      sector.style.color = accentVar;
+    });
+  })();
 </script>

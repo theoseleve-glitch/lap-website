@@ -2,28 +2,36 @@ import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, test } from 'vitest';
 import TimecodeCounter from '../components/chrome/TimecodeCounter.astro';
 
-const render = () =>
-  AstroContainer.create().then((c) => c.renderToString(TimecodeCounter, {}));
+const render = async () =>
+  (await AstroContainer.create()).renderToString(TimecodeCounter);
 
-describe('TimecodeCounter', () => {
-  test('renders a <time> element (semantic HTML for clock)', async () => {
+describe('TimecodeCounter · 3-field', () => {
+  test('renders <aside aria-hidden="true">', async () => {
     const html = await render();
-    expect(html).toMatch(/<time/);
+    expect(html).toMatch(/<aside[^>]*\saria-hidden="true"/);
   });
-  test('uses font-telemetry class (mono + uppercase + wide tracking from Phase 1)', async () => {
+
+  test('renders all three time fields', async () => {
     const html = await render();
-    expect(html).toMatch(/class="[^"]*font-telemetry[^"]*"/);
+    expect(html).toMatch(/data-tc-sector/);
+    expect(html).toMatch(/data-tc-utc/);
+    expect(html).toMatch(/data-tc-elapsed/);
+    expect(html).toMatch(/data-tc-delta/);
   });
-  test('positions fixed at the bottom (uses bottom-0 or fixed positioning)', async () => {
+
+  test('renders data-timecode-counter root element', async () => {
     const html = await render();
-    expect(html).toMatch(/class="[^"]*fixed[^"]*"/);
+    expect(html).toMatch(/data-timecode-counter/);
   });
-  test('aria-hidden — decorative; the live-clock is not a screen-reader landmark', async () => {
+
+  test('renders sector field with opening marker', async () => {
     const html = await render();
-    expect(html).toMatch(/aria-hidden="true"/);
+    expect(html).toMatch(/▸ SECTOR/);
   });
-  test('inline script tag is present to drive the live update (client-side only)', async () => {
+
+  test('renders UTC and page-elapsed time fields', async () => {
     const html = await render();
-    expect(html).toMatch(/<script/);
+    expect(html).toMatch(/UTC/);
+    expect(html).toMatch(/PAGE/);
   });
 });

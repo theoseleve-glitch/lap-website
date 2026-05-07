@@ -1,0 +1,52 @@
+---
+// Pipeline · room 05 · accent: acid-green. Absorbs PremiumLayer.
+// 7 stations, scroll = horizontal scrub progression. Stations 06-07
+// carry the premium-tier content folded in from the retired PremiumLayer.
+// `data-pin-horizontal-scrub` marks the wrapping track for the home
+// pin script.
+
+const STATIONS = [
+  { code: '01', heading: 'Capture',    body: 'iRacing · ACC · AMS2 · RaceBox · phone — one format.' },
+  { code: '02', heading: 'Process',    body: 'GPS clean · lap split · corner detection · resample.' },
+  { code: '03', heading: 'Analyse',    body: 'Pedal traces · G-G · time-delta — pinned to the metre.' },
+  { code: '04', heading: 'Score',      body: 'Pace · Consistency · Execution · Robustness — / 25.' },
+  { code: '05', heading: 'Profile',    body: 'Cross-session overlay · per-corner trend.' },
+  { code: '06', heading: 'PROGRESSION INTELLIGENCE', body: 'Closed weakness count · open prescriptions · next-session target.' },
+  { code: '07', heading: 'UNLIMITED ANALYSIS',       body: 'Upload · analyse · compare — no session caps.' },
+];
+---
+
+<section
+  data-sector-id="pipeline"
+  data-accent="green"
+  aria-label="Product pipeline"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="font-telemetry text-acid-green">05 / SECTOR 3 · THE LINE</p>
+    <h2 class="font-display font-monument text-h2 tracking-display mt-4 text-balance">
+      <span class="text-chalk block">One system from raw session</span>
+      <span class="text-acid-green block">to next-session action.</span>
+    </h2>
+  </header>
+
+  <div data-pin-horizontal-scrub class="mt-14 overflow-hidden">
+    <ol class="flex gap-4 md:gap-6">
+      {STATIONS.map((s) => (
+        <li
+          data-station-code={s.code}
+          class="flex shrink-0 flex-col"
+          style="width: clamp(240px, 70vw, 360px);"
+        >
+          <article class="beam-card rounded-2 flex h-full flex-col p-7">
+            <p class="font-telemetry text-acid-green">{s.code}</p>
+            <h3 class="font-display font-monument text-h4 text-chalk tracking-display mt-3 text-balance">
+              {s.heading}
+            </h3>
+            <p class="text-steel text-body font-body mt-3">{s.body}</p>
+          </article>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

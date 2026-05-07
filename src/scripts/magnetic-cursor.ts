@@ -53,15 +53,6 @@ export function initMagneticCursor(): () => void {
   let xTo: ((value: number) => void) | null = null;
   let yTo: ((value: number) => void) | null = null;
 
-  loadGsap()
-    .then(({ gsap }) => {
-      xTo = gsap.quickTo(cursor, 'x', { duration: 0.25, ease: 'power3' });
-      yTo = gsap.quickTo(cursor, 'y', { duration: 0.25, ease: 'power3' });
-    })
-    .catch(() => {
-      // GSAP failed to load; cursor still moves via direct CSS transform.
-    });
-
   let inZone = false;
 
   const setPos = (x: number, y: number) => {
@@ -98,6 +89,21 @@ export function initMagneticCursor(): () => void {
   };
 
   document.addEventListener('pointermove', onMove);
+
+  loadGsap()
+    .then(({ gsap }) => {
+      xTo = gsap.quickTo(cursor, 'x', { duration: 0.25, ease: 'power3' });
+      yTo = gsap.quickTo(cursor, 'y', { duration: 0.25, ease: 'power3' });
+    })
+    .catch(() => {
+      // GSAP failed to load (network blip, blocked CDN, etc). Restore the
+      // native system cursor and remove the crosshair element + listener
+      // so the user isn't left without a visible pointer until reload.
+      document.removeEventListener('pointermove', onMove);
+      cursor.remove();
+      document.body.style.cursor = '';
+    });
+
   return () => {
     document.removeEventListener('pointermove', onMove);
     cursor.remove();

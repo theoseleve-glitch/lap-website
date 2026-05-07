@@ -48,4 +48,19 @@ describe('SiteHeader', () => {
     expect(cta).toMatch(/text-asphalt/);
     expect(cta).toMatch(/Start trial/);
   });
+  test('mounts SectorRibbon when currentPath is "/"', async () => {
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(SiteHeader, {
+      props: { currentPath: '/' },
+    });
+    expect(html).toMatch(/data-sector-ribbon/);
+  });
+
+  test('omits SectorRibbon on inner pages (currentPath != "/")', async () => {
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(SiteHeader, {
+      props: { currentPath: '/pricing' },
+    });
+    expect(html).not.toMatch(/data-sector-ribbon/);
+  });
 });

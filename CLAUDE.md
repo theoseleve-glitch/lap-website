@@ -72,6 +72,57 @@ under `src/components/rooms/`. Phase-3 plan:
 
 **Phase-3 explicitly does NOT include:** GSAP scroll-pinning in S3Product, count-up animation on Garage stats, billing toggle / FAQ accordion / feature matrix in PitStop, magnetic cursor / split-text / custom cursor anywhere. These are Phase-4 polish if JS budget allows.
 
+## Interactive homepage — Phase 4 (complete 2026-05-07)
+
+Spec: `docs/superpowers/specs/2026-05-07-interactive-homepage-design.md`
+Plan: `docs/superpowers/plans/2026-05-07-interactive-homepage.md`
+
+10 rooms collapsed to 7. Each owns one sector accent (orange / red / steel /
+purple / green / orange / orange-shimmer). 5 rooms pin via GSAP
+ScrollTrigger; mobile and reduced-motion fall back to natural scroll.
+
+- **`src/components/chrome/SectorRibbon.astro`** — 7-segment top HUD strip,
+  home-only. `aria-hidden`. Driven by `sector-progress.ts`'s
+  `sector-change` CustomEvent.
+- **`src/components/chrome/SectorTabs.astro`** — variant C nav: Space Mono
+  caps + glowing pit-orange dot on active. Single-letter sector codes
+  (P/H/D/B/S) dropped.
+- **`src/components/chrome/TimecodeCounter.astro`** — 3 fields: active
+  sector (left), UTC clock (mid), page-elapsed + simulated lap delta
+  (right). Mobile collapses to UTC only.
+- **`src/components/rooms/StartGrid.astro`** — absorbs HeroManifest;
+  monument+shimmer headline, T024 subhead, T025/T026 CTAs all in-room.
+  `data-magnetic-zone` enables hero-only crosshair cursor.
+- **`src/components/rooms/SessionProof.astro`** — 3 beam-cards, red
+  accent, score and loss tick up on view.
+- **`src/components/rooms/ThePain.astro`** (renamed from S1Pain) — steel
+  accent, M1 cross-fade pin.
+- **`src/components/rooms/Versus.astro`** (renamed from S2Versus,
+  absorbs SimFirst) — racing-purple, M1 card-swap pin, lateral
+  sim ↔ real bridge.
+- **`src/components/rooms/Pipeline.astro`** (renamed from S3Product,
+  absorbs PremiumLayer) — acid-green, 7-station horizontal scrub pin.
+- **`src/components/rooms/Garage.astro`** — pit-orange returns; founder
+  note + 3 stat cards (tick-up) + 3 reserved beta slots.
+- **`src/components/rooms/Podium.astro`** (absorbs PitStop) — text-shimmer
+  monument headline, single primary CTA, inline `€15 / mo · €150 / yr`
+  pricing teaser.
+- **`src/scripts/gsap-loader.ts`** — lazy GSAP + ScrollTrigger via
+  `requestIdleCallback`. Token: `--color-pit-orange-deep #b8923f` for
+  AA-compliant primary buttons.
+- **`src/scripts/sector-progress.ts`** — IntersectionObserver dispatches
+  `sector-change` to drive ribbon + bottom HUD.
+- **`src/scripts/tick-up.ts`** — rAF count-up; honours reduced-motion.
+- **`src/scripts/magnetic-cursor.ts`** — hero-only crosshair, magnetic
+  pull on links. `pointer: fine` + motion-allowed only.
+- **`src/scripts/home-pins.ts`** — GSAP ScrollTrigger configurations for
+  the 4 pinned rooms (start-grid uses native sticky).
+
+**Phase 4 explicitly does NOT include:** Three.js / WebGL, sound, custom
+domain cutover at lap-coach.racing (separate ops decision), visual-
+regression Playwright screenshots (deferred — too brittle without a
+stable baseline).
+
 ## /loop rules
 - Read sprint file, pick next `[ ]`, complete fully.
 - Build verification: `pnpm build && pnpm preview` must succeed.

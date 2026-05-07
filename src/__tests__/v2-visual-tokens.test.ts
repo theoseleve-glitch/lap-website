@@ -138,3 +138,31 @@ describe('V2 March visual tokens — touch + shadow-e0', () => {
     expect(GLOBAL_CSS).toMatch(/--shadow-e0\s*:\s*none\s*;/);
   });
 });
+
+test('exposes --color-pit-orange-deep at the @theme layer', () => {
+  expect(GLOBAL_CSS).toMatch(/--color-pit-orange-deep:\s*#b8923f/);
+});
+
+test('--color-pit-orange-deep contrasts ≥ 4.5:1 with asphalt #000000', () => {
+  // We pair deep gold with text-asphalt (dark) on primary buttons. That hits
+  // ~7.0:1 (AAA). The brighter pit-orange + asphalt would also pass (9.4:1)
+  // but pit-orange-deep gives buttons a distinct token, decoupling the
+  // accent palette from the conversion-surface palette. Light text on either
+  // gold falls below 3:1 — see the chalk regression assertion below.
+  const lum = (hex: string) => {
+    const rgb = [hex.slice(1, 3), hex.slice(3, 5), hex.slice(5, 7)].map((c) => {
+      const v = parseInt(c, 16) / 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+  };
+  const ratio = (a: string, b: string) => {
+    const [la, lb] = [lum(a), lum(b)].sort((x, y) => y - x);
+    return (la + 0.05) / (lb + 0.05);
+  };
+  expect(ratio('#b8923f', '#000000')).toBeGreaterThan(4.5);
+  // Regression guard: light text on either gold variant fails AA. The V2
+  // brand doc's stated `bg-gold + text-white` rule is unenforceable; this
+  // test makes the engineering reality permanent.
+  expect(ratio('#b8923f', '#f0ede5')).toBeLessThan(3);
+});

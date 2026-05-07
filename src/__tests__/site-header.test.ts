@@ -44,7 +44,8 @@ describe('SiteHeader', () => {
     const cta = ctaMatch![0];
     expect(cta).toMatch(/href="https:\/\/app\.lap-coach\.racing\/signup"/);
     expect(cta).toMatch(/rel="noopener"/);
-    expect(cta).toMatch(/bg-pit-orange/);
+    expect(cta).toMatch(/bg-pit-orange-deep/);
+    expect(cta).toMatch(/text-asphalt/);
     expect(cta).toMatch(/Start trial/);
   });
 });

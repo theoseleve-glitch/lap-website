@@ -19,6 +19,14 @@
   --color-safety-red: #ff2a2a;
   --color-marshal-yellow: #facc15;
   --color-pit-orange: #c9a84c;
+  /* Deep gold for primary buttons (CTAs only). Pairs with text-asphalt at
+     ~7.0:1 (AAA). Both gold variants fail AA against light text (chalk on
+     pit-orange = 2.4:1, on pit-orange-deep = 2.5:1) — the V2 brand doc's
+     `bg-gold text-white` rule is mathematically broken; we use light text
+     on dark surfaces and reserve gold for backgrounds with dark text.
+     The brighter pit-orange stays for accents, ribbons, eyebrows where
+     it doesn't carry body-size text. */
+  --color-pit-orange-deep: #b8923f;
   --color-racing-purple: #8b5cf6;
   --color-racing-red: #dc2626;
 

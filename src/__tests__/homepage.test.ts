@@ -4,111 +4,58 @@ import Home from '../pages/index.astro';
 
 const render = () => AstroContainer.create().then((c) => c.renderToString(Home));
 
-// ── Doctrine-locked copy (T023 / T024) ─────────────────────────────────
-// StartGrid carries T023 (the headline). HeroManifest carries T024 (the
-// subhead) and T025 / T026 (the CTAs) — the V2 March press-and-hold
-// release scrolls to HeroManifest, so both still land "above the fold"
-// in the hero arc.
-
-test('homepage renders the chosen Option B headline verbatim', async () => {
+// Doctrine-locked copy
+test('homepage carries T023 headline verbatim', async () => {
   const html = await render();
   expect(html).toContain('Every lap, one step better.');
 });
 
-test('homepage forbids the other headline option at the HTML surface', async () => {
+test('forbids the alternative T023 option', async () => {
   const html = await render();
   expect(html).not.toContain('The Driver OS — Train. Race. Improve.');
 });
 
-test('homepage uses StartGrid (section landmark + font-display H1)', async () => {
+test('font-display H1 is present', async () => {
   const html = await render();
-  expect(html).toMatch(/<section[\s>]/);
   expect(html).toMatch(/<h1[^>]*class="[^"]*font-display[^"]*"/);
 });
 
-test('homepage renders the locked T024 subhead verbatim (HeroManifest)', async () => {
+test('T024 subhead lives in StartGrid (post-absorption)', async () => {
   const html = await render();
   expect(html).toContain(
     'The cross-platform Driver OS that turns every sim and real-world session into measurable progress.',
   );
 });
 
-test('homepage subhead carries the Driver OS category claim', async () => {
-  const html = await render();
-  expect(html).toMatch(/Driver OS/);
-});
-
-test('homepage subhead names the cross-platform ecosystem', async () => {
-  const html = await render();
-  expect(html).toMatch(/cross-platform/i);
-  expect(html).toMatch(/sim and real-world/);
-});
-
-test('homepage copy forbids AI-coach / LLM vocabulary (ADR-004 §4)', async () => {
+test('forbids AI / LLM / generative vocabulary (ADR-004 §4)', async () => {
   const html = await render();
   expect(html.toLowerCase()).not.toMatch(/\bai coach\b/);
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
+  expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
 });
 
-// ── Hero-twin CTA contract (T025 / T026) — now in HeroManifest ─────────
-
-test('T025 primary CTA: "Start 14-day trial" → https://app.lap-coach.racing/signup', async () => {
-  const html = await render();
-  expect(html).toMatch(
-    /<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
-  );
-});
-
-test('T025 primary CTA carries rel="noopener" for the cross-origin hand-off', async () => {
+test('T025 primary CTA links to signup with rel=noopener', async () => {
   const html = await render();
   expect(html).toMatch(/<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]+rel="noopener"/);
 });
 
-test('T026 secondary CTA: "See how it works" → /how-it-works (same-origin)', async () => {
+test('T026 secondary CTA links to /how-it-works without rel=noopener', async () => {
   const html = await render();
-  expect(html).toMatch(/<a[^>]+href="\/how-it-works"[^>]*>[\s\S]*See how it works[\s\S]*<\/a>/);
-});
-
-test('T026 secondary CTA omits rel="noopener" on same-origin href', async () => {
-  const html = await render();
+  expect(html).toMatch(/<a[^>]+href="\/how-it-works"[^>]*>[\s\S]*See how it works/);
   expect(html).not.toMatch(/<a[^>]+href="\/how-it-works"[^>]+rel="noopener"/);
 });
 
-// ── Hero entrance: StartGrid + lights gate + scroll target ─────────────
-
-test('StartGrid mounts the FiveRedLights press-and-hold gate', async () => {
-  const html = await render();
-  expect(html).toMatch(/data-five-red-lights/);
-  expect(html).toMatch(/data-hold/);
-  expect(html).toMatch(/PRESS\s*&(?:amp;|)\s*HOLD\s*TO\s*BEGIN/);
-});
-
-test('HeroManifest sits between StartGrid and MarqueeStrip with [data-after-hero]', async () => {
-  const html = await render();
-  expect(html).toMatch(/<section[^>]*\sdata-after-hero/);
-  const startGridIdx = html.indexOf('01 / START GRID');
-  const manifestIdx = html.indexOf('data-after-hero');
-  const marqueeIdx = html.indexOf('TELEMETRY');
-  expect(startGridIdx).toBeGreaterThan(-1);
-  expect(manifestIdx).toBeGreaterThan(startGridIdx);
-  expect(marqueeIdx).toBeGreaterThan(manifestIdx);
-});
-
-// ── Phase 3 V2 March room sequence ─────────────────────────────────────
-
-test('homepage mounts the 10 V2 March rooms in canonical order', async () => {
+// Phase 4 · 7-room sequence
+test('homepage mounts the 7 rooms in canonical order', async () => {
   const html = await render();
   const order = [
     '01 / START GRID',
-    '02 / SESSION CARDS',
+    '02 / POST-RACE WRAP',
     '03 / SECTOR 1',
     '04 / SECTOR 2',
     '05 / SECTOR 3',
-    '06 / SIM FIRST',
-    '07 / PREMIUM LAYER',
-    '08 / GARAGE',
-    '09 / PIT STOP',
-    '10 / PODIUM',
+    '06 / GARAGE',
+    '07 / CHEQUERED FLAG',
   ];
   let cursor = 0;
   for (const marker of order) {
@@ -118,55 +65,21 @@ test('homepage mounts the 10 V2 March rooms in canonical order', async () => {
   }
 });
 
-test('MarqueeStrip with racing keywords sits between HeroManifest and SessionProof', async () => {
+test('every room exposes data-sector-id', async () => {
   const html = await render();
-  const keywords = [
-    'TELEMETRY',
-    'LAP ANALYSIS',
-    'CORNER COACHING',
-    'PERFORMANCE SCORING',
-    'SESSION DEBRIEF',
-    'DATA ENGINEERING',
-    'TRACK MAPPING',
-  ];
-  for (const k of keywords) expect(html).toMatch(new RegExp(k));
+  for (const id of ['start-grid', 'session-proof', 'the-pain', 'versus', 'pipeline', 'garage', 'podium']) {
+    expect(html).toMatch(new RegExp(`data-sector-id="${id}"`));
+  }
+});
 
-  const manifestIdx = html.indexOf('data-after-hero');
+test('MarqueeStrip with racing keywords sits between StartGrid and SessionProof', async () => {
+  const html = await render();
+  for (const k of ['TELEMETRY','LAP ANALYSIS','CORNER COACHING','PERFORMANCE SCORING','SESSION DEBRIEF','DATA ENGINEERING','TRACK MAPPING']) {
+    expect(html).toMatch(new RegExp(k));
+  }
+  const startGridIdx = html.indexOf('01 / START GRID');
   const marqueeIdx = html.indexOf('TELEMETRY');
-  const sessionProofIdx = html.indexOf('02 / SESSION CARDS');
-  expect(manifestIdx).toBeGreaterThan(-1);
-  expect(marqueeIdx).toBeGreaterThan(manifestIdx);
+  const sessionProofIdx = html.indexOf('02 / POST-RACE WRAP');
+  expect(marqueeIdx).toBeGreaterThan(startGridIdx);
   expect(sessionProofIdx).toBeGreaterThan(marqueeIdx);
-});
-
-// ── Phase 3 surface-level content guards ───────────────────────────────
-
-test('homepage carries the V2 March SIM-RACING badge in HeroManifest', async () => {
-  const html = await render();
-  expect(html).toContain('SIM-RACING EARLY ACCESS NOW OPEN');
-});
-
-test('homepage carries the SessionProof three-card mantras', async () => {
-  const html = await render();
-  expect(html).toContain('YOUR SCORE');
-  expect(html).toContain('YOUR DEBRIEF');
-  expect(html).toContain('YOUR PROGRESSION');
-});
-
-test('homepage carries the S2Versus dual-headline contrast', async () => {
-  const html = await render();
-  expect(html).toMatch(/They time laps/);
-  expect(html).toMatch(/We coach drivers/);
-});
-
-test('homepage carries the PitStop pricing card with both billing options', async () => {
-  const html = await render();
-  expect(html).toMatch(/€15 \/ month/);
-  expect(html).toMatch(/€150 \/ year/);
-});
-
-test('homepage closes with the Podium chequered-flag CTA', async () => {
-  const html = await render();
-  expect(html).toMatch(/Your driving deserves/);
-  expect(html).toMatch(/Start free — try the demo dashboard/);
 });

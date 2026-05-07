@@ -1,25 +1,38 @@
 ---
-// src/components/rooms/StartGrid.astro — Phase 3.2.
+// V2 March entrance — absorbs the retired HeroManifest. Single 100 vh
+// section with: telemetry kicker, badge, monument+shimmer headline,
+// 5-light press-and-hold gate, T024 subhead, T025/T026 CTA pair.
 //
-// V2 March entrance ritual. Pure minimalist 100vh hero: telemetry kicker,
-// monument+shimmer headline, the five-red-lights press-and-hold gate.
-// The doctrine-locked subhead and CTAs (T024 / T025 / T026) live in the
-// HeroManifest section right below — that section also carries the
-// [data-after-hero] anchor that the lights-out release smooth-scrolls to.
+// Carries `data-sector-id`, `data-accent`, `data-magnetic-zone` so the
+// chrome HUD and the magnetic-cursor script can target this room.
 import FiveRedLights from './FiveRedLights.astro';
 
 const HEADLINE = 'Every lap, one step better.';
+const SUBHEAD =
+  'The cross-platform Driver OS that turns every sim and real-world session into measurable progress.';
+const PRIMARY = { text: 'Start 14-day trial', href: 'https://app.lap-coach.racing/signup' };
+const SECONDARY = { text: 'See how it works', href: '/how-it-works' };
 ---
 
 <section
-  class="room texture-grain px-grid-margin relative mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center py-16 text-center sm:py-20"
+  data-sector-id="start-grid"
+  data-accent="orange"
+  data-magnetic-zone
   aria-label="Start grid — what is LAP"
+  class="room texture-grain px-grid-margin relative mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center py-16 text-center sm:py-20"
 >
   <p
-    class="font-telemetry text-pit-orange mb-8 tracking-[0.3em]"
     data-hero-animate
+    class="font-telemetry text-pit-orange mb-6 tracking-[0.3em]"
   >
     01 / START GRID · GREEN FLAG
+  </p>
+
+  <p
+    data-hero-animate
+    class="font-telemetry bg-pit-orange/10 text-pit-orange border-pit-orange/30 mb-8 inline-block border px-3 py-1 tracking-[0.2em]"
+  >
+    SIM-RACING EARLY ACCESS NOW OPEN
   </p>
 
   <h1
@@ -29,11 +42,35 @@ const HEADLINE = 'Every lap, one step better.';
     {HEADLINE}
   </h1>
 
-  <div data-hero-animate class="mt-14 sm:mt-16">
+  <p
+    data-hero-animate
+    class="text-chalk text-body font-body mt-6 max-w-prose text-pretty"
+  >
+    {SUBHEAD}
+  </p>
+
+  <div data-hero-animate class="mt-10 sm:mt-12">
     <FiveRedLights />
+  </div>
+
+  <div data-hero-animate class="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
+    <a
+      href={PRIMARY.href}
+      rel="noopener"
+      class="bg-pit-orange-deep text-asphalt hover:bg-pit-orange-deep/90 focus-visible:outline-pit-orange text-body font-mono inline-flex items-center justify-center px-7 py-3 font-medium tracking-wide uppercase transition"
+    >
+      {PRIMARY.text}
+    </a>
+    <a
+      href={SECONDARY.href}
+      class="text-chalk border-pit-orange/40 hover:border-pit-orange focus-visible:outline-chalk text-body font-mono inline-flex items-center justify-center border px-7 py-3 tracking-wide uppercase transition"
+    >
+      {SECONDARY.text}
+    </a>
   </div>
 </section>
 
 <script>
   import '../../scripts/hero-motion';
+  import '../../scripts/magnetic-cursor';
 </script>

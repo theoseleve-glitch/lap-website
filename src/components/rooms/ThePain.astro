@@ -1,0 +1,69 @@
+---
+// ThePain · room 03 · accent: steel. The "drowning in fragmented tools"
+// room. Pinned (M1): the typical-stack card cross-fades into the LAP
+// ecosystem card as the user scrolls within the pin range. The cross-fade
+// is GSAP scroll-scrubbed; the markup carries `data-pin-cross-fade` so
+// the home pin script can find both panes.
+
+const TYPICAL = [
+  { name: 'Telemetry app',     cost: '€20 / mo' },
+  { name: 'Lap-time logger',   cost: '€8 / mo' },
+  { name: 'Setup notebook',    cost: '€5 / mo' },
+  { name: 'Coach hourly',      cost: '€60 / hr' },
+  { name: 'Strategy planner',  cost: '€12 / mo' },
+];
+
+const LAP = [
+  'Capture · iRacing · ACC · phone',
+  'Auto split + corners',
+  'Four-pillar grade',
+  'Drill prescription',
+  'Cross-session reference',
+  'Theoretical perfect-lap solver',
+  'Race-strategy planner',
+];
+---
+
+<section
+  data-sector-id="the-pain"
+  data-accent="steel"
+  aria-label="Tool fragmentation pain"
+  class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
+>
+  <header class="max-w-prose">
+    <p class="font-telemetry text-steel">03 / SECTOR 1 · TOOL FRAGMENTATION</p>
+    <h2 class="font-display font-monument text-h2 text-chalk tracking-display mt-4 text-balance">
+      Stop stacking tools.
+    </h2>
+  </header>
+
+  <div data-pin-cross-fade class="relative mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
+    <article data-pin-pane="before" class="bg-asphalt border-steel/30 rounded-2 flex flex-col border p-7">
+      <h3 class="font-telemetry text-steel">TYPICAL STACK</h3>
+      <dl class="mt-4 flex flex-col gap-3">
+        {TYPICAL.map((t) => (
+          <div class="flex items-center justify-between">
+            <dt class="text-chalk text-body font-body">{t.name}</dt>
+            <dd class="font-telemetry text-steel tabular-nums">{t.cost}</dd>
+          </div>
+        ))}
+      </dl>
+      <p class="font-telemetry text-steel mt-6">5 logins · no connection</p>
+    </article>
+
+    <article data-pin-pane="after" class="beam-card rounded-2 flex flex-col p-7">
+      <h3 class="font-telemetry text-pit-orange">LAP ECOSYSTEM</h3>
+      <ul class="mt-4 flex flex-col gap-3">
+        {LAP.map((line) => (
+          <li class="flex items-center justify-between gap-3">
+            <span class="text-chalk text-body font-body">{line}</span>
+            <span class="font-telemetry bg-acid-green/10 text-acid-green border-acid-green/30 inline-block border px-2 py-0.5">
+              INCLUDED
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p class="font-telemetry text-pit-orange mt-6">One ecosystem · everything connected</p>
+    </article>
+  </div>
+</section>

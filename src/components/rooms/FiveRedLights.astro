@@ -46,6 +46,7 @@
   <button
     type="button"
     data-hold
+    aria-pressed="false"
     aria-label="Press and hold to start the lights-out sequence"
     class="bg-pit-orange-deep text-asphalt hover:bg-pit-orange-deep/90 focus-visible:outline-pit-orange data-[active=true]:bg-safety-red data-[active=true]:text-chalk font-mono mt-6 inline-flex w-48 cursor-pointer touch-none items-center justify-center px-7 py-4 font-medium tracking-[0.3em] uppercase transition select-none"
   >
@@ -111,6 +112,7 @@
       clearAllTimers();
       setLights(0);
       button.dataset.active = 'false';
+      button.setAttribute('aria-pressed', 'false');
       label.textContent = 'HOLD';
       status.textContent = 'PRESS & HOLD TO BEGIN';
       state = 'idle';
@@ -121,6 +123,7 @@
       clearAllTimers();
       state = 'pressing';
       button.dataset.active = 'true';
+      button.setAttribute('aria-pressed', 'true');
       label.textContent = 'HOLDING…';
       status.textContent = 'STEADY…';
       setLights(0);
@@ -153,6 +156,7 @@
       const wasReady = state === 'ready';
       clearAllTimers();
       button.dataset.active = 'false';
+      button.setAttribute('aria-pressed', 'false');
       label.textContent = 'HOLD';
 
       if (wasReady) {

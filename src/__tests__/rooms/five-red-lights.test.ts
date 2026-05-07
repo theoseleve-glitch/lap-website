@@ -36,4 +36,9 @@ describe('FiveRedLights press-and-hold gate', () => {
     expect(cta).toMatch(/bg-pit-orange/);
     expect(cta).toMatch(/aria-label="Press and hold to start the lights-out sequence"/);
   });
+
+  test('HOLD button declares aria-pressed initial state', async () => {
+    const html = await render();
+    expect(html).toMatch(/<button[^>]*\sdata-hold[^>]*\saria-pressed="false"/);
+  });
 });

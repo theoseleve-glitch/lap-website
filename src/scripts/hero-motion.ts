@@ -1,33 +1,22 @@
-import gsap from 'gsap';
+import { loadGsap, shouldAnimate, onIdle } from './gsap-loader';
 
 /**
- * True when the browser is capable of running motion AND the user has not
- * asked for reduced motion. Runs pure — no DOM mutation — so it can be
- * unit-tested and used as an early-return guard.
- *
- * CLAUDE.md locks the policy: "GSAP only for above-the-fold motion; defer
- * below-fold." T027 delivers the above-the-fold entrance; the guard below
- * is the mechanism that honours `prefers-reduced-motion: reduce`.
+ * Re-export shouldAnimate so existing tests keep passing — the original
+ * hero-motion.test.ts imports it from this module path.
  */
-export function shouldAnimate(): boolean {
-  // `typeof X` is the only global-lookup form that does not throw on
-  // undeclared identifiers, so it works in both browser (matchMedia on
-  // window → globalThis) and non-browser (matchMedia absent) contexts,
-  // which is what the Vitest-node + browser-runtime split requires.
-  if (typeof matchMedia !== 'function') return false;
-  return !matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
+export { shouldAnimate } from './gsap-loader';
 
 /**
- * Stagger-fade the hero's headline, subhead, and CTA pair in from a
+ * Stagger-fade the hero's headline, subhead, and CTA pair from a
  * translateY(20px) + opacity:0 start state to their natural layout.
  * Selector decouples motion from class names — any element tagged
- * `data-hero-animate` participates in the sequence, so future copy
- * refactors don't drift from the motion choreography.
+ * `data-hero-animate` participates.
+ *
+ * GSAP loads lazily via gsap-loader so it never blocks LCP.
  */
-export function initHeroMotion(): void {
+export async function initHeroMotion(): Promise<void> {
   if (!shouldAnimate()) return;
-
+  const { gsap } = await loadGsap();
   gsap.from('[data-hero-animate]', {
     opacity: 0,
     y: 20,
@@ -38,9 +27,7 @@ export function initHeroMotion(): void {
 }
 
 if (typeof window !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHeroMotion);
-  } else {
+  onIdle(() => {
     initHeroMotion();
-  }
+  });
 }

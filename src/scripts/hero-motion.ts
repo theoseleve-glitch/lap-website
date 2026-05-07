@@ -1,33 +1,34 @@
-import { loadGsap, shouldAnimate, onIdle } from './gsap-loader';
+// Hero stagger — CSS-driven for above-the-fold performance budget.
+// We cannot use GSAP here because GSAP is lazy-loaded and would arrive
+// after first paint, causing FOUC. Instead each [data-hero-animate]
+// element starts at opacity:0 (CSS), and a single class on <html>
+// triggers a staggered fade-in via animation-delay per :nth-child.
+//
+// Reduced-motion: the CSS @media query in global.css writes the final
+// state instantly so reduced-motion users never see the opacity:0 frame.
+//
+// Re-export shouldAnimate so existing callers (and the hero-motion test
+// suite) keep importing it from this module path.
 
-/**
- * Re-export shouldAnimate so existing tests keep passing — the original
- * hero-motion.test.ts imports it from this module path.
- */
+import { shouldAnimate } from './gsap-loader';
+
 export { shouldAnimate } from './gsap-loader';
 
-/**
- * Stagger-fade the hero's headline, subhead, and CTA pair from a
- * translateY(20px) + opacity:0 start state to their natural layout.
- * Selector decouples motion from class names — any element tagged
- * `data-hero-animate` participates.
- *
- * GSAP loads lazily via gsap-loader so it never blocks LCP.
- */
-export async function initHeroMotion(): Promise<void> {
-  if (!shouldAnimate()) return;
-  const { gsap } = await loadGsap();
-  gsap.from('[data-hero-animate]', {
-    opacity: 0,
-    y: 20,
-    duration: 0.8,
-    stagger: 0.12,
-    ease: 'power3.out',
-  });
-}
-
-if (typeof window !== 'undefined') {
-  onIdle(() => {
-    initHeroMotion();
-  });
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  const root = document.documentElement;
+  if (shouldAnimate()) {
+    // Two rAFs: first paints the opacity:0 initial state, second flips
+    // the class so the animation actually runs (without this, the class
+    // could be added in the same frame as initial paint and the browser
+    // would skip the transition).
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => root.classList.add('hero-ready'));
+    });
+  } else {
+    // Reduced-motion users: the @media block in global.css forces the
+    // final state regardless of `.hero-ready`, so we don't strictly need
+    // this. But adding the class anyway keeps :nth-child rules visible
+    // in DevTools and avoids surprising future maintainers.
+    root.classList.add('hero-ready');
+  }
 }

@@ -432,6 +432,44 @@ html {
   }
 }
 
+/* ── Hero stagger — CSS-driven, replaces former GSAP hero-motion. ─────────────
+ * Phase-4 fix: above-the-fold motion must not depend on lazy-loaded GSAP,
+ * which arrived after first paint and caused a visible FOUC on the
+ * StartGrid hero. Each [data-hero-animate] element starts at opacity:0
+ * + translateY(20px); the `.hero-ready` class on <html> (set by
+ * src/scripts/hero-motion.ts after first paint) triggers a staggered
+ * fade-in keyed off :nth-child position. Up to 6 staggered children. */
+[data-hero-animate] {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.hero-ready [data-hero-animate] {
+  animation: hero-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-ready [data-hero-animate]:nth-child(1) { animation-delay: 0ms; }
+.hero-ready [data-hero-animate]:nth-child(2) { animation-delay: 120ms; }
+.hero-ready [data-hero-animate]:nth-child(3) { animation-delay: 240ms; }
+.hero-ready [data-hero-animate]:nth-child(4) { animation-delay: 360ms; }
+.hero-ready [data-hero-animate]:nth-child(5) { animation-delay: 480ms; }
+.hero-ready [data-hero-animate]:nth-child(6) { animation-delay: 600ms; }
+
+@keyframes hero-rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-hero-animate] {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
 /* ── V2 March selection ──────────────────────────────────────────────────── */
 ::selection {
   background: var(--accent);

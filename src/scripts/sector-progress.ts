@@ -69,24 +69,36 @@ export function startSectorProgress(): () => void {
     document.dispatchEvent(event);
   };
 
+  // We need to handle BOTH compact rooms (intersectionRatio ~1 when in view)
+  // and tall pinned rooms (e.g. pipeline scroll-pin at ~2.7× viewport, where
+  // ratio caps at ~0.37). A single 0.5 threshold misses the tall sections.
+  //
+  // Strategy: fire on a fine threshold ladder, and on each callback re-rank
+  // ALL observed sections by the visible viewport area they currently
+  // occupy. The section with the largest visible footprint wins, regardless
+  // of its self-relative ratio.
   const io = new IntersectionObserver(
-    (entries) => {
-      // Pick the entry with the largest visible ratio that is intersecting.
-      let best: IntersectionObserverEntry | null = null;
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        if (!best || entry.intersectionRatio > best.intersectionRatio) {
-          best = entry;
+    () => {
+      const vh = window.innerHeight;
+      let bestIdx = -1;
+      let bestArea = 0;
+      for (const sec of sections) {
+        const id = sec.getAttribute('data-sector-id');
+        if (!id) continue;
+        const idx = idToIndex.get(id);
+        if (idx === undefined) continue;
+        const rect = sec.getBoundingClientRect();
+        const top = Math.max(0, rect.top);
+        const bottom = Math.min(vh, rect.bottom);
+        const visible = Math.max(0, bottom - top);
+        if (visible > bestArea) {
+          bestArea = visible;
+          bestIdx = idx;
         }
       }
-      if (!best) return;
-      const id = (best.target as HTMLElement).getAttribute('data-sector-id');
-      if (!id) return;
-      const idx = idToIndex.get(id);
-      if (idx === undefined) return;
-      broadcast(idx);
+      if (bestIdx >= 0) broadcast(bestIdx);
     },
-    { threshold: [0.5] },
+    { threshold: [0, 0.05, 0.1, 0.25, 0.5, 0.75, 1.0] },
   );
 
   for (const sec of sections) io.observe(sec);

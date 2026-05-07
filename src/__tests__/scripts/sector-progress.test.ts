@@ -26,18 +26,26 @@ describe('sector-progress', () => {
 
   test('startSectorProgress dispatches sector-change CustomEvent on activation', async () => {
     const mod = await import('../../scripts/sector-progress');
-    const sections: Array<{ id: string; setAttribute: () => void; getAttribute: (n: string) => string | null }> = mod.SECTORS.map(
-      (s, i) => ({
-        id: s.id,
-        setAttribute: vi.fn(),
-        getAttribute: (n: string) => (n === 'data-sector-id' ? s.id : null),
+    // Simulated viewport-relative rect: only sections[0] (start-grid) is in
+    // the viewport. The post-T20 impl picks the section with the largest
+    // visible-area footprint, so the off-screen sections supply rects that
+    // sit below the fold.
+    const sections = mod.SECTORS.map((s, i) => ({
+      id: s.id,
+      setAttribute: vi.fn(),
+      getAttribute: (n: string) => (n === 'data-sector-id' ? s.id : null),
+      getBoundingClientRect: () => ({
+        top: i === 0 ? 0 : 1000 + i * 800,
+        bottom: i === 0 ? 600 : 1000 + i * 800 + 800,
+        height: 800,
       }),
-    );
+    }));
     const observed: Array<unknown> = [];
     vi.stubGlobal('document', {
       querySelectorAll: () => sections,
       dispatchEvent: (e: unknown) => observed.push(e),
     });
+    vi.stubGlobal('window', { innerHeight: 800 });
     const ioCallbacks: Array<(entries: unknown[]) => void> = [];
     vi.stubGlobal(
       'IntersectionObserver',

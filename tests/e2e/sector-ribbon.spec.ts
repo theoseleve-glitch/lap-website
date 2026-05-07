@@ -26,8 +26,15 @@ test('sector ribbon active segment matches scrolled-into-view room', async ({ pa
       const targetY = window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2;
       window.scrollTo({ top: targetY, behavior: 'instant' as ScrollBehavior });
     }, s.id);
-    await page.waitForTimeout(800); // let IO debounce
-    const active = page.locator(`[data-segment-code="${s.code}"][data-state="active"]`);
-    await expect(active).toHaveCount(1);
+    // Polling absorbs IO debounce + animation frame jitter that flakes a
+    // fixed 800 ms wait under CI load. Caps at 4 s with progressively
+    // longer intervals so the happy path returns near-instantly.
+    await expect
+      .poll(
+        () =>
+          page.locator(`[data-segment-code="${s.code}"][data-state="active"]`).count(),
+        { timeout: 4000, intervals: [200, 400, 600, 800] },
+      )
+      .toBe(1);
   }
 });

@@ -1,18 +1,13 @@
 ---
-// src/components/rooms/SessionProof.astro
-// V2 March SessionProof room. Phase 3 / T02.
+// SessionProof · room 02 · accent: safety-red.
+// Three offset beam-cards for SCORE / DEBRIEF / PROGRESSION. The score
+// number and debrief loss tick up on viewport entry via tick-up.ts.
 
 const PILLARS = [
-  { name: 'Pace', score: 19 },
-  { name: 'Consistency', score: 22 },
-  { name: 'Execution', score: 17 },
-  { name: 'Robustness', score: 14 },
-];
-
-const DEBRIEF = [
-  { label: 'LOSS', value: '-0.41 s in T6 (Spa, Bus Stop)', tone: 'text-safety-red' },
-  { label: 'CAUSE', value: 'Trail-brake released 8 m too early at apex', tone: 'text-steel' },
-  { label: 'WHAT TO CHANGE', value: 'Hold 12 % brake to apex × next 3 sessions', tone: 'text-acid-green' },
+  { name: 'Pace',         score: 19 },
+  { name: 'Consistency',  score: 22 },
+  { name: 'Execution',    score: 17 },
+  { name: 'Robustness',   score: 14 },
 ];
 
 const PROGRESSION = [
@@ -23,25 +18,27 @@ const PROGRESSION = [
 ---
 
 <section
-  aria-label="What you get after every session"
+  data-sector-id="session-proof"
+  data-accent="red"
+  aria-label="Post-race wrap"
   class="px-grid-margin border-pit-orange/15 mx-auto w-full max-w-6xl border-t py-24 sm:py-32"
 >
   <header class="max-w-prose">
-    <p class="font-telemetry text-pit-orange">02 / SESSION CARDS · POST-RACE WRAP</p>
+    <p class="font-telemetry text-safety-red">02 / POST-RACE WRAP</p>
     <h2 class="font-display font-monument text-h2 text-chalk tracking-display mt-4 text-balance">
       Every session ends with a clear next step.
     </h2>
-    <p class="text-steel text-body font-body mt-5 max-w-prose">
-      Not just telemetry. A driver-ready debrief with decisions, not dashboards.
-    </p>
   </header>
 
   <ol class="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
     <li class="flex md:translate-y-4">
       <article class="beam-card rounded-2 flex flex-1 flex-col p-7">
-        <span class="font-telemetry text-pit-orange">YOUR SCORE</span>
+        <span class="font-telemetry text-safety-red">YOUR SCORE</span>
         <div class="mt-4 flex items-baseline gap-3">
-          <span class="font-display font-monument text-h2 text-chalk tabular-nums leading-none">72</span>
+          <span
+            data-tick-target="72"
+            class="font-display font-monument text-h2 text-chalk tabular-nums leading-none"
+          >72</span>
           <span class="text-steel text-caption">/100</span>
         </div>
         <dl class="mt-5 flex flex-col gap-2">
@@ -57,21 +54,29 @@ const PROGRESSION = [
 
     <li class="flex">
       <article class="beam-card rounded-2 flex flex-1 flex-col p-7">
-        <span class="font-telemetry text-pit-orange">YOUR DEBRIEF</span>
+        <span class="font-telemetry text-safety-red">YOUR DEBRIEF</span>
         <dl class="mt-4 flex flex-col gap-3">
-          {DEBRIEF.map((d) => (
-            <div>
-              <dt class={`font-telemetry ${d.tone}`}>{d.label}</dt>
-              <dd class="text-chalk text-body font-body mt-1">{d.value}</dd>
-            </div>
-          ))}
+          <div>
+            <dt class="font-telemetry text-safety-red">LOSS</dt>
+            <dd class="text-chalk text-body font-body mt-1">
+              −0.<span data-tick-target="41" class="tabular-nums">41</span> s · T6 Spa
+            </dd>
+          </div>
+          <div>
+            <dt class="font-telemetry text-steel">CAUSE</dt>
+            <dd class="text-chalk text-body font-body mt-1">Trail-brake released 8 m too early.</dd>
+          </div>
+          <div>
+            <dt class="font-telemetry text-acid-green">FIX</dt>
+            <dd class="text-chalk text-body font-body mt-1">Hold 12 % brake to apex × 3 sessions.</dd>
+          </div>
         </dl>
       </article>
     </li>
 
     <li class="flex md:-translate-y-4">
       <article class="beam-card rounded-2 flex flex-1 flex-col p-7">
-        <span class="font-telemetry text-pit-orange">YOUR PROGRESSION</span>
+        <span class="font-telemetry text-safety-red">YOUR PROGRESSION</span>
         <ol class="mt-4 flex flex-col gap-3">
           {PROGRESSION.map((p) => (
             <li class="flex items-center gap-3">
@@ -88,3 +93,7 @@ const PROGRESSION = [
     </li>
   </ol>
 </section>
+
+<script>
+  import '../../scripts/tick-up';
+</script>

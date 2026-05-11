@@ -1,4 +1,4 @@
-﻿import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { expect, test } from 'vitest';
 import PricingTierCard from '../components/PricingTierCard.astro';
 
@@ -60,7 +60,7 @@ test('T058: monthly CTA wires to /signup?plan=monthly with rel=noopener', async 
   // pre-select billing cadence.
   const html = await render();
   expect(html).toMatch(
-    /<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register\?plan=monthly"[^>]+rel="noopener"/,
+    /<a[^>]+href="\/register\?plan=monthly"[^>]+rel="noopener"/,
   );
 });
 
@@ -70,7 +70,7 @@ test('T058: yearly CTA wires to /signup?plan=yearly with rel=noopener', async ()
   // handler see the same identifier.
   const html = await render();
   expect(html).toMatch(
-    /<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register\?plan=yearly"[^>]+rel="noopener"/,
+    /<a[^>]+href="\/register\?plan=yearly"[^>]+rel="noopener"/,
   );
 });
 

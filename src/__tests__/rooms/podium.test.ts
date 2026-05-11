@@ -1,4 +1,4 @@
-﻿import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, test } from 'vitest';
 import Podium from '../../components/rooms/Podium.astro';
 
@@ -34,7 +34,7 @@ describe('Podium · room 07 · close + price', () => {
 
   test('single primary CTA · pit-orange-deep + asphalt · signup link · rel noopener', async () => {
     const html = await render();
-    const ctaMatch = html.match(/<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register"[^>]*>/);
+    const ctaMatch = html.match(/<a[^>]+href="\/register"[^>]*>/);
     expect(ctaMatch).not.toBeNull();
     const cta = ctaMatch![0];
     expect(cta).toMatch(/rel="noopener"/);

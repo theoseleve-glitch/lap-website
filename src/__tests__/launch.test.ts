@@ -1,4 +1,4 @@
-﻿// T209 — public beta launch landing page at /launch.
+// T209 — public beta launch landing page at /launch.
 // One-off, featured during launch week (week of
 // 2026-07-23), stable as a permanent reference URL after.
 // Today is Month 1 (2026-04-26); the page ships date-
@@ -104,7 +104,7 @@ describe('T209: hero (labelled landmark + primary CTA)', () => {
     );
     expect(heroMatch, 'hero region must be findable').not.toBeNull();
     expect(heroMatch![0]).toMatch(
-      /href="(?:\/waitlist[^"]*|https:\/\/www\.lap-coach\.racing\/[^"]*|\/pricing[^"]*)"/,
+      /href="(?:\/waitlist[^"]*|\/[^"]*|\/pricing[^"]*)"/,
     );
   });
 });

@@ -71,7 +71,7 @@ export function bindSignupClickListener(doc: Document, win: Window): void {
     const anchor = target.closest('a[href]');
     if (!anchor) return;
     const href = anchor.getAttribute('href') ?? '';
-    if (!/www\.lap-coach\.racing\/register/.test(href)) return;
+    if (!/\/register(?:[/?#]|$)/.test(href)) return;
     captureSignupClicked(signupSourceFromPathname(win.location.pathname));
   });
 }

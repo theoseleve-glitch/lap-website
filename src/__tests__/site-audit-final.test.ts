@@ -75,6 +75,18 @@ const HREF_WHITELIST: ReadonlyArray<RegExp> = [
   /^\/press\/[^/]+/, // public press assets
   /^\/robots\.txt$/,
   /^\/sitemap/,
+  // V2 webapp routes — served by the Cloudflare Worker `lap-website` on
+  // the same zone (`lap-coach.racing/login*`, `/register*`, `/app/*` etc.).
+  // Same-domain handoffs, not 404 orphans on the Phase 4 Astro side.
+  // See C:/Users/Admin/.claude/projects/C--Users-Admin-Documents-Telemetry/memory/lap_repo_map.md
+  /^\/login(?:[/?#]|$)/,
+  /^\/register(?:[/?#]|$)/,
+  /^\/oauth-callback(?:[/?#]|$)/,
+  /^\/forgot-password(?:[/?#]|$)/,
+  /^\/reset-password(?:[/?#]|$)/,
+  /^\/verify-email(?:[/?#]|$)/,
+  /^\/app(?:[/?#]|$)/,
+  /^\/admin(?:[/?#]|$)/,
 ];
 
 function isWhitelisted(href: string): boolean {

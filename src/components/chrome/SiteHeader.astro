@@ -10,13 +10,13 @@ interface Props {
 const { currentPath = Astro.url.pathname } = Astro.props;
 const PRIMARY_CTA = {
   text: 'Start trial',
-  href: 'https://www.lap-coach.racing/register',
+  href: '/register',
 };
 // Sign-in pair retrieved from the V2 marketing header
 // (lap_web/lap-website/src/components/site/SiteHeader.tsx). The V2 site
 // shipped both a quiet "Sign in" text link AND the gold signup CTA; the
 // Phase 4 Astro port initially dropped the Sign in and only kept the CTA.
-const LOGIN_HREF = 'https://www.lap-coach.racing/login';
+const LOGIN_HREF = '/login';
 
 const isHome = currentPath === '/';
 ---

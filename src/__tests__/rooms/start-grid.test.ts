@@ -1,4 +1,4 @@
-﻿import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, test } from 'vitest';
 import StartGrid from '../../components/rooms/StartGrid.astro';
 
@@ -47,7 +47,7 @@ describe('StartGrid · entrance with absorbed manifest', () => {
   test('absorbs T025 + T026 CTAs', async () => {
     const html = await render();
     expect(html).toMatch(
-      /<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register"[^>]+rel="noopener"[^>]*>[\s\S]*Start 14-day trial/,
+      /<a[^>]+href="\/register"[^>]+rel="noopener"[^>]*>[\s\S]*Start 14-day trial/,
     );
     expect(html).toMatch(/<a[^>]+href="\/how-it-works"[^>]*>[\s\S]*See how it works/);
     expect(html).not.toMatch(/<a[^>]+href="\/how-it-works"[^>]+rel="noopener"/);
@@ -58,7 +58,7 @@ describe('StartGrid · entrance with absorbed manifest', () => {
     // The primary CTA links to signup. We narrow to that anchor and assert both
     // tokens are present together — bg alone is insufficient (text-chalk on gold
     // would pass `bg-pit-orange-deep` but FAIL WCAG AA at 2.5:1).
-    const primaryMatch = html.match(/<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register"[^>]*>/);
+    const primaryMatch = html.match(/<a[^>]+href="\/register"[^>]*>/);
     expect(primaryMatch).not.toBeNull();
     const primary = primaryMatch![0];
     expect(primary).toMatch(/bg-pit-orange-deep/);

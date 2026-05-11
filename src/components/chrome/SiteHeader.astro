@@ -12,6 +12,11 @@ const PRIMARY_CTA = {
   text: 'Start trial',
   href: 'https://www.lap-coach.racing/register',
 };
+// Sign-in pair retrieved from the V2 marketing header
+// (lap_web/lap-website/src/components/site/SiteHeader.tsx). The V2 site
+// shipped both a quiet "Sign in" text link AND the gold signup CTA; the
+// Phase 4 Astro port initially dropped the Sign in and only kept the CTA.
+const LOGIN_HREF = 'https://www.lap-coach.racing/login';
 
 const isHome = currentPath === '/';
 ---
@@ -30,13 +35,22 @@ const isHome = currentPath === '/';
       <SectorTabs currentPath={currentPath} />
     </div>
 
-    <a
-      href={PRIMARY_CTA.href}
-      rel="noopener"
-      data-header-cta
-      class="bg-pit-orange-deep text-asphalt hover:bg-pit-orange-deep/90 focus-visible:outline-pit-orange font-mono inline-flex items-center justify-center px-4 py-2 text-caption font-medium tracking-wide uppercase transition"
-    >
-      {PRIMARY_CTA.text}
-    </a>
+    <div class="flex items-center gap-3">
+      <a
+        href={LOGIN_HREF}
+        data-header-login
+        class="text-steel hover:text-chalk focus-visible:outline-pit-orange font-mono hidden items-center justify-center px-3 py-2 text-caption font-medium tracking-wide uppercase transition md:inline-flex"
+      >
+        Sign in
+      </a>
+      <a
+        href={PRIMARY_CTA.href}
+        rel="noopener"
+        data-header-cta
+        class="bg-pit-orange-deep text-asphalt hover:bg-pit-orange-deep/90 focus-visible:outline-pit-orange font-mono inline-flex items-center justify-center px-4 py-2 text-caption font-medium tracking-wide uppercase transition"
+      >
+        {PRIMARY_CTA.text}
+      </a>
+    </div>
   </div>
 </header>

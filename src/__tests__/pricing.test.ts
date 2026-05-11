@@ -1,4 +1,4 @@
-import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+﻿import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { expect, test } from 'vitest';
 import Pricing from '../pages/pricing.astro';
 
@@ -95,8 +95,8 @@ test('T058: the tier card is mounted on /pricing below the header', async () => 
   // shell's subhead already contains "14-day free trial" + price
   // anchors and would false-pass a content-only check.
   const html = await render();
-  expect(html).toMatch(/<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup\?plan=monthly"/);
-  expect(html).toMatch(/<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup\?plan=yearly"/);
+  expect(html).toMatch(/<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register\?plan=monthly"/);
+  expect(html).toMatch(/<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register\?plan=yearly"/);
 });
 
 test('T059: the "What\'s included" checklist is mounted after the tier card', async () => {

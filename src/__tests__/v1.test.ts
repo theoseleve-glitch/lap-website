@@ -1,4 +1,4 @@
-// T210 — V1 release landing page at /v1.
+﻿// T210 — V1 release landing page at /v1.
 //
 // Companion to T209's /launch (public-beta page on
 // 2026-07-23). V1 release ships 2026-09-23 = end Month 5
@@ -91,7 +91,7 @@ describe('T210: hero (labelled landmark)', () => {
   test('page has a primary CTA (waitlist, signup, or pricing link)', async () => {
     const html = await render();
     expect(html).toMatch(
-      /href="(?:\/waitlist[^"]*|https:\/\/app\.lap-coach\.racing\/[^"]*|\/pricing[^"]*)"/,
+      /href="(?:\/waitlist[^"]*|https:\/\/www\.lap-coach\.racing\/[^"]*|\/pricing[^"]*)"/,
     );
   });
 });

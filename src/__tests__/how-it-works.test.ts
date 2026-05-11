@@ -1,4 +1,4 @@
-import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+﻿import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { expect, test } from 'vitest';
 import HowItWorks from '../pages/how-it-works.astro';
 
@@ -163,7 +163,7 @@ test('T052: /how-it-works closes with the shared trial CTA (href + rel locked)',
   // propagates site-wide instead of drifting between pages.
   const html = await render();
   expect(html).toMatch(
-    /<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]+rel="noopener"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
+    /<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register"[^>]+rel="noopener"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
   );
   // Ordering: CTA appears after the honesty section so the reader
   // closes with "here's what today gives you" → "start the trial".

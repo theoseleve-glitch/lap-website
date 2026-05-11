@@ -1,9 +1,9 @@
-// T076 — "Try it with a real session" CTA on /demo. Bridges the
+﻿// T076 — "Try it with a real session" CTA on /demo. Bridges the
 // gap between the 3-minute walkthrough video (T074, BLOCKED on
 // real product UI) and the full T085 trial CTA with a lower-
 // friction interactive offer: visitor either uploads their own
 // iRacing .ibt file or opens our prewired Sebring sample at
-// app.lap-coach.racing/sample (T077 data fixture, also pending).
+// www.lap-coach.racing/sample (T077 data fixture, also pending).
 //
 // The site-side CTA ships now. The destination 404s pre-launch
 // — same posture as T085's /signup destination — and becomes
@@ -40,14 +40,14 @@ describe('T076: TrySampleCta component contract', () => {
   test('CTA href is the canonical sample path on app.lap-coach.racing', async () => {
     const html = await renderComponent();
     expect(html).toMatch(
-      /href=["']https:\/\/app\.lap-coach\.racing\/sample["']/,
+      /href=["']https:\/\/www\.lap-coach\.racing\/sample["']/,
     );
   });
 
   test('CTA carries rel="noopener" (cross-origin link safety)', async () => {
     const html = await renderComponent();
     const ctaMatch = html.match(
-      /<a\s+[^>]*href=["']https:\/\/app\.lap-coach\.racing\/sample["'][^>]*>/,
+      /<a\s+[^>]*href=["']https:\/\/www\.lap-coach\.racing\/sample["'][^>]*>/,
     );
     expect(ctaMatch).toBeTruthy();
     expect(ctaMatch![0]).toMatch(/\brel=["']noopener["']/);
@@ -93,7 +93,7 @@ describe('T076: TrySampleCta is mounted on /demo', () => {
   test('/demo includes the canonical sample-path link', async () => {
     const html = await renderDemoPage();
     expect(html).toMatch(
-      /href=["']https:\/\/app\.lap-coach\.racing\/sample["']/,
+      /href=["']https:\/\/www\.lap-coach\.racing\/sample["']/,
     );
   });
 

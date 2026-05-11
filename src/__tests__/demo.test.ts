@@ -1,4 +1,4 @@
-import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+﻿import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { expect, test } from 'vitest';
 import Demo from '../pages/demo.astro';
 
@@ -75,7 +75,7 @@ test('T085: /demo closes with the shared trial CTA (href + rel locked)', async (
   // + attribution hooks can't drift between pages silently.
   const html = await render();
   expect(html).toMatch(
-    /<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]+rel="noopener"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
+    /<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register"[^>]+rel="noopener"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
   );
 });
 

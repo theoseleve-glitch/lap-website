@@ -1,4 +1,4 @@
-import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+﻿import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { expect, test } from 'vitest';
 import FinalCta from '../components/FinalCta.astro';
 
@@ -40,25 +40,32 @@ test('renders the €150/year price anchor from doctrine §8', async () => {
   expect(html).toMatch(/€150/);
 });
 
-test('primary CTA: "Start 14-day trial" → https://app.lap-coach.racing/signup', async () => {
+test('primary CTA: "Start 14-day trial" → https://www.lap-coach.racing/register', async () => {
   // T025 locked this text + href for the hero. The final CTA MUST
   // reuse both so the hero button and the page-closing button are
   // recognizably the same commitment. Drift here would either create
   // two different trial flows or break the attribution model.
+  //
+  // Hand-off target was originally `https://app[.]lap-coach[.]racing/signup`
+  // (square brackets keep this comment outside the URL-rewrite pass);
+  // updated 2026-05-11 to the actual production webapp route at
+  // https://www.lap-coach.racing/register (V2 Next.js, served via Cloudflare
+  // Worker route `lap-coach.racing/register*`). The `app.` subdomain
+  // was never set up in DNS; pointing CTAs at it returned NXDOMAIN.
   const html = await render();
   expect(html).toMatch(
-    /<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
+    /<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
   );
 });
 
-test('primary CTA carries rel="noopener" on the cross-origin hand-off', async () => {
-  // Consistent with the T025 hero CTA — cross-origin security posture
-  // for the app.lap-coach.racing hand-off. If the final CTA ever
-  // stopped emitting rel=noopener, the cross-origin link would leak
-  // window.opener to the destination, which matters even for a
-  // first-party app. The test is cheap; the lapse would be subtle.
+test('primary CTA carries rel="noopener"', async () => {
+  // Kept for defense-in-depth even though the hand-off is now same-site
+  // (www.lap-coach.racing/register sits behind a worker route on the
+  // same zone). rel=noopener is harmless here and would re-acquire its
+  // original meaning the day the webapp moves to a different origin
+  // (e.g. app.lap-coach.racing once that rebuild ships).
   const html = await render();
-  expect(html).toMatch(/<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]+rel="noopener"/);
+  expect(html).toMatch(/<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register"[^>]+rel="noopener"/);
 });
 
 test('renders a secondary link to /pricing for the full tier card', async () => {

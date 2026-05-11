@@ -1,4 +1,4 @@
-// T218 — PostHog conversion events for the marketing-funnel
+﻿// T218 — PostHog conversion events for the marketing-funnel
 // vocabulary the sprint locked: signup_clicked, demo_viewed,
 // pricing_viewed. Sits alongside waitlist-events.ts (T103,
 // waitlist_submitted + waitlist_confirmed) and download-events.ts
@@ -18,7 +18,7 @@
 //
 // signup_clicked is wired via a global delegated click listener
 // (bindSignupClickListener) auto-installed in BaseLayout, so any
-// anchor pointing to app.lap-coach.racing/signup fires the event
+// anchor pointing to www.lap-coach.racing/register fires the event
 // without per-anchor per-page wiring. Source is derived from
 // window.location.pathname at click time via signupSourceFromPathname.
 
@@ -59,7 +59,7 @@ export function capturePricingViewed(): void {
 }
 
 // Global delegated click listener: catches clicks on any anchor
-// pointing to app.lap-coach.racing/signup and fires the event
+// pointing to www.lap-coach.racing/register and fires the event
 // with source derived from the page path. Pages don't need
 // per-anchor wiring; the listener delegates from the document
 // root, so new CTAs added later inherit the instrumentation
@@ -71,7 +71,7 @@ export function bindSignupClickListener(doc: Document, win: Window): void {
     const anchor = target.closest('a[href]');
     if (!anchor) return;
     const href = anchor.getAttribute('href') ?? '';
-    if (!/app\.lap-coach\.racing\/signup/.test(href)) return;
+    if (!/www\.lap-coach\.racing\/register/.test(href)) return;
     captureSignupClicked(signupSourceFromPathname(win.location.pathname));
   });
 }

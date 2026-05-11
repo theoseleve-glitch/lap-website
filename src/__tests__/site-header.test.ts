@@ -1,4 +1,4 @@
-import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+﻿import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, test } from 'vitest';
 import SiteHeader from '../components/chrome/SiteHeader.astro';
 
@@ -42,7 +42,7 @@ describe('SiteHeader', () => {
     const ctaMatch = html.match(/<a[^>]*?\sdata-header-cta[^>]*>[\s\S]*?<\/a>/);
     expect(ctaMatch).not.toBeNull();
     const cta = ctaMatch![0];
-    expect(cta).toMatch(/href="https:\/\/app\.lap-coach\.racing\/signup"/);
+    expect(cta).toMatch(/href="https:\/\/www\.lap-coach\.racing\/register"/);
     expect(cta).toMatch(/rel="noopener"/);
     expect(cta).toMatch(/bg-pit-orange-deep/);
     expect(cta).toMatch(/text-asphalt/);

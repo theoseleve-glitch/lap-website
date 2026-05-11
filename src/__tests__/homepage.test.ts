@@ -1,4 +1,4 @@
-import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+﻿import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { expect, test } from 'vitest';
 import Home from '../pages/index.astro';
 
@@ -36,7 +36,7 @@ test('forbids AI / LLM / generative vocabulary (ADR-004 §4)', async () => {
 
 test('T025 primary CTA links to signup with rel=noopener', async () => {
   const html = await render();
-  expect(html).toMatch(/<a[^>]+href="https:\/\/app\.lap-coach\.racing\/signup"[^>]+rel="noopener"/);
+  expect(html).toMatch(/<a[^>]+href="https:\/\/www\.lap-coach\.racing\/register"[^>]+rel="noopener"/);
 });
 
 test('T026 secondary CTA links to /how-it-works without rel=noopener', async () => {

@@ -4,164 +4,147 @@ import Demo from '../pages/demo.astro';
 
 const render = () => AstroContainer.create().then((c) => c.renderToString(Demo));
 
-test('T072: /demo renders a single <main> landmark', async () => {
-  // Every Astro page needs exactly one <main> for axe's landmark
-  // rule and for the skip-link target. T073-T090 will populate
-  // this shell with the 3-minute walkthrough video, annotated
-  // screens, sample-session CTA, and post-demo trial CTA.
+// /demo is now a lean, fully-static page (BaseLayout + SiteHeader/SiteFooter):
+// hero ("See it before you sign up."), a reserved 16:9 walkthrough placeholder,
+// three product stills, a "What you'll see" list, and a shared trial CTA. No
+// SocialProof / testimonials, no "three-minute walkthrough", no /product cross-
+// linking pillars. These tests assert what the rebuilt page actually contains.
+
+test('/demo renders a single <main> landmark', async () => {
+  // Every page needs exactly one <main> for axe's landmark rule and for the
+  // skip-link target. SiteHeader/SiteFooter contribute <header>/<footer>, not
+  // <main>, so the page body must own the sole <main>.
   const html = await render();
   const mainMatches = html.match(/<main[\s>]/g) ?? [];
   expect(mainMatches.length).toBe(1);
 });
 
-test('T072: /demo renders the locked shell H1 "See LAP in action"', async () => {
-  // The H1 names what the page does in four words. "See it work"
-  // would be more generic but loses the branded direct-address
-  // ("LAP in action") that reads as an invitation rather than a
-  // section label. Locking the exact string keeps the shell
-  // stable while T073 makes format decisions (video vs.
-  // screenshots) and T074 lands the walkthrough.
+test('/demo renders the hero H1 "See it before you sign up."', async () => {
+  // The H1 names what the page does in one direct-address line. Locking the
+  // exact string keeps the hero stable across edits.
   const html = await render();
-  expect(html).toMatch(/<h1[^>]*>[\s\S]*See LAP in action\.[\s\S]*<\/h1>/);
+  expect(html).toMatch(/<h1[^>]*>[\s\S]*See it before you sign up\.[\s\S]*<\/h1>/);
 });
 
-test('T072: title includes "LAP" branding (BaseLayout integration)', async () => {
-  // "<Page> — LAP" pattern matches the homepage, /how-it-works,
-  // /pricing, and /refund-policy titles. Locking LAP here catches
-  // BaseLayout-bypass on future edits.
+test('title includes "LAP" branding (BaseLayout integration)', async () => {
+  // Title flows through BaseLayout. Locking LAP here catches BaseLayout-bypass
+  // on future edits.
   const html = await render();
   expect(html).toMatch(/<title>[^<]*LAP[^<]*<\/title>/);
 });
 
-test('T072: intro paragraph signals "session walkthrough, no sign-up"', async () => {
-  // Doctrine-aligned scent: the demo page must set expectations
-  // before the visitor decides to watch. "Session walkthrough,
-  // no sign-up required" is the shortest version of what T074
-  // (3-min video) + T077 (pre-seeded Sebring session, viewable
-  // without signup) will fulfil. Lock both anchors so the intro
-  // can't drift into "Check out what LAP can do!" marketing
-  // blur.
+test('intro signals "session" preview with "no live demo / sign up" framing', async () => {
+  // Doctrine-aligned scent: the page sets honest pre-launch expectations
+  // before the visitor decides to look. It promises a per-session preview and
+  // is up-front that there is no live demo to click through before sign-up.
   const html = await render();
-  expect(html.toLowerCase()).toMatch(/session/);
-  expect(html.toLowerCase()).toMatch(/sign[- ]?up/);
+  const lower = html.toLowerCase();
+  expect(lower).toMatch(/session/);
+  expect(lower).toMatch(/sign[- ]?up/);
 });
 
-test('T072: copy stays doctrine-aligned — no AI-coach / LLM / generative', async () => {
+test('copy stays doctrine-aligned — no AI-coach / LLM / generative', async () => {
   const html = await render();
-  expect(html.toLowerCase()).not.toMatch(/\bai coach\b/);
-  expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
-  expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
+  const lower = html.toLowerCase();
+  expect(lower).not.toMatch(/\bai coach\b/);
+  expect(lower).not.toMatch(/\bllm\b/);
+  expect(lower).not.toMatch(/\bgenerative\b/);
 });
 
-test('T073: DemoWalkthrough placeholder is mounted on /demo below the shell header', async () => {
-  // Integration check: the T073 decision ships as a component that
-  // actually lives on the page. The 16:9 aspect placeholder lands
-  // after the header so T074 can swap in the iframe without
-  // restructuring the shell. If a refactor silently unmounts the
-  // section, this catches it before the visual surface drifts.
+test('walkthrough placeholder is mounted on /demo below the hero', async () => {
+  // Integration check: the reserved 16:9 walkthrough slot ships as a real
+  // section on the page. The PlaceholderMedia stand-in (labelled "lands at
+  // public beta") lands after the hero so a real <video>/iframe can swap in
+  // with zero layout shift. If a refactor silently unmounts it, this catches
+  // the surface drift.
   const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*three-minute walkthrough[\s\S]*<\/h2>/i);
-  const headerIdx = html.search(/See LAP in action\./);
-  const walkthroughIdx = html.search(/three-minute walkthrough/i);
-  expect(headerIdx).toBeGreaterThan(-1);
-  expect(walkthroughIdx).toBeGreaterThan(headerIdx);
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*The walkthrough[\s\S]*<\/h2>/i);
+  const heroIdx = html.search(/See it before you sign up\./);
+  const walkthroughIdx = html.search(/The walkthrough/i);
+  expect(heroIdx).toBeGreaterThan(-1);
+  expect(walkthroughIdx).toBeGreaterThan(heroIdx);
 });
 
-test('T085: /demo closes with the shared trial CTA (href + rel locked)', async () => {
-  // Integration check: /demo ends with the same T034 trial contract
-  // that closes the homepage and /how-it-works. Reusing FinalCta
-  // (rather than a new demo-specific CTA) keeps the href +
-  // rel=noopener wiring in exactly one component — the signup URL
-  // + attribution hooks can't drift between pages silently.
+test('walkthrough slot uses the PlaceholderMedia "public beta" stand-in', async () => {
+  // Honest pre-launch posture: the walkthrough is reserved, not yet shot. The
+  // placeholder label/caption must say so rather than implying a live demo.
+  const html = await render();
+  expect(html).toMatch(/Full product walkthrough — lands at public beta/);
+  expect(html).toMatch(/Walkthrough video — coming at public beta/);
+});
+
+test('/demo closes with the shared trial CTA (href + rel locked)', async () => {
+  // /demo ends with the same trial contract that closes the homepage and
+  // /how-it-works, rendered via CtaButton: href="/register", rel="noopener",
+  // and the canonical "Start 30-day free trial" label. Locking href + rel in
+  // one component keeps the signup URL + attribution wiring from drifting.
   const html = await render();
   expect(html).toMatch(
-    /<a[^>]+href="\/register"[^>]+rel="noopener"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
+    /<a[^>]+href="\/register"[^>]+rel="noopener"[^>]*>[\s\S]*Start 30-day free trial[\s\S]*<\/a>/,
   );
 });
 
-test('T085: trial CTA renders after the walkthrough placeholder', async () => {
-  // Reader flow: intro → watch the walkthrough → decide to trial.
-  // If a refactor ever swaps ordering so the CTA lands before the
-  // walkthrough, this fails with a clear signal — the visitor
-  // should see the artefact they came for before the ask.
+test('trial CTA renders after the walkthrough placeholder', async () => {
+  // Reader flow: intro → see the walkthrough/stills → decide to trial. If a
+  // refactor swaps ordering so the CTA lands before the walkthrough, this
+  // fails — the visitor should see the artefact they came for before the ask.
   const html = await render();
-  const walkthroughIdx = html.search(/three-minute walkthrough/i);
-  const ctaIdx = html.indexOf('Start 14-day trial');
+  const walkthroughIdx = html.search(/The walkthrough/i);
+  const ctaIdx = html.indexOf('Start 30-day free trial');
   expect(walkthroughIdx).toBeGreaterThan(-1);
   expect(ctaIdx).toBeGreaterThan(walkthroughIdx);
 });
 
-test('T086: SocialProof testimonials placeholder is mounted on /demo', async () => {
-  // Integration check: the T035 SocialProof placeholder — the
-  // doctrine-aligned "no testimonials until the beta opens"
-  // message — renders on /demo. Reusing the same component as the
-  // homepage means the "no testimonials yet" posture stays in
-  // exactly one place. When real beta quotes land (2026-07-23),
-  // swapping SocialProof's internals updates every page at once
-  // instead of leaving a stale /demo-specific placeholder behind.
+test('final CTA section carries the June-8 pricing figures', async () => {
+  // The closing CTA copy states the canon: €19.90/mo standard, €14.90/mo for
+  // the first 50 founding members, 30-day free trial. These figures must be
+  // present and correct (no €15/€150/14-day legacy numbers).
   const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*No testimonials until the beta opens[\s\S]*<\/h2>/);
+  expect(html).toMatch(/€19\.90/);
+  expect(html).toMatch(/€14\.90/);
+  expect(html).toMatch(/30-day free trial/);
+  expect(html).toMatch(/first\s+50\s+founding members/i);
+  // Legacy figures must not resurface.
+  expect(html).not.toMatch(/€150/);
+  expect(html).not.toMatch(/14-day/);
 });
 
-test('T086: testimonials section renders between walkthrough and CTA', async () => {
-  // Reader flow post-T086: header → walkthrough → testimonials →
-  // CTA. The classic conversion sequence: watch the artefact →
-  // see what other sim racers say → decide to trial. Dropping
-  // testimonials AFTER the CTA would reverse the social-proof
-  // nudge right when it matters most.
-  const html = await render();
-  const walkthroughIdx = html.search(/three-minute walkthrough/i);
-  const testimonialsIdx = html.indexOf('No testimonials until the beta opens');
-  const ctaIdx = html.indexOf('Start 14-day trial');
-  expect(walkthroughIdx).toBeGreaterThan(-1);
-  expect(testimonialsIdx).toBeGreaterThan(walkthroughIdx);
-  expect(ctaIdx).toBeGreaterThan(testimonialsIdx);
-});
-
-test('T088: <title> carries the "sim racing telemetry demo" target keyword', async () => {
-  // Sprint T088 targets "sim racing telemetry demo" for /demo.
-  // Putting the exact noun phrase in the <title> is the single
-  // strongest ranking signal; the loop rules forbid keyword soup,
-  // so the phrasing "Sim racing telemetry demo — LAP" reads as a
-  // natural SERP title rather than an SEO artefact. Mirrors the
-  // T069 /pricing pattern.
+test('<title> is present, descriptive, and scoped to the demo page', async () => {
+  // SEO: a real, page-specific <title>. The rebuilt /demo title is
+  // "See LAP before you sign up — demo" — branded, names the page intent, and
+  // ends with the "demo" noun so the SERP title reads naturally.
   const html = await render();
   const titleMatch = html.match(/<title>([^<]+)<\/title>/);
   expect(titleMatch).not.toBeNull();
-  expect(titleMatch![1].toLowerCase()).toContain('sim racing telemetry demo');
+  const title = titleMatch![1].toLowerCase();
+  expect(title).toContain('demo');
+  expect(title).toContain('lap');
 });
 
-test('T088: meta description carries the "sim racing telemetry" noun phrase', async () => {
-  // Description is the SERP snippet below the title. Pairing the
-  // target phrase with the concrete scent (3-min walkthrough, no
-  // sign-up) rewards the query match and tells the reader in the
-  // first few words that they landed on the right page. The exact
-  // tail "demo" is in the title; the description carries
-  // "sim racing telemetry" alongside the existing session/no-signup
-  // anchors locked by T072.
+test('meta description is present and carries the demo scent', async () => {
+  // Description is the SERP snippet. It must exist and carry the concrete
+  // preview scent: the per-session report and the 30-day free trial, so the
+  // reader knows in the first words they landed on the right page.
   const html = await render();
   const descMatch = html.match(/<meta\s+name="description"\s+content="([^"]+)"/);
   expect(descMatch).not.toBeNull();
-  expect(descMatch![1].toLowerCase()).toContain('sim racing telemetry');
+  const desc = descMatch![1].toLowerCase();
+  expect(desc).toContain('preview');
+  expect(desc).toContain('30-day free trial');
 });
 
-test('T089: /demo renders a link to /how-it-works', async () => {
-  // Sprint T089 places related links to /how-it-works + /pricing
-  // on /demo so a reader who watched the walkthrough but isn't
-  // ready to start a trial has somewhere else to go. The
-  // /how-it-works link is the missing piece — FinalCta already
-  // carries a /pricing link — so its presence is the T089 signal.
+test('/demo renders a link to /how-it-works', async () => {
+  // A reader who looked at the previews but isn't ready to trial has somewhere
+  // else to go. The /how-it-works link (via the shared SiteFooter) is the
+  // signal that the related-pages path exists.
   const html = await render();
   expect(html).toMatch(/<a[^>]+href="\/how-it-works"/);
 });
 
-test('T089: related-links footer contains both /how-it-works and /pricing', async () => {
-  // Both links appear inside a <footer> wrapper so the pattern is
-  // visually + structurally identifiable as a "see also" block —
-  // distinct from the FinalCta's embedded "See full pricing" link.
-  // Counting both links *inside the footer* is what locks T089's
-  // intent: a dedicated related-pages section, not ad-hoc inline
-  // references.
+test('shared footer contains both /how-it-works and /pricing', async () => {
+  // Both links live inside the SiteFooter <footer> so the "see also" path is
+  // structurally identifiable. Counting both inside the footer locks the
+  // related-pages intent rather than relying on ad-hoc inline references.
   const html = await render();
   const footerMatch = html.match(/<footer[\s\S]*?<\/footer>/);
   expect(footerMatch).not.toBeNull();
@@ -170,17 +153,15 @@ test('T089: related-links footer contains both /how-it-works and /pricing', asyn
   expect(footerHtml).toMatch(/href="\/pricing"/);
 });
 
-test('T089: related-links footer lands after the FinalCta in document order', async () => {
-  // Reader flow: walkthrough → testimonials → trial CTA →
-  // related links. Putting related-links BEFORE the CTA would
-  // invite the reader to wander off before the primary ask; after
-  // the CTA, the links serve as a fallback path for readers who
-  // decided not to trial but still want to learn more.
+test('related-links footer lands after the trial CTA in document order', async () => {
+  // Reader flow: previews → trial CTA → related links. Putting related links
+  // before the CTA would invite the reader to wander off before the primary
+  // ask; after the CTA they serve as a fallback path. SiteFooter renders after
+  // the page <slot>, so the footer's /how-it-works link lands after the CTA.
   const html = await render();
-  const ctaIdx = html.indexOf('Start 14-day trial');
-  // Use lastIndexOf: SiteHeader's SectorTabs also links /how-it-works;
-  // we want the page-footer (or SiteFooter) occurrence which lands after
-  // the CTA — the original intent is preserved.
+  const ctaIdx = html.indexOf('Start 30-day free trial');
+  // lastIndexOf: SiteHeader's SectorTabs also links /how-it-works; we want the
+  // SiteFooter occurrence, which lands after the CTA.
   const hiwLinkIdx = html.lastIndexOf('href="/how-it-works"');
   expect(ctaIdx).toBeGreaterThan(-1);
   expect(hiwLinkIdx).toBeGreaterThan(ctaIdx);

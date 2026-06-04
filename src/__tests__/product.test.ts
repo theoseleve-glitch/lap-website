@@ -1,15 +1,20 @@
-// T107 — /product overview page. The product-architecture surface
-// of the marketing site: the homepage carries the position, /how-
-// it-works carries the loop narrative, /product names the five
-// pillars (desktop / mobile / bridge / coaching / driver-profile)
-// + cross-links to the per-pillar sub-pages that ship in T108-T122.
+// T107 — /product overview page (June-8 rebuild). The product-
+// architecture surface of the marketing site: the homepage carries
+// the position, /how-it-works carries the loop narrative, /product
+// names the five things LAP does as one consolidated, anchored page.
+//
+// The old six /product/* pillar sub-pages were removed in the
+// rebuild; this is now ONE static page with five in-page sections
+// (#analysis #coaching #strategy #bridge #capture), each with a
+// PlaceholderMedia and a trial CTA. There are no cross-links to
+// /product/* sub-pages any more.
 //
 // Locks here are about doctrine alignment + structural shape:
-// the five pillars must all be present (otherwise the architecture
-// reads as incomplete), the cross-links must point at the canonical
-// /product/X paths (otherwise T108-T122 land at the wrong URLs),
-// and the cross-platform sim+real pitch must be visible (without
-// it the page is just a feature catalog, not a position statement).
+// the five sections must all be present (otherwise the architecture
+// reads as incomplete), the page must NOT regress to cross-linking
+// removed /product/* sub-pages, and the cross-platform sim+real
+// pitch must be visible (without it the page is just a feature
+// catalog, not a position statement).
 
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { expect, test } from 'vitest';
@@ -43,33 +48,47 @@ test('T107: title carries "LAP" (BaseLayout integration)', async () => {
   expect(html).toMatch(/<title>[^<]*LAP[^<]*<\/title>/);
 });
 
-test('T107: page names all five product pillars (desktop, mobile, bridge, coaching, driver profile)', async () => {
-  // The five pillars map 1:1 to T108+ sub-task pages. If a future
-  // edit drops one pillar from the overview, the architecture
-  // reads as four-piece-not-five, and the dropped sub-page becomes
-  // unreachable from the marketing surface.
+test('T107: page names all five things LAP does (analysis, coaching, strategy, bridge, capture)', async () => {
+  // The consolidated /product page has five sections. If a future
+  // edit drops one, the architecture reads as four-piece-not-five.
+  // Lock both the section anchors (so the in-page jump nav keeps
+  // resolving) and the human-facing section vocabulary.
   const html = await render();
   const lower = html.toLowerCase();
-  expect(lower).toMatch(/desktop/);
-  expect(lower).toMatch(/mobile/);
+  // Section anchor ids — these back the in-page jump nav hrefs.
+  expect(html).toMatch(/id="analysis"/);
+  expect(html).toMatch(/id="coaching"/);
+  expect(html).toMatch(/id="strategy"/);
+  expect(html).toMatch(/id="bridge"/);
+  expect(html).toMatch(/id="capture"/);
+  // Human-facing vocabulary for each of the five.
+  expect(lower).toMatch(/session analysis/);
+  expect(lower).toMatch(/corner coaching/);
+  expect(lower).toMatch(/race strategy/);
   expect(lower).toMatch(/bridge/);
-  expect(lower).toMatch(/coaching/);
-  expect(lower).toMatch(/driver profile/);
+  expect(lower).toMatch(/capture/);
 });
 
-test('T107: page links to all five /product/* sub-pages (cross-link contract)', async () => {
-  // The per-pillar sub-pages land in T108-T122 with these exact
-  // paths. Locking the links here means when those pages ship,
-  // the cross-links resolve automatically with no follow-up edit
-  // to the overview. Until then, the links 404 — which reads as
-  // honest "coming soon" rather than as a broken interaction
-  // (the pillar names + descriptions render regardless).
+test('T107: in-page jump nav links to all five section anchors', async () => {
+  // The intro carries an in-page jump nav (the consolidated page's
+  // replacement for the old per-pillar cross-links). Lock that each
+  // nav entry points at its on-page section anchor so the jump nav
+  // keeps working as sections are edited.
   const html = await render();
-  expect(html).toMatch(/<a[^>]+href="\/product\/desktop"/);
-  expect(html).toMatch(/<a[^>]+href="\/product\/mobile"/);
-  expect(html).toMatch(/<a[^>]+href="\/product\/bridge"/);
-  expect(html).toMatch(/<a[^>]+href="\/product\/coaching"/);
-  expect(html).toMatch(/<a[^>]+href="\/product\/driver-profile"/);
+  expect(html).toMatch(/<a[^>]+href="#analysis"/);
+  expect(html).toMatch(/<a[^>]+href="#coaching"/);
+  expect(html).toMatch(/<a[^>]+href="#strategy"/);
+  expect(html).toMatch(/<a[^>]+href="#bridge"/);
+  expect(html).toMatch(/<a[^>]+href="#capture"/);
+});
+
+test('T107: page does NOT cross-link the removed /product/* sub-pages', async () => {
+  // The six /product/* pillar sub-pages were removed in the June-8
+  // rebuild and consolidated into this single anchored page. Guard
+  // against a regression that re-introduces links to those dead
+  // paths (they would 404).
+  const html = await render();
+  expect(html).not.toMatch(/href="\/product\/[^"#]/);
 });
 
 test('T107: page names the cross-platform sim+real pitch', async () => {
@@ -93,9 +112,24 @@ test('T107: page mentions Coaching Memory primitives (weakness/prescription/outc
   expect(lower).toMatch(/weakness|prescription|outcome/);
 });
 
-test('T107: copy stays doctrine-aligned — no AI-coach / LLM / generative', async () => {
-  const html = await render();
-  expect(html.toLowerCase()).not.toMatch(/\bai coach\b/);
-  expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
-  expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
+test('T107: copy stays doctrine-aligned — no AI-coach positioning, coaching framed as rule-based', async () => {
+  // Doctrine: LAP must never be positioned AS an AI coach / LLM /
+  // generative chat tool. The rebuilt page goes further — it
+  // explicitly disclaims that framing ("not a chat box", "no
+  // generative chat", "not an LLM chat box"). So we ban the
+  // AFFIRMATIVE positioning phrases (which must not appear) and
+  // positively assert the rule-based disclaimer is present, rather
+  // than banning the words "generative"/"chat" outright (they now
+  // legitimately appear inside the negations).
+  const lower = (await render()).toLowerCase();
+  // No affirmative AI-coach / generative-coaching claims.
+  expect(lower).not.toMatch(/\bai coach\b/);
+  expect(lower).not.toMatch(/\bai-powered\b/);
+  expect(lower).not.toMatch(/\bgenerative ai\b/);
+  // The "generative"/"chat" mentions that DO appear must be the
+  // doctrine-aligned negations, not affirmations.
+  expect(lower).toMatch(/no generative chat/);
+  expect(lower).toMatch(/not a chat box/);
+  // And coaching is positively framed as rule-based.
+  expect(lower).toMatch(/rule-based/);
 });

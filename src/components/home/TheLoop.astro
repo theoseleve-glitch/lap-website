@@ -1,0 +1,49 @@
+---
+// The loop — four static steps: Capture -> Analyze -> Plan -> Improve.
+// No motion, no scroll-scrub. Rendered fully visible.
+interface LoopStep {
+  code: string;
+  title: string;
+  body: string;
+}
+
+const steps: LoopStep[] = [
+  {
+    code: 'Capture',
+    title: 'Every session, automatically',
+    body: 'Sim or real, kart or car. RaceChrono, RaceBox, AiM, or MoTeC CSV auto-sync into one place.',
+  },
+  {
+    code: 'Analyze',
+    title: 'A debrief that ranks itself',
+    body: 'Speed trace, sector deltas, and a 4-pillar score show exactly where the lap time went.',
+  },
+  {
+    code: 'Plan',
+    title: 'Rule-based coaching, not a chat box',
+    body: 'Your weakest corners become prioritised drills — concrete instructions, traceable to the data.',
+  },
+  {
+    code: 'Improve',
+    title: 'Show up to the next one prepared',
+    body: 'Run the plan, log the next session, and watch your progression close the gap.',
+  },
+];
+---
+
+<ol class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  {
+    steps.map((step, i) => (
+      <li class="flex flex-col gap-3 rounded-2 border border-steel/15 bg-concrete p-6">
+        <div class="flex items-center gap-3">
+          <span class="font-monument text-h4 text-pit-orange/30 tabular-nums" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <span class="font-telemetry text-pit-orange">{step.code}</span>
+        </div>
+        <h3 class="font-monument text-h5 text-chalk">{step.title}</h3>
+        <p class="font-body text-caption text-steel">{step.body}</p>
+      </li>
+    ))
+  }
+</ol>

@@ -31,8 +31,7 @@ const LOGOS_HEADING_ID = 'press-logos-heading';
 const SCREENSHOTS_HEADING_ID = 'press-screenshots-heading';
 const CONTACT_HEADING_ID = 'press-contact-heading';
 
-const PRESS_MAILTO =
-  'mailto:sales@lap-coach.racing?subject=Press%20inquiry';
+const PRESS_MAILTO = 'mailto:sales@lap-coach.racing?subject=Press%20inquiry';
 
 interface Fact {
   readonly key: string;
@@ -56,7 +55,7 @@ const FACTS: ReadonlyArray<Fact> = [
   {
     key: 'Pricing',
     value:
-      'Single consumer tier at €15 per month or €150 per year. Multi-seat pricing for racing schools and karting academies starts from €10 per seat per month, finalised in conversation.',
+      'One membership: €19.90 per month standard, or €14.90 per month for the first 50 founding members. Includes a 30-day free trial with no card charged until it ends. Monthly only — no annual plan, no free tier, no B2B or multi-seat pricing. Cancel anytime. Charged in EUR.',
   },
   {
     key: 'Public beta launch',
@@ -75,15 +74,13 @@ const FACTS: ReadonlyArray<Fact> = [
   <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
     <header class="max-w-prose">
       <p class="text-acid-green text-caption tracking-wide uppercase">Press</p>
-      <h1
-        class="font-display text-h1 text-chalk tracking-display mt-4 text-balance"
-      >
+      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
         LAP press kit.
       </h1>
-      <p class="text-steel text-body mt-6 leading-body">
-        Everything a journalist, podcaster, or blogger needs to write about LAP
-        accurately — facts about the company, downloadable wordmark, the
-        screenshots policy until public beta, and the press contact email.
+      <p class="text-steel text-body leading-body mt-6">
+        Everything a journalist, podcaster, or blogger needs to write about LAP accurately — facts
+        about the company, downloadable wordmark, the screenshots policy until public beta, and the
+        press contact email.
       </p>
     </header>
 
@@ -103,9 +100,7 @@ const FACTS: ReadonlyArray<Fact> = [
         {
           FACTS.map((fact) => (
             <div class="flex flex-col gap-2">
-              <dt class="text-acid-green text-caption tracking-wide uppercase">
-                {fact.key}
-              </dt>
+              <dt class="text-acid-green text-caption tracking-wide uppercase">{fact.key}</dt>
               <dd class="text-steel text-body leading-body">{fact.value}</dd>
             </div>
           ))
@@ -124,16 +119,14 @@ const FACTS: ReadonlyArray<Fact> = [
       >
         Built by a small founding team.
       </h2>
-      <p class="text-steel text-body mt-6 leading-body">
-        LAP is in pre-launch development, built and operated by a small
-        founding team with hands-on involvement in sim and real-world track
-        sessions across the calendar year.
+      <p class="text-steel text-body leading-body mt-6">
+        LAP is in pre-launch development, built and operated by a small founding team with hands-on
+        involvement in sim and real-world track sessions across the calendar year.
       </p>
-      <p class="text-steel text-body mt-4 leading-body">
-        A named founder profile, photograph, and direct biographical text
-        land on this page ahead of the public beta launch on 2026-07-23.
-        Research enquiries before then can reach the founder directly at the
-        press email below.
+      <p class="text-steel text-body leading-body mt-4">
+        A named founder profile, photograph, and direct biographical text land on this page ahead of
+        the public beta launch on 2026-07-23. Research enquiries before then can reach the founder
+        directly at the press email below.
       </p>
     </section>
 
@@ -148,28 +141,19 @@ const FACTS: ReadonlyArray<Fact> = [
       >
         LAP wordmark.
       </h2>
-      <p class="text-steel text-body mt-6 leading-body">
-        SVG wordmark, dark text on transparent background — places cleanly on
-        white article layouts. Right-click to save, or use the link below.
+      <p class="text-steel text-body leading-body mt-6">
+        SVG wordmark, dark text on transparent background — places cleanly on white article layouts.
+        Right-click to save, or use the link below.
       </p>
 
       <div
-        class="border-steel/15 mt-8 flex items-center justify-center rounded-2 border bg-chalk p-12"
+        class="border-steel/15 rounded-2 bg-chalk mt-8 flex items-center justify-center border p-12"
       >
-        <img
-          src="/press/lap-wordmark.svg"
-          alt="LAP wordmark"
-          width="320"
-          height="100"
-        />
+        <img src="/press/lap-wordmark.svg" alt="LAP wordmark" width="320" height="100" />
       </div>
 
       <p class="mt-6">
-        <a
-          href="/press/lap-wordmark.svg"
-          download
-          class="text-acid-green hover:underline"
-        >
+        <a href="/press/lap-wordmark.svg" download class="text-acid-green hover:underline">
           Download wordmark (SVG, transparent)
         </a>
       </p>
@@ -179,24 +163,19 @@ const FACTS: ReadonlyArray<Fact> = [
       aria-labelledby={SCREENSHOTS_HEADING_ID}
       class="border-steel/10 mt-24 max-w-prose border-t pt-16 sm:mt-32 sm:pt-20"
     >
-      <p class="text-steel text-caption tracking-wide uppercase">
-        Screenshots
-      </p>
+      <p class="text-steel text-caption tracking-wide uppercase">Screenshots</p>
       <h2
         id={SCREENSHOTS_HEADING_ID}
         class="font-display text-h2 text-chalk tracking-display mt-4 text-balance"
       >
         Screenshots ship at public beta.
       </h2>
-      <p class="text-steel text-body mt-6 leading-body">
-        Application screenshots land on this page when the public beta goes
-        live on 2026-07-23 — captured from the actual product running on real
-        sessions, not synthesised mockups. Until then, the visual reference
-        for what LAP looks like in the field is the OG imagery on the blog
-        articles and the diagrammatic figures on
-        <a href="/how-it-works" class="text-acid-green hover:underline"
-          >/how-it-works</a
-        >.
+      <p class="text-steel text-body leading-body mt-6">
+        Application screenshots land on this page when the public beta goes live on 2026-07-23 —
+        captured from the actual product running on real sessions, not synthesised mockups. Until
+        then, the visual reference for what LAP looks like in the field is the OG imagery on the
+        blog articles and the diagrammatic figures on
+        <a href="/how-it-works" class="text-acid-green hover:underline">/how-it-works</a>.
       </p>
     </section>
 
@@ -211,14 +190,11 @@ const FACTS: ReadonlyArray<Fact> = [
       >
         Press contact.
       </h2>
-      <p class="text-steel text-body mt-6 leading-body">
+      <p class="text-steel text-body leading-body mt-6">
         Email
-        <a
-          href={PRESS_MAILTO}
-          class="text-acid-green hover:underline"
-        >sales@lap-coach.racing</a> with subject "Press inquiry" and we will
-        reply, usually within a working day. The same inbox routes sales,
-        partnerships, and press; tag the subject so we triage cleanly.
+        <a href={PRESS_MAILTO} class="text-acid-green hover:underline">sales@lap-coach.racing</a> with
+        subject "Press inquiry" and we will reply, usually within a working day. The same inbox routes
+        sales, partnerships, and press; tag the subject so we triage cleanly.
       </p>
     </section>
 

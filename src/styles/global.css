@@ -327,30 +327,21 @@ html {
   }
 }
 
-/* ── V2 March text-shimmer (Vercel-inspired) ─────────────────────────────────
- * Gold highlight sweeps across text via animated background-position +
- * background-clip:text. Preferred use: hero monument headlines.
- * The pit-orange tint at 80% opacity uses color-mix() so a future brand-
- * colour change to --color-pit-orange propagates here automatically. */
-@keyframes text-shimmer {
-  0% { background-position: 100% 50%; }
-  100% { background-position: -100% 50%; }
-}
-
+/* ── Static gold sheen for monument headlines ────────────────────────────────
+ * Minimal-motion doctrine: a fixed gold gradient on the text, NO animation.
+ * (Replaces the former infinite background-position sweep.) */
 .text-shimmer {
   background: linear-gradient(
     105deg,
     var(--color-chalk) 0%,
-    var(--color-chalk) 35%,
+    var(--color-chalk) 38%,
     color-mix(in srgb, var(--color-pit-orange) 80%, transparent) 50%,
-    var(--color-chalk) 65%,
+    var(--color-chalk) 62%,
     var(--color-chalk) 100%
   );
-  background-size: 250% 100%;
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  animation: text-shimmer 6s ease-in-out infinite;
 }
 
 /* ── V2 March beam-card (Linear-inspired) ────────────────────────────────────
@@ -407,30 +398,7 @@ html {
   background: var(--color-concrete);
 }
 
-/* ── V2 March radio-bar waveform ─────────────────────────────────────────── */
-@keyframes radio-wave {
-  0%,
-  100% {
-    height: 3px;
-  }
-  50% {
-    height: 12px;
-  }
-}
-
-.radio-bar {
-  animation: radio-wave 0.8s ease-in-out infinite;
-}
-
-/* ── V2 March marquee-scroll (Basement-inspired) ──────────────────────────────── */
-@keyframes marquee-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
+/* (Removed: radio-wave + marquee-scroll looping keyframes — minimal-motion doctrine.) */
 
 /* ── Hero stagger — CSS-driven, replaces former GSAP hero-motion. ─────────────
  * Phase-4 fix: above-the-fold motion must not depend on lazy-loaded GSAP,

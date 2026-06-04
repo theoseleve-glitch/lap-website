@@ -3,7 +3,6 @@ import { Font } from 'astro:assets';
 import '../styles/global.css';
 import SiteHeader from '../components/chrome/SiteHeader.astro';
 import SiteFooter from '../components/chrome/SiteFooter.astro';
-import TimecodeCounter from '../components/chrome/TimecodeCounter.astro';
 
 interface Props {
   title: string;
@@ -15,22 +14,19 @@ interface Props {
 
 // Strategic-doctrine-aligned default description. No LLM / AI-coach claims
 // (ADR-004 principle 4 — "No LLM in coaching text — ever, in this 6-month plan").
-// The sim/real framing and "driver-development plan" language mirror the mission
-// statement in 01-STRATEGIC-DOCTRINE.md §1.
 const DEFAULT_DESCRIPTION =
   'LAP is the cross-platform Driver OS — it turns every sim and real-world session into a personalised driver-development plan you can execute.';
 
 const {
   title,
   description = DEFAULT_DESCRIPTION,
-  ogImage = '/og-default.png',
+  ogImage = '/og-default.svg',
   ogType = 'website',
   noindex = false,
 } = Astro.props;
 
-// Astro.site is pinned to https://lap-coach.racing/ in astro.config.mjs; in any
-// test or SSR surface without a configured site we fall back to that URL so the
-// absolute-URL assertions remain deterministic.
+// Astro.site is pinned to https://lap-coach.racing/ in astro.config.mjs; fall back
+// to that URL so absolute-URL assertions stay deterministic without a site config.
 const siteURL = Astro.site ?? new URL('https://lap-coach.racing/');
 const pageURL = new URL(Astro.url.pathname, siteURL).toString();
 const ogImageURL = new URL(ogImage, siteURL).toString();
@@ -54,6 +50,11 @@ const jsonLd = {
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={pageURL} />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -83,10 +84,9 @@ const jsonLd = {
       import '../scripts/marketing-events';
     </script>
   </head>
-  <body class="bg-asphalt text-chalk min-h-screen pb-12 texture-grain">
+  <body class="bg-asphalt text-chalk texture-grain min-h-screen">
     <SiteHeader />
     <slot />
     <SiteFooter />
-    <TimecodeCounter />
   </body>
 </html>

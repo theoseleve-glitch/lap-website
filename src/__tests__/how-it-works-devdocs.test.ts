@@ -1,4 +1,4 @@
-// T051 — "for interested developers" footer on /how-it-works.
+// T051 — "for interested developers" footer (HowItWorksDevDocs).
 // Reframes the original BLOCKED annotation's path (a/b/c —
 // LAP-owned docs that don't exist publicly) into path (d): deep-
 // links to the standards LAP holds itself to + the public
@@ -6,11 +6,21 @@
 // public URL (W3C TR for WCAG, MDN for Web Crypto, eur-lex for
 // GDPR, iracing.com for telemetry) — no placeholders, no scaffolds,
 // no risk of 404'd deep-links.
+//
+// June-8 rebuild note: the HowItWorksDevDocs component still exists
+// and its structural / link-safety / vocab contracts below are
+// unchanged. What changed is the page: the rebuilt /how-it-works
+// (BaseLayout + 4 numbered steps + reused HowItWorksDiagram +
+// "Today vs the roadmap" honesty section + final trial CTA) no
+// longer mounts HowItWorksDevDocs. The final describe block was
+// therefore retargeted from "DevDocs is mounted" to the page
+// contract the new /how-it-works actually ships.
 
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, test } from 'vitest';
 import HowItWorksDevDocs from '../components/HowItWorksDevDocs.astro';
 import HowItWorks from '../pages/how-it-works.astro';
+import { MEMBERSHIP } from '../data/membership';
 
 const renderComponent = (): Promise<string> =>
   AstroContainer.create().then((c) => c.renderToString(HowItWorksDevDocs));
@@ -69,8 +79,7 @@ describe('T051: HowItWorksDevDocs external-link safety', () => {
     // noreferrer prevents the destination site from seeing the
     // referring page. Both required on any target="_blank" link.
     const html = await renderComponent();
-    const externalLinkRegex =
-      /<a\s+[^>]*href=["']https?:\/\/[^"']+["'][^>]*>/g;
+    const externalLinkRegex = /<a\s+[^>]*href=["']https?:\/\/[^"']+["'][^>]*>/g;
     const links = [...html.matchAll(externalLinkRegex)];
     expect(links.length).toBeGreaterThan(0);
     for (const link of links) {
@@ -81,8 +90,7 @@ describe('T051: HowItWorksDevDocs external-link safety', () => {
 
   test('every external link opens in a new tab (target="_blank")', async () => {
     const html = await renderComponent();
-    const externalLinkRegex =
-      /<a\s+[^>]*href=["']https?:\/\/[^"']+["'][^>]*>/g;
+    const externalLinkRegex = /<a\s+[^>]*href=["']https?:\/\/[^"']+["'][^>]*>/g;
     const links = [...html.matchAll(externalLinkRegex)];
     for (const link of links) {
       expect(link[0]).toMatch(/\btarget=["']_blank["']/);
@@ -102,24 +110,47 @@ describe('T051: HowItWorksDevDocs ADR-004 vocab discipline', () => {
   });
 });
 
-describe('T051: HowItWorksDevDocs is mounted on /how-it-works', () => {
-  test('/how-it-works renders the DevDocs H2', async () => {
+describe('/how-it-works page contract (June-8 rebuild)', () => {
+  // The rebuilt page no longer mounts HowItWorksDevDocs, so the old
+  // "renders the DevDocs H2 / WCAG deep-link" mount assertions are
+  // dropped. These verify the actual shipped page: an <h1>, the
+  // four-step loop, the kept honesty section, and the trial CTA.
+
+  test('/how-it-works renders an H1 with the loop framing', async () => {
     const html = await renderPage();
-    expect(html.toLowerCase()).toMatch(
-      /<h2[^>]*>[\s\S]*?(?:developer|technical)[\s\S]*?<\/h2>/i,
-    );
+    const h1Match = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/);
+    expect(h1Match).toBeTruthy();
+    expect(h1Match![1].toLowerCase()).toMatch(/capture, analyze, plan, improve/);
   });
 
-  test('/how-it-works includes WCAG 2.1 deep-link', async () => {
+  test('/how-it-works names the four loop steps', async () => {
     const html = await renderPage();
-    expect(html).toMatch(/href=["']https:\/\/www\.w3\.org\/TR\/WCAG21\/?["']/);
+    expect(html).toMatch(/Capture a session/);
+    expect(html).toMatch(/Analyze with the pipeline/);
+    expect(html).toMatch(/Get your plan/);
+    expect(html).toMatch(/Improve next time/);
   });
 
-  test('/how-it-works retains the existing Honesty section H2 (regression guard)', async () => {
-    // T051 inserts a new section between Honesty and FinalCta; the
-    // pre-existing Honesty H2 must keep rendering so T049's contract
-    // doesn't silently break.
+  test('/how-it-works keeps the "Today vs the roadmap" honesty section (regression guard)', async () => {
+    // The honesty section — what ships at launch vs what is still
+    // roadmap — must keep rendering. Replaces the old exact-string
+    // guard (the rebuilt copy reads "What ships at launch — and what
+    // comes later.").
     const html = await renderPage();
-    expect(html).toMatch(/What ships today, and what is still roadmap\./);
+    expect(html).toMatch(/Today vs the roadmap/);
+    expect(html).toMatch(/What ships at launch — and what comes later\./);
+  });
+
+  test('/how-it-works ships the primary trial CTA pointing at /register', async () => {
+    const html = await renderPage();
+    expect(html).toMatch(new RegExp(MEMBERSHIP.ctaText.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')));
+    expect(html).toMatch(new RegExp(`href=["']${MEMBERSHIP.ctaHref}["']`));
+  });
+
+  test('/how-it-works shows the correct pricing figures', async () => {
+    const html = await renderPage();
+    expect(html).toMatch(/€19\.90/);
+    expect(html).toMatch(/€14\.90/);
+    expect(html).toMatch(/30-day free\s+trial/);
   });
 });

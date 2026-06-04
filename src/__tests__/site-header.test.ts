@@ -3,9 +3,7 @@ import { describe, expect, test } from 'vitest';
 import SiteHeader from '../components/chrome/SiteHeader.astro';
 
 const render = (currentPath = '/') =>
-  AstroContainer.create().then((c) =>
-    c.renderToString(SiteHeader, { props: { currentPath } }),
-  );
+  AstroContainer.create().then((c) => c.renderToString(SiteHeader, { props: { currentPath } }));
 
 describe('SiteHeader', () => {
   test('uses <header role="banner"> as root', async () => {
@@ -18,11 +16,11 @@ describe('SiteHeader', () => {
   });
   test('contains the SectorTabs nav (5 primary links)', async () => {
     const html = await render();
-    expect(html).toMatch(/href="\/pricing"/);
+    expect(html).toMatch(/href="\/product"/);
     expect(html).toMatch(/href="\/how-it-works"/);
+    expect(html).toMatch(/href="\/pricing"/);
     expect(html).toMatch(/href="\/demo"/);
     expect(html).toMatch(/href="\/blog"/);
-    expect(html).toMatch(/href="\/for-schools"/);
   });
   test('uses sticky positioning at z-nav', async () => {
     const html = await render();
@@ -46,7 +44,7 @@ describe('SiteHeader', () => {
     expect(cta).toMatch(/rel="noopener"/);
     expect(cta).toMatch(/bg-pit-orange-deep/);
     expect(cta).toMatch(/text-asphalt/);
-    expect(cta).toMatch(/Start trial/);
+    expect(cta).toMatch(/Start free trial/);
   });
   test('mounts a "Sign in" text link to the left of the trial CTA', async () => {
     const html = await render();
@@ -73,19 +71,14 @@ describe('SiteHeader', () => {
     expect(ctaIdx).toBeGreaterThan(loginIdx);
   });
 
-  test('mounts SectorRibbon when currentPath is "/"', async () => {
-    const container = await AstroContainer.create();
-    const html = await container.renderToString(SiteHeader, {
-      props: { currentPath: '/' },
-    });
-    expect(html).toMatch(/data-sector-ribbon/);
-  });
+  // The Phase-4 SectorRibbon HUD strip was removed in the June-8 rebuild —
+  // the header no longer renders it on any page. Tests for `data-sector-ribbon`
+  // are deleted accordingly.
 
-  test('omits SectorRibbon on inner pages (currentPath != "/")', async () => {
-    const container = await AstroContainer.create();
-    const html = await container.renderToString(SiteHeader, {
-      props: { currentPath: '/pricing' },
-    });
-    expect(html).not.toMatch(/data-sector-ribbon/);
+  test('never renders the removed SectorRibbon HUD strip', async () => {
+    const home = await render('/');
+    const inner = await render('/pricing');
+    expect(home).not.toMatch(/data-sector-ribbon/);
+    expect(inner).not.toMatch(/data-sector-ribbon/);
   });
 });

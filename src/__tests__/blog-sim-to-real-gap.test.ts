@@ -21,12 +21,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 
-const POST_PATH = join(
-  process.cwd(),
-  'docs',
-  'blog-posts',
-  'sim-to-real-gap-honest-look.md',
-);
+const POST_PATH = join(process.cwd(), 'docs', 'blog-posts', 'sim-to-real-gap-honest-look.md');
 
 const loadPost = (): string => readFileSync(POST_PATH, 'utf8');
 
@@ -115,7 +110,7 @@ describe('T182: The Sim-to-Real Gap — blog post draft', () => {
     // The post IS the founder voice on Pillar 1's claim.
     // Linking the cluster article is non-negotiable.
     const post = loadPost();
-    expect(post).toMatch(/\]\(\/blog\/sim\-to\-real\-transfer\)/);
+    expect(post).toMatch(/\]\(\/blog\/sim-to-real-transfer\)/);
   });
 
   test('post links to ≥1 OTHER sibling pillar (cluster reach beyond Pillar 1)', () => {
@@ -191,22 +186,14 @@ describe('T182: The Sim-to-Real Gap — blog post draft', () => {
     // breaks the doctrine anchor that shapes transfer and
     // magnitudes don't.
     const post = loadPost().toLowerCase();
-    expect(
-      post,
-      'sim-overclaim: "just like the real thing"',
-    ).not.toMatch(/\bjust\s+like\s+the\s+real/);
-    expect(
-      post,
-      'sim-overclaim: "indistinguishable from real"',
-    ).not.toMatch(/\bindistinguishable\s+from\s+real/);
-    expect(
-      post,
-      'sim-dismissal: "video game"',
-    ).not.toMatch(/\bvideo\s+game\b/);
-    expect(
-      post,
-      'sim-dismissal: "not real driving"',
-    ).not.toMatch(/\bnot\s+real\s+driving\b/);
+    expect(post, 'sim-overclaim: "just like the real thing"').not.toMatch(
+      /\bjust\s+like\s+the\s+real/,
+    );
+    expect(post, 'sim-overclaim: "indistinguishable from real"').not.toMatch(
+      /\bindistinguishable\s+from\s+real/,
+    );
+    expect(post, 'sim-dismissal: "video game"').not.toMatch(/\bvideo\s+game\b/);
+    expect(post, 'sim-dismissal: "not real driving"').not.toMatch(/\bnot\s+real\s+driving\b/);
   });
 
   test('post filler-word count is bounded (anti-fluff guardrail)', () => {

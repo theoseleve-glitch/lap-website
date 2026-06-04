@@ -1,0 +1,32 @@
+---
+// Static value strip — replaces the old animated MarqueeStrip. Four short
+// value props in sequence: the path a driver's session takes through LAP.
+// No motion; rendered fully visible and static.
+interface Step {
+  label: string;
+  detail: string;
+}
+
+const steps: Step[] = [
+  { label: 'Upload a session', detail: 'Any sim or real lap, any supported logger.' },
+  { label: 'Get a debrief', detail: 'Sector deltas, time loss, and a 4-pillar score.' },
+  { label: 'Know what to fix', detail: 'Your weakest corners, ranked by lap time.' },
+  { label: 'Show up faster', detail: 'A coaching plan you can run before next session.' },
+];
+---
+
+<ul
+  class="grid grid-cols-1 gap-px overflow-hidden rounded-2 border border-steel/10 bg-steel/10 sm:grid-cols-2 lg:grid-cols-4"
+>
+  {
+    steps.map((step, i) => (
+      <li class="flex flex-col gap-2 bg-asphalt p-6">
+        <span class="font-telemetry text-pit-orange tabular-nums">
+          {String(i + 1).padStart(2, '0')}
+        </span>
+        <span class="font-monument text-h5 text-chalk">{step.label}</span>
+        <span class="font-body text-caption text-steel">{step.detail}</span>
+      </li>
+    ))
+  }
+</ul>

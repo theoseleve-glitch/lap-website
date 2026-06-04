@@ -1,0 +1,15 @@
+---
+import { MEMBERSHIP } from '../../data/membership';
+---
+
+<div class="rounded-2 border border-pit-orange/30 bg-pit-orange/5 p-6">
+  <p class="font-telemetry text-pit-orange mb-2">Founding {MEMBERSHIP.foundingLimit}</p>
+  <h3 class="font-monument text-h4 text-chalk mb-2">
+    {MEMBERSHIP.foundingMonthly}/mo — locked while you stay a member
+  </h3>
+  <p class="font-body text-caption text-steel">
+    The first {MEMBERSHIP.foundingLimit} members pay {MEMBERSHIP.foundingMonthly}/mo for as long as their
+    membership stays active — €5/mo below the standard {MEMBERSHIP.standardMonthly}. Once the
+    {MEMBERSHIP.foundingLimit} founding places are taken, new memberships are {MEMBERSHIP.standardMonthly}/mo.
+  </p>
+</div>

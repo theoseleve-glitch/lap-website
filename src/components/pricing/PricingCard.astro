@@ -1,0 +1,38 @@
+---
+import { MEMBERSHIP } from '../../data/membership';
+import CtaButton from '../ui/CtaButton.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={[
+    'beam-card mx-auto w-full max-w-xl rounded-2 border-2 border-pit-orange/50 bg-concrete p-8',
+    className,
+  ]}
+>
+  <p class="font-telemetry text-pit-orange mb-4 inline-flex border border-pit-orange/40 px-2 py-1">
+    Founding offer · first {MEMBERSHIP.foundingLimit} members
+  </p>
+
+  <h3 class="font-monument text-h3 text-chalk mb-3">{MEMBERSHIP.name} Membership</h3>
+
+  <p class="font-monument text-h2 text-chalk leading-none">
+    {MEMBERSHIP.foundingMonthly}<span class="font-body text-h5 text-steel"> / mo</span>
+  </p>
+  <p class="font-body text-caption text-steel mt-3 mb-6">
+    for the first {MEMBERSHIP.foundingLimit} members · then
+    <span class="text-chalk">{MEMBERSHIP.standardMonthly} / mo</span> ·
+    {MEMBERSHIP.trialDays}-day free trial
+  </p>
+
+  <CtaButton href={MEMBERSHIP.ctaHref} class="w-full">{MEMBERSHIP.ctaText}</CtaButton>
+
+  <p class="font-body text-caption text-steel mt-3 text-center">
+    No charge for {MEMBERSHIP.trialDays} days · {MEMBERSHIP.currencyNote}
+  </p>
+</div>

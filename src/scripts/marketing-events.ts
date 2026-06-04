@@ -6,9 +6,8 @@
 // T218 for naming consistency).
 //
 // Event shapes:
-//   * signup_clicked  { source }   — primary CTA (Start 14-day
-//                                    trial → app.lap-coach.racing/
-//                                    signup). Source is the page
+//   * signup_clicked  { source }   — primary CTA (Start 30-day free
+//                                    trial → /register). Source is the page
 //                                    the click originated from.
 //   * demo_viewed     { source }   — visitor reached the demo
 //                                    surface (full /demo page or

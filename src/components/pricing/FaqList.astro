@@ -1,0 +1,23 @@
+---
+import { MEMBERSHIP_FAQ, type Faq } from '../../data/membership';
+
+interface Props {
+  items?: Faq[];
+}
+
+const { items = MEMBERSHIP_FAQ } = Astro.props;
+---
+
+<div class="space-y-3">
+  {
+    items.map((item) => (
+      <details class="group rounded-2 border border-steel/20 bg-concrete/40">
+        <summary class="font-body text-caption text-chalk hover:text-pit-orange flex cursor-pointer items-center justify-between p-4 transition-colors">
+          {item.q}
+          <span class="text-steel ml-2 shrink-0 transition-transform group-open:rotate-45">+</span>
+        </summary>
+        <p class="font-body text-caption text-steel px-4 pb-4">{item.a}</p>
+      </details>
+    ))
+  }
+</div>

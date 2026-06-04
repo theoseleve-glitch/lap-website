@@ -1,80 +1,141 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import DemoWalkthrough from '../components/DemoWalkthrough.astro';
-import TrySampleCta from '../components/TrySampleCta.astro';
-import SocialProof from '../components/SocialProof.astro';
-import FinalCta from '../components/FinalCta.astro';
+import CtaButton from '../components/ui/CtaButton.astro';
+import PlaceholderMedia from '../components/ui/PlaceholderMedia.astro';
+import { MEMBERSHIP } from '../data/membership';
 
-// T072 — shell for /demo. The route is referenced from the sprint brief
-// (Block E) as the "watch it work before you sign up" on-ramp. Shipping
-// the shell means the secondary CTA path (hero → /demo) resolves to a
-// real page instead of 404ing while T073 decided format (video; see
-// DemoWalkthrough.astro), T074 lands the 3-minute walkthrough, T077
-// pre-seeds the sample session, T085 wires the post-demo trial CTA
-// (done — reuses the shared T034 FinalCta so the signup href stays in
-// exactly one place), T086 mounts the testimonials placeholder between
-// the walkthrough and the CTA (reuses the T035 SocialProof so the
-// "no testimonials until beta" posture stays in one component), and
-// T079-T090 cover perf, SEO, a11y, and e2e.
-
-// Doctrine-aligned scent: the <title> + description set expectations
-// before the visitor decides to watch. "Session walkthrough" matches
-// T074's 3-min video content (one real session from capture → plan);
-// "no sign-up required" names the friction we've removed, which is
-// the single most relevant decision point for a cold visitor. Loop
-// rule enforced: natural prose, not keyword soup.
+// /demo — "see it before you sign up". Honest pre-launch posture: there is no
+// live or playable demo yet, so this page is a guided look at what the product
+// will show, built from labelled placeholder media. The full walkthrough video
+// lands at public beta (reserved 16:9 slot below). No client JS, no motion.
 //
-// T088 — target keyword "sim racing telemetry demo". The title leads
-// with the exact noun phrase so SERP snippets carry the match near
-// the click; the description pairs "sim racing telemetry" with the
-// concrete scent (three-minute walkthrough, one real session, no
-// sign-up) so a visitor who clicked on the query arrives with the
-// answer already visible. Natural prose — the phrase is used
-// because it describes the page, not because the ranking function
-// wanted it there.
-const TITLE = 'Sim racing telemetry demo — LAP';
+// Copy governance: every line traces to a shippable feature in the pricing
+// canon (session analysis, race strategy, driver profile). No "available now /
+// live demo / early access" overclaims — the visuals are explicitly Previews.
+
+const TITLE = 'See LAP before you sign up — demo';
 const DESCRIPTION =
-  'A three-minute sim racing telemetry demo: watch one real session get captured, reviewed by the brain, and turned into the next session plan. No sign-up required.';
+  'A guided preview of LAP: the session report, race strategy, and driver profile you get from every session. The full product walkthrough lands at public beta. Start a 30-day free trial when you are ready.';
+
+// What a visitor will see once the walkthrough and product ship.
+const WHAT_YOU_SEE: string[] = [
+  'How a session goes from logger upload to a scored report — Pace, Consistency, Execution, Robustness.',
+  'Per-corner coaching that names where the time went and what to change next time.',
+  'Race strategy across any stint length, with pit-stop and fuel planning.',
+  'Your driver profile and progression building across sessions.',
+  'Rule-based coaching — clear, repeatable feedback, not a chat box.',
+];
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
-  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
-    <header class="max-w-prose">
-      <p class="text-steel text-caption tracking-wide uppercase">Demo</p>
-      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
-        See LAP in action.
-      </h1>
-      <p class="text-steel text-body mt-6">
-        A three-minute session walkthrough — what gets captured, what the brain finds, and what the
-        next session plan looks like. No sign-up required.
-      </p>
-    </header>
+  <main>
+    <!-- Hero / intro -->
+    <section class="border-steel/10 border-b">
+      <div class="px-grid-margin mx-auto max-w-6xl py-20 md:py-28">
+        <p class="font-telemetry text-pit-orange">Demo</p>
+        <h1 class="font-monument text-h1 text-chalk mt-4 text-balance">
+          See it before you sign up.
+        </h1>
+        <p class="font-body text-body text-steel prose-max mt-6">
+          LAP is pre-launch, so there is no live demo to click through yet. Instead, here is an
+          honest look at exactly what you get from every session — the report, the strategy, and the
+          driver profile. The full walkthrough video lands at public beta.
+        </p>
+      </div>
+    </section>
 
-    <DemoWalkthrough />
-    <TrySampleCta />
-    <SocialProof />
-    <FinalCta />
+    <!-- Reserved walkthrough video slot (honest — not yet shot) -->
+    <section class="border-steel/10 border-b">
+      <div class="px-grid-margin mx-auto max-w-6xl py-20 md:py-28">
+        <h2 class="font-monument text-h3 text-chalk">The walkthrough</h2>
+        <p class="font-body text-body text-steel prose-max mt-3">
+          One real session, captured to coached, end to end. We are reserving this slot now so it
+          drops in with zero surprises the moment beta opens.
+        </p>
+        <div class="mt-8">
+          <PlaceholderMedia
+            label="Full product walkthrough — lands at public beta"
+            aspect="16/9"
+            caption="Walkthrough video — coming at public beta"
+          />
+        </div>
+      </div>
+    </section>
 
-    <footer
-      class="px-grid-margin text-steel/80 text-caption mx-auto mt-16 flex w-full max-w-6xl justify-center gap-6 pt-8 font-mono tracking-wide sm:mt-24"
-    >
-      <a
-        href="/how-it-works"
-        class="hover:text-chalk focus-visible:outline-chalk underline underline-offset-4 transition"
-      >
-        How it works
-      </a>
-      <a
-        href="/pricing"
-        class="hover:text-chalk focus-visible:outline-chalk underline underline-offset-4 transition"
-      >
-        Pricing
-      </a>
-    </footer>
+    <!-- Placeholder stills: what the product looks like -->
+    <section class="border-steel/10 border-b">
+      <div class="px-grid-margin mx-auto max-w-6xl py-20 md:py-28">
+        <h2 class="font-monument text-h3 text-chalk">What it looks like</h2>
+        <p class="font-body text-body text-steel prose-max mt-3">
+          Three of the screens you will live in. These are representative previews — real captures
+          ship with the product.
+        </p>
+        <div class="mt-10 grid gap-6 md:grid-cols-3">
+          <PlaceholderMedia
+            label="Session report — 4-pillar score, per-corner time loss, and the debrief."
+            aspect="4/3"
+            caption="Session report"
+          />
+          <PlaceholderMedia
+            label="Race strategy — stint, pit-stop, and fuel planning across any duration."
+            aspect="4/3"
+            caption="Race strategy"
+          />
+          <PlaceholderMedia
+            label="Driver profile — strengths, weaknesses, and progression across sessions."
+            aspect="4/3"
+            caption="Driver profile"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- What you'll see — bullet list -->
+    <section class="border-steel/10 border-b">
+      <div class="px-grid-margin mx-auto max-w-6xl py-20 md:py-28">
+        <h2 class="font-monument text-h3 text-chalk">What you'll see</h2>
+        <ul class="rounded-2 border-steel/20 bg-steel/20 mt-8 grid gap-px overflow-hidden border">
+          {
+            WHAT_YOU_SEE.map((item) => (
+              <li class="bg-concrete flex items-start gap-4 px-6 py-5">
+                <span class="font-telemetry text-pit-orange mt-1 shrink-0" aria-hidden="true">
+                  →
+                </span>
+                <span class="font-body text-body text-chalk">{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section>
+      <div class="px-grid-margin mx-auto max-w-6xl py-20 text-center md:py-28">
+        <h2 class="font-monument text-h2 text-chalk text-balance">
+          Ready to coach the next session?
+        </h2>
+        <p class="font-body text-body text-steel prose-max mx-auto mt-4">
+          One membership: {MEMBERSHIP.standardMonthly}/mo, or {MEMBERSHIP.foundingMonthly}/mo for
+          the first {MEMBERSHIP.foundingLimit} founding members. 30-day free trial — no card charged until
+          it ends.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">
+            {MEMBERSHIP.ctaText}
+          </CtaButton>
+          <CtaButton href="/pricing" variant="secondary">See pricing</CtaButton>
+        </div>
+        <p class="font-telemetry text-tiny text-steel/70 mt-6">{MEMBERSHIP.currencyNote}</p>
+      </div>
+    </section>
   </main>
-</BaseLayout>
 
-<script>
-  import { captureDemoViewed } from '../scripts/marketing-events';
-  captureDemoViewed('demo-page');
-</script>
+  <script>
+    // Funnel analytics — fire `demo_viewed` on every /demo page load.
+    // Page-view event only (not motion); mirrors the welcome-page
+    // waitlist_confirmed wiring. Source is the full demo page.
+    import { captureDemoViewed } from '../scripts/marketing-events';
+    captureDemoViewed('demo-page');
+  </script>
+</BaseLayout>

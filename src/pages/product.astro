@@ -1,104 +1,219 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaButton from '../components/ui/CtaButton.astro';
+import PlaceholderMedia from '../components/ui/PlaceholderMedia.astro';
+import { MEMBERSHIP } from '../data/membership';
 
-// T107 — /product overview. Five-pillar architecture surface that
-// makes the product shape visible at a scan: desktop captures sim
-// sessions, mobile captures real-world track days, the bridge ties
-// them together, the coaching library powers the prescriptions
-// after every session, the driver profile is the progression
-// you build over months. Each pillar links to its own sub-page
-// (T108-T122 land those); pre-T108 those links 404 — which reads
-// as honest "coming soon" while the names + descriptions render
-// regardless.
+// Consolidated /product page (June-8 rebuild). Replaces the old six
+// /product/* pillars with one anchored page: intro + in-page jump nav
+// + 5 sections. Each section is a heading + honest body copy + a
+// feature bullet list + one PlaceholderMedia labelled with what the
+// real screenshot will show (no real captures exist yet — studio
+// media swaps in at step 3 with zero layout shift).
 //
-// Doctrine voice (01-STRATEGIC-DOCTRINE.md): cross-platform Driver
-// OS, sim AND real-world, ADR-005 Coaching Memory backend objects
-// (weakness / prescription / outcome). No "AI coach now" claims —
-// ADR-004 forbids LLM-driven coaching in the 6-month plan.
+// Honest claims only: the product is pre-launch. No "available now"
+// badges; coaching is rule-based, not an LLM chat box. Static — no
+// client JS, no motion.
 
-const TITLE = 'LAP Product — sim and real-world, in five pillars';
+const TITLE = 'Product — sim and real-world driver analysis & coaching | LAP';
 const DESCRIPTION =
-  'The five pillars of LAP — desktop sim capture, mobile real-world capture, the sim-to-real bridge, the coaching library, and the driver profile.';
+  'LAP turns every sim and real-world session into a development plan — 4-pillar analysis, rule-based corner coaching, race strategy, and broad logger capture.';
 
-interface Pillar {
-  href: string;
+interface Section {
+  id: string;
   eyebrow: string;
   title: string;
   body: string;
+  bullets: readonly string[];
+  media: { label: string; caption?: string };
 }
 
-const PILLARS: readonly Pillar[] = [
+const NAV: readonly { id: string; label: string }[] = [
+  { id: 'analysis', label: 'Session analysis' },
+  { id: 'coaching', label: 'Corner coaching' },
+  { id: 'strategy', label: 'Race strategy' },
+  { id: 'bridge', label: 'Sim ↔ real bridge' },
+  { id: 'capture', label: 'Capture & devices' },
+];
+
+const SECTIONS: readonly Section[] = [
   {
-    href: '/product/desktop',
-    eyebrow: 'Desktop',
-    title: 'Sim capture, live coaching, and strategy',
-    body: 'Captures the sim session in real time as you drive. After every stint, weaknesses (where you actually lost time) become prescriptions you can take back into the next session. Strategy mode covers stint planning, pace targets, and tyre management for race nights.',
+    id: 'analysis',
+    eyebrow: 'Analyse',
+    title: 'Session analysis & 4-pillar scoring',
+    body: 'Every session is scored across four pillars so you know exactly where the lap time went — not just that it went. The breakdown is per corner, so a 0.3s loss is tied to the apex it came from instead of being buried in a lap average.',
+    bullets: [
+      'Four pillars — Pace, Consistency, Execution, and Robustness — scored every session.',
+      'Per-corner time-loss breakdown: where you lost time, corner by corner.',
+      'Session comparison and progression tracking over weeks and months.',
+      'A visualization workspace for traces, deltas, and overlays.',
+    ],
+    media: {
+      label:
+        'The session report: a four-pillar score panel beside a per-corner time-loss table for a single lap.',
+      caption: 'Session report',
+    },
   },
   {
-    href: '/product/mobile',
-    eyebrow: 'Mobile',
-    title: 'Real-world capture on the track day',
-    body: 'Phone GPS plus a bluetooth GNSS hat for high-fidelity track-day data on Android. Wear OS companion handles glance-able lap times. RaceBox integration covers anyone who already owns one.',
+    id: 'coaching',
+    eyebrow: 'Coach',
+    title: 'Corner coaching & coaching library',
+    body: 'Coaching is rule-based — not a chat box. Each prescription comes from a rule in the coaching library matched to the corner shape, car class, and the weakness the analysis found. Every note follows the same chain: rule → prescription → drill → outcome, so you always know what to change and how to check it worked.',
+    bullets: [
+      'Rule-based prescriptions traced to a library rule — no generative chat, no guesswork.',
+      'The chain is explicit: rule → prescription → drill → outcome.',
+      'A targeted drill for each weakness, with a measurable outcome to confirm the fix.',
+      'Coaching plans that build across sessions instead of one-off tips.',
+    ],
+    media: {
+      label:
+        'A single corner card showing the matched rule, its prescription, the assigned drill, and the outcome metric to watch.',
+      caption: 'Corner coaching card',
+    },
   },
   {
-    href: '/product/bridge',
+    id: 'strategy',
+    eyebrow: 'Strategise',
+    title: 'Race strategy',
+    body: 'A full race-strategy workspace with no duration cap — endurance stints and sprints alike. All optimizer modes are available to every member, with pit and stint planning up front and live pace monitoring once you are on track.',
+    bullets: [
+      'Unlimited race duration — from a sprint to a 24-hour endurance run.',
+      'All optimizer modes available to every member, no tier gating.',
+      'Pit-stop and stint planning with fuel and tyre windows.',
+      'Live pace and stint monitoring while the session is running.',
+    ],
+    media: {
+      label:
+        'The strategy dashboard: a stint timeline with planned pit windows above a live pace-vs-target chart.',
+      caption: 'Strategy dashboard',
+    },
+  },
+  {
+    id: 'bridge',
     eyebrow: 'Bridge',
-    title: 'Sim and real, one driver profile',
-    body: 'The algorithm that maps sim weaknesses onto your real-world driving and the other way round. A trail-braking habit you fix on the sim shows up as faster lap times at the actual track; a real-world cornering note becomes a sim drill.',
+    title: 'The sim ↔ real bridge',
+    body: 'One logger feeds both worlds. The bridge maps a weakness you find on the sim onto your real-world driving and the other way round — a trail-braking habit you correct on the sim becomes faster lap times at the actual track, and a real-world cornering note becomes a sim drill. The diagram below is illustrative and representative of how the two sides connect.',
+    bullets: [
+      'A single driver profile spans sim and real-world sessions.',
+      'Weaknesses and drills carry across, in both directions.',
+      'One capture pipeline, two worlds — no separate accounts to reconcile.',
+      'Representative illustration only — the bridge view ships at public beta.',
+    ],
+    media: {
+      label:
+        'An illustrative diagram: a sim session and a track-day session feeding one shared driver profile, with weaknesses mapped between them. Representative, not a live screen.',
+      caption: 'Illustrative — sim ↔ real',
+    },
   },
   {
-    href: '/product/coaching',
-    eyebrow: 'Coaching library',
-    title: 'Prescriptions backed by a rule library',
-    body: 'Every prescription comes from a rule in the coaching library — track section, car class, weakness shape. Outcomes feed back into which prescriptions actually move the needle, so the library improves with every session driven.',
-  },
-  {
-    href: '/product/driver-profile',
-    eyebrow: 'Driver Profile',
-    title: 'Your progression, six months in',
-    body: 'Strengths, weaknesses, drills attempted, drills closed, by track and by car class. The shape of your driving over time instead of a folder of telemetry files you never look at again.',
+    id: 'capture',
+    eyebrow: 'Capture',
+    title: 'Capture & devices',
+    body: 'Bring the data you already have. LAP ingests the common logger formats and auto-detects them, for both kart and car. Link up to three devices, and your data is retained long enough to track real progression — not just this week.',
+    bullets: [
+      'Logger support: RaceChrono, RaceBox, AiM, and MoTeC CSV exports with GPS.',
+      'Both kart and car sessions, on one profile.',
+      'Up to 3 linked devices per membership.',
+      '12-month raw telemetry retention and 5-year report retention.',
+      'Auto-sync and format auto-detection — no manual configuration.',
+    ],
+    media: {
+      label:
+        'The capture screen: a list of linked loggers (RaceChrono, RaceBox, AiM, MoTeC CSV) with sync status and retention badges.',
+      caption: 'Capture & devices',
+    },
   },
 ];
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
-  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
-    <header class="max-w-prose">
-      <p class="text-acid-green text-caption tracking-wide uppercase">Product</p>
-      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
-        The LAP Driver OS, in five pieces.
-      </h1>
-      <p class="text-steel text-body mt-6">
-        LAP is the cross-platform Driver OS that turns every sim and real-world session into a
-        personalised development plan you can execute. The product is five pieces that converge into
-        one driver profile.
+  <main>
+    <!-- Intro -->
+    <section class="px-grid-margin mx-auto w-full max-w-6xl py-20 md:py-28">
+      <p class="font-telemetry text-pit-orange">Product</p>
+      <h1 class="font-monument text-h1 text-chalk mt-4 text-balance">What LAP does.</h1>
+      <p class="font-body text-body text-steel prose-max mt-6">
+        LAP turns every sim and real-world session into a development plan you can execute. It
+        scores each session, finds where you lost time corner by corner, and prescribes the drill to
+        fix it. The coaching is rule-based — not a chat box. Below are the five things LAP does, and
+        the kit it captures from. The product is pre-launch; every visual here is a labelled preview
+        of the real screen.
       </p>
-    </header>
 
-    <div class="mt-16 flex flex-col gap-12">
-      {
-        PILLARS.map((pillar) => (
-          <section
-            aria-labelledby={`pillar-${pillar.href.split('/').pop()}-heading`}
-            class="border-steel/15 border-t pt-10"
-          >
-            <p class="text-steel text-caption tracking-wide uppercase">{pillar.eyebrow}</p>
-            <h2
-              id={`pillar-${pillar.href.split('/').pop()}-heading`}
-              class="font-display text-h3 text-chalk tracking-display mt-3 text-balance"
-            >
-              {pillar.title}
-            </h2>
-            <p class="text-steel text-body leading-body mt-4 max-w-prose">{pillar.body}</p>
-            <a
-              href={pillar.href}
-              class="text-chalk hover:text-acid-green text-body mt-4 inline-flex items-center underline underline-offset-4 transition"
-            >
-              Read more
-            </a>
-          </section>
-        ))
-      }
-    </div>
+      <!-- In-page jump nav -->
+      <nav aria-label="Product sections" class="mt-10">
+        <ul class="flex flex-wrap gap-x-3 gap-y-3">
+          {
+            NAV.map((item) => (
+              <li>
+                <a
+                  href={`#${item.id}`}
+                  class="font-telemetry text-steel hover:text-chalk hover:border-pit-orange/60 focus-visible:outline-pit-orange border-steel/30 rounded-2 inline-flex border px-3 py-2 transition"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </section>
+
+    <!-- Five sections -->
+    {
+      SECTIONS.map((section) => (
+        <section
+          id={section.id}
+          aria-labelledby={`${section.id}-heading`}
+          class="border-steel/10 scroll-mt-24 border-t"
+        >
+          <div class="px-grid-margin mx-auto grid w-full max-w-6xl gap-10 py-20 md:grid-cols-2 md:items-center md:py-28">
+            <div>
+              <p class="font-telemetry text-pit-orange">{section.eyebrow}</p>
+              <h2
+                id={`${section.id}-heading`}
+                class="font-monument text-h2 text-chalk mt-3 text-balance"
+              >
+                {section.title}
+              </h2>
+              <p class="font-body text-body text-steel prose-max mt-5">{section.body}</p>
+              <ul class="mt-6 flex flex-col gap-3">
+                {section.bullets.map((bullet) => (
+                  <li class="font-body text-body text-chalk flex items-start gap-3">
+                    <span class="text-acid-green mt-1 shrink-0" aria-hidden="true">
+                      ✓
+                    </span>
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <PlaceholderMedia
+                label={section.media.label}
+                caption={section.media.caption}
+                aspect="16/9"
+              />
+            </div>
+          </div>
+        </section>
+      ))
+    }
+
+    <!-- Closing CTA -->
+    <section class="border-steel/10 border-t">
+      <div class="px-grid-margin mx-auto w-full max-w-6xl py-20 text-center md:py-28">
+        <h2 class="font-monument text-h2 text-chalk text-balance">See it on your own data.</h2>
+        <p class="font-body text-body text-steel prose-max mx-auto mt-5">
+          One membership, full access. {MEMBERSHIP.standardMonthly}/mo —
+          {MEMBERSHIP.foundingMonthly}/mo for the first {MEMBERSHIP.foundingLimit} founding members.
+          {MEMBERSHIP.trialDays}-day free trial, no card charged until it ends.
+        </p>
+        <div class="mt-8 flex justify-center">
+          <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">{MEMBERSHIP.ctaText}</CtaButton>
+        </div>
+        <p class="font-telemetry text-steel/70 mt-4">{MEMBERSHIP.currencyNote}</p>
+      </div>
+    </section>
   </main>
 </BaseLayout>

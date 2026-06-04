@@ -1,56 +1,236 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaButton from '../components/ui/CtaButton.astro';
 import HowItWorksDiagram from '../components/HowItWorksDiagram.astro';
-import HowItWorksCapture from '../components/HowItWorksCapture.astro';
-import HowItWorksBrain from '../components/HowItWorksBrain.astro';
-import HowItWorksPlan from '../components/HowItWorksPlan.astro';
-import HowItWorksImprove from '../components/HowItWorksImprove.astro';
-import HowItWorksHonesty from '../components/HowItWorksHonesty.astro';
-import HowItWorksDevDocs from '../components/HowItWorksDevDocs.astro';
-import FinalCta from '../components/FinalCta.astro';
+import { MEMBERSHIP } from '../data/membership';
 
-// T042 set up the shell; T043 lands the real hero. H1 copy is locked
-// by the sprint task and mirrors the doctrine's category framing
-// ("loop"). The subhead previews the four sections T045-T048 will
-// build out — capture, brain, plan, improve — which map one-to-one
-// to ADR-005 objects (§5 capture schema / §5.2-§5.4 backend brain /
-// next-session plan / §5.1 DriverProgressSnapshot). SEO retuning
-// per targeted keyword lands in T054.
+// June-8 rebuild — /how-it-works. Static, token-only, no client JS, no motion.
+// Structure (per the 2026-06-04 marketing rebuild design spec, IA §/how-it-works):
+//   H1 + honest intro
+//   → 4 numbered steps (capture → analyze → plan → improve)
+//   → the loop diagram (reused HowItWorksDiagram — already static + on-doctrine:
+//      pure SVG, no JS, no banned motion, token CSS vars, figcaption text alt)
+//   → "Today vs the roadmap" honesty section (ships at launch vs later)
+//   → final "Start 30-day free trial" CTA.
+// Positioning is rule-based, not an LLM chat box; every claim traces to a
+// shippable feature. Product is pre-launch — no "available now" overclaims.
 
-// T054 — SEO meta tuned for the long-tail keyword "sim racing
-// coaching platform how it works". Title leads with the action
-// ("How LAP works") and closes with the target noun phrase so a
-// SERP snippet reads naturally rather than as keyword soup.
-// Description leads with the target phrase and paraphrases the
-// page's four-step scaffold to match the content below.
-const TITLE = 'How LAP works — the sim racing coaching platform';
+// SEO: title leads with the action and closes on the target noun phrase;
+// description paraphrases the four-step loop the page lays out below.
+const TITLE = 'How LAP works — the sim racing coaching loop';
 const DESCRIPTION =
-  'The sim racing coaching platform that turns every sim and real-world session into a next-session plan. Capture, brain, plan, improve — four steps, one loop.';
+  'How LAP works in four steps: capture a session, analyze it with the rule-based pipeline, get a next-session plan, and improve. Honest about what ships at launch.';
+
+interface Step {
+  num: string;
+  name: string;
+  body: string;
+}
+
+const STEPS: readonly Step[] = [
+  {
+    num: '01',
+    name: 'Capture a session',
+    body: 'Drive your session, then bring the data in. The logger auto-syncs from RaceChrono, RaceBox, AiM, or a MoTeC CSV with GPS — kart or car. Every upload finalises into one canonical session bundle the rest of the pipeline reads from.',
+  },
+  {
+    num: '02',
+    name: 'Analyze with the pipeline',
+    body: 'A rule-based pipeline — not a chat box — scores the session on four pillars (pace, consistency, execution, robustness) and breaks down where you actually lost time, corner by corner. The same rules run every time, so two identical sessions get the same read.',
+  },
+  {
+    num: '03',
+    name: 'Get your plan',
+    body: 'Recurring patterns become a next-session plan: a specific weakness, a target metric, a target value, and how many sessions to work it across. Each item pairs with a concrete drill from the coaching library — something to actually do next time, not a paragraph of advice.',
+  },
+  {
+    num: '04',
+    name: 'Improve next time',
+    body: 'Your next session is measured against the plan. LAP marks each weakness closed, improving, or still open, and rolls the result into your progression. Then the loop starts again — every session sharpening the read on the one after it.',
+  },
+];
+
+interface RoadmapItem {
+  label: string;
+  detail: string;
+}
+
+// Honest split: what a member can do from day one vs. what is still on the
+// roadmap. No "available now / early access open" framing — the product is
+// pre-launch and product visuals are labelled previews.
+const TODAY: readonly RoadmapItem[] = [
+  {
+    label: 'Session analysis & 4-pillar scoring',
+    detail: 'Unlimited uploads, scored on pace, consistency, execution, and robustness.',
+  },
+  {
+    label: 'Per-corner time-loss breakdown',
+    detail: 'See exactly where the lap time went, corner by corner.',
+  },
+  {
+    label: 'Coaching plans & drills',
+    detail:
+      'Weaknesses turned into a next-session plan with targeted drills from a rule-based library.',
+  },
+  {
+    label: 'Progression tracking',
+    detail: 'Session comparison and a profile that shows your shape over time.',
+  },
+  {
+    label: 'Race strategy & live monitoring',
+    detail: 'All optimizer modes, unlimited duration, pit and stint planning, live pace.',
+  },
+  {
+    label: 'Logger auto-sync & reports',
+    detail: 'RaceChrono, RaceBox, AiM, MoTeC CSV; PDF reports and API access.',
+  },
+];
+
+const ROADMAP: readonly RoadmapItem[] = [
+  {
+    label: 'More direct device integrations',
+    detail: 'Deeper, lower-friction sync with more logging hardware over time.',
+  },
+  {
+    label: 'A wider coaching library',
+    detail: 'More tracks, more car classes, and drills refined as real outcomes come in.',
+  },
+  {
+    label: 'Richer sim ↔ real bridging',
+    detail: 'Mapping a habit fixed on the sim onto your real-world driving, and back.',
+  },
+];
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
-  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
-    <header class="max-w-wide">
-      <p class="text-steel text-caption tracking-wide uppercase">The loop</p>
-      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
-        The whole driver improvement loop, in one place.
+  <main class="px-grid-margin mx-auto w-full max-w-6xl py-20 sm:py-28">
+    <!-- Hero / intro -->
+    <header class="max-w-prose">
+      <p class="font-telemetry text-pit-orange">How it works</p>
+      <h1 class="font-monument text-h1 text-chalk mt-4 text-balance">
+        Capture, analyze, plan, improve — one loop.
       </h1>
-      <p class="text-steel text-body mt-6 max-w-prose">
-        Four steps — capture, brain, plan, improve — that turn every session you run into a concrete
-        plan for the next one.
+      <p class="font-body text-body text-steel mt-6">
+        LAP turns every session you run into a concrete plan for the next one. It is rule-based
+        coaching, not a chat box: the same pipeline reads every session, so the feedback is
+        consistent and traceable. Here is the whole loop, end to end.
       </p>
     </header>
 
-    <div class="mt-16 sm:mt-20">
-      <HowItWorksDiagram />
-    </div>
+    <!-- 4 numbered steps -->
+    <section aria-labelledby="steps-heading" class="mt-16 sm:mt-20">
+      <h2 id="steps-heading" class="sr-only">The four steps</h2>
+      <ol
+        class="rounded-2 border-steel/15 bg-steel/15 grid gap-px overflow-hidden border sm:grid-cols-2"
+      >
+        {
+          STEPS.map((step) => (
+            <li class="bg-concrete flex flex-col gap-3 p-6 sm:p-8">
+              <span class="font-telemetry text-pit-orange tabular-nums" aria-hidden="true">
+                {step.num}
+              </span>
+              <h3 class="font-monument text-h4 text-chalk text-balance">{step.name}</h3>
+              <p class="font-body text-body text-steel">{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
 
-    <HowItWorksCapture />
-    <HowItWorksBrain />
-    <HowItWorksPlan />
-    <HowItWorksImprove />
-    <HowItWorksHonesty />
-    <HowItWorksDevDocs />
-    <FinalCta />
+    <!-- The loop, visualised (reused static diagram) + preview media -->
+    <section
+      aria-labelledby="loop-heading"
+      class="border-steel/10 mt-16 border-t pt-16 sm:mt-20 sm:pt-20"
+    >
+      <h2 id="loop-heading" class="font-monument text-h2 text-chalk text-balance">
+        Four steps, one feedback loop.
+      </h2>
+      <p class="font-body text-body text-steel mt-4 max-w-prose">
+        Capture feeds the pipeline, the pipeline writes the plan, the plan shapes your next session,
+        and that session feeds back in. The loop tightens the read on your driving every time
+        around.
+      </p>
+      <div class="mt-10">
+        <HowItWorksDiagram />
+      </div>
+    </section>
+
+    <!-- Today vs the roadmap (honesty) -->
+    <section
+      aria-labelledby="roadmap-heading"
+      class="border-steel/10 mt-16 border-t pt-16 sm:mt-20 sm:pt-20"
+    >
+      <p class="font-telemetry text-steel">Today vs the roadmap</p>
+      <h2 id="roadmap-heading" class="font-monument text-h2 text-chalk mt-4 text-balance">
+        What ships at launch — and what comes later.
+      </h2>
+      <p class="font-body text-body text-steel mt-4 max-w-prose">
+        LAP launches on June 8 as one membership with full access. We would rather be honest about
+        the line between what works on day one and what is still ahead, so here it is.
+      </p>
+
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        <div class="rounded-2 border-acid-green/30 bg-concrete border p-6 sm:p-8">
+          <h3 class="font-telemetry text-acid-green">At launch</h3>
+          <ul class="mt-5 flex flex-col gap-4">
+            {
+              TODAY.map((item) => (
+                <li class="flex gap-3">
+                  <span class="text-acid-green shrink-0" aria-hidden="true">
+                    ✓
+                  </span>
+                  <span class="font-body text-body text-steel">
+                    <strong class="text-chalk font-medium">{item.label}.</strong> {item.detail}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="rounded-2 border-steel/20 bg-concrete border p-6 sm:p-8">
+          <h3 class="font-telemetry text-steel">On the roadmap</h3>
+          <ul class="mt-5 flex flex-col gap-4">
+            {
+              ROADMAP.map((item) => (
+                <li class="flex gap-3">
+                  <span class="text-steel shrink-0" aria-hidden="true">
+                    →
+                  </span>
+                  <span class="font-body text-body text-steel">
+                    <strong class="text-chalk font-medium">{item.label}.</strong> {item.detail}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="font-body text-caption text-steel/80 mt-6">
+            Roadmap items are not promised dates — they are the direction of travel. Your membership
+            includes everything in the product as it grows.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section
+      aria-labelledby="cta-heading"
+      class="border-steel/10 mt-16 border-t pt-16 text-center sm:mt-20 sm:pt-20"
+    >
+      <h2 id="cta-heading" class="font-monument text-h2 text-chalk text-balance">
+        Run the loop on your own driving.
+      </h2>
+      <p class="font-body text-body text-steel mx-auto mt-4 max-w-prose">
+        One membership, full access. {MEMBERSHIP.standardMonthly}/mo — {
+          MEMBERSHIP.foundingMonthly
+        }/mo for the first {MEMBERSHIP.foundingLimit} founding members. {MEMBERSHIP.trialDays}-day
+        free trial, no card charged until it ends.
+      </p>
+      <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">{MEMBERSHIP.ctaText}</CtaButton>
+        <CtaButton href="/pricing" variant="secondary">See full pricing</CtaButton>
+      </div>
+      <p class="font-telemetry text-tiny text-steel/70 mt-6">{MEMBERSHIP.currencyNote}</p>
+    </section>
   </main>
 </BaseLayout>

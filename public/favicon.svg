@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LAP">
+  <rect width="64" height="64" rx="12" fill="#000000" />
+  <rect x="0" y="0" width="64" height="4" rx="2" fill="#c9a84c" />
+  <text x="32" y="43" font-family="'Space Grotesk', Arial, sans-serif" font-size="26" font-weight="700"
+    text-anchor="middle" fill="#c9a84c" letter-spacing="-1">LAP</text>
+</svg>

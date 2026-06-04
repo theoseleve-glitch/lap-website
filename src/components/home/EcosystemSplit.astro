@@ -1,0 +1,57 @@
+---
+// Problem -> LAP ecosystem. Static two-pane: a stack of disconnected tools
+// vs. one LAP ecosystem. No motion, no animated swap.
+const disconnected: string[] = [
+  'A logger app for the raw data',
+  'A spreadsheet for lap times',
+  'A separate tool to compare laps',
+  'A forum thread for setup advice',
+  'A notebook for what to fix',
+  'No idea if any of it worked',
+];
+
+const ecosystem: string[] = [
+  'Capture from any supported logger',
+  'Analysis & 4-pillar scoring',
+  'Per-corner coaching & drills',
+  'Race strategy & stint planning',
+  'Progression tracking over time',
+  'One plan you can actually execute',
+];
+---
+
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+  <article class="flex flex-col gap-5 rounded-2 border border-steel/15 bg-concrete p-7">
+    <p class="font-telemetry text-steel">Today</p>
+    <h3 class="font-monument text-h4 text-chalk">A stack of disconnected tools</h3>
+    <ul class="font-body text-caption flex flex-col gap-2.5">
+      {
+        disconnected.map((item) => (
+          <li class="flex items-start gap-3 text-steel">
+            <span class="text-safety-red mt-0.5 shrink-0" aria-hidden="true">
+              ×
+            </span>
+            <span>{item}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </article>
+
+  <article class="beam-card flex flex-col gap-5 rounded-2 border border-pit-orange/40 bg-concrete p-7">
+    <p class="font-telemetry text-pit-orange">With LAP</p>
+    <h3 class="font-monument text-h4 text-chalk">One LAP ecosystem</h3>
+    <ul class="font-body text-caption flex flex-col gap-2.5">
+      {
+        ecosystem.map((item) => (
+          <li class="flex items-start gap-3 text-chalk">
+            <span class="text-acid-green mt-0.5 shrink-0" aria-hidden="true">
+              ✓
+            </span>
+            <span>{item}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </article>
+</div>

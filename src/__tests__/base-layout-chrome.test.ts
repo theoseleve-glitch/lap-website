@@ -24,9 +24,14 @@ describe('BaseLayout chrome integration', () => {
     const footerIdx = html.search(/<footer[^>]+role="contentinfo"/);
     expect(footerIdx).toBeGreaterThan(slotIdx);
   });
-  test('renders TimecodeCounter (aria-hidden + fixed) outside the main flow', async () => {
+  test('emits favicon + web manifest <link> tags in the head', async () => {
     const html = await render();
-    expect(html).toMatch(/<aside[^>]+aria-hidden="true"[^>]*class="[^"]*fixed[^"]*"/);
+    expect(html).toMatch(/<link[^>]+rel="icon"[^>]+href="\/favicon\.ico"/);
+    expect(html).toMatch(
+      /<link[^>]+rel="icon"[^>]+type="image\/svg\+xml"[^>]+href="\/favicon\.svg"/,
+    );
+    expect(html).toMatch(/<link[^>]+rel="apple-touch-icon"[^>]+href="\/apple-touch-icon\.png"/);
+    expect(html).toMatch(/<link[^>]+rel="manifest"[^>]+href="\/site\.webmanifest"/);
   });
   test('chrome elements live inside <body>, not <head>', async () => {
     const html = await render();

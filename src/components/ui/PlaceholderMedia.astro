@@ -1,0 +1,40 @@
+---
+// A fixed-aspect, clearly-labelled stand-in for product media. Renders a static
+// token-driven telemetry grid + a "Preview — representative UI" label. Step 3
+// (studio capture) swaps the inner content for a real <img>/<video> with the
+// same aspect ratio, so there is zero layout shift. No motion.
+interface Props {
+  label: string; // what the real media will show
+  caption?: string;
+  aspect?: string; // e.g. '16/9', '4/3', '3/2'
+  class?: string;
+}
+
+const { label, caption, aspect = '16/9', class: className = '' } = Astro.props;
+---
+
+<figure
+  class:list={[
+    'relative overflow-hidden rounded-2 border border-steel/20 bg-concrete',
+    className,
+  ]}
+  style={`aspect-ratio:${aspect}`}
+>
+  <div
+    class="absolute inset-0 opacity-40"
+    style="background-image: var(--bg-grid); background-size: 32px 32px;"
+    aria-hidden="true"
+  >
+  </div>
+  <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center">
+    <span class="font-telemetry text-pit-orange">Preview — representative UI</span>
+    <span class="font-body text-caption text-steel prose-max">{label}</span>
+  </div>
+  {
+    caption && (
+      <figcaption class="font-telemetry text-tiny text-steel/70 absolute bottom-2 left-3">
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>

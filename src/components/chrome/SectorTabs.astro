@@ -9,39 +9,39 @@ interface Props {
 }
 
 const TABS: NavTab[] = [
-  { label: 'Pricing',     href: '/pricing' },
-  { label: 'How',         href: '/how-it-works' },
-  { label: 'Demo',        href: '/demo' },
-  { label: 'Blog',        href: '/blog' },
-  { label: 'Schools',     href: '/for-schools' },
+  { label: 'Product', href: '/product' },
+  { label: 'How it works', href: '/how-it-works' },
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Demo', href: '/demo' },
+  { label: 'Blog', href: '/blog' },
 ];
 
 const { currentPath = Astro.url.pathname } = Astro.props;
 
-// Path-prefix match — `/blog/<slug>` highlights `/blog`.
-const isCurrent = (href: string) => currentPath.startsWith(href);
+// Path-prefix match — `/blog/<slug>` highlights `/blog`. Home (`/`) never matches.
+const isCurrent = (href: string) => href !== '/' && currentPath.startsWith(href);
 ---
 
 <nav role="navigation" aria-label="Primary" class="flex gap-7">
-  {TABS.map((tab) => (
-    <a
-      href={tab.href}
-      data-active={isCurrent(tab.href) ? 'true' : 'false'}
-      class:list={[
-        'group font-telemetry relative inline-flex items-center px-1 py-2 transition-colors',
-        isCurrent(tab.href) ? 'text-chalk' : 'text-steel hover:text-chalk',
-      ]}
-      aria-current={isCurrent(tab.href) ? 'page' : undefined}
-    >
-      {tab.label.toUpperCase()}
-    </a>
-  ))}
+  {
+    TABS.map((tab) => (
+      <a
+        href={tab.href}
+        data-active={isCurrent(tab.href) ? 'true' : 'false'}
+        class:list={[
+          'group font-telemetry relative inline-flex items-center px-1 py-2 transition-colors',
+          isCurrent(tab.href) ? 'text-chalk' : 'text-steel hover:text-chalk',
+        ]}
+        aria-current={isCurrent(tab.href) ? 'page' : undefined}
+      >
+        {tab.label.toUpperCase()}
+      </a>
+    ))
+  }
 </nav>
 
 <style>
-  /* Glowing gold dot to the left of the active tab. ::before because the
-     tab text is the only child; we pin the dot at the tab's left edge,
-     vertically centered. */
+  /* Glowing gold dot to the left of the active tab. Static (no animation). */
   nav a[data-active='true']::before {
     content: '';
     position: absolute;

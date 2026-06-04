@@ -42,7 +42,7 @@ export const PILLAR_3_FAQS: ReadonlyArray<Faq> = [
   {
     question: 'How much does telemetry software cost for sim racing?',
     answer:
-      'Pricing varies widely across the six telemetry apps in this comparison. LAP is a subscription at €15 per month standard, €12 per month for closed-beta waitlist invitees. Garage61 has a free tier plus paid premium. MoTeC i2 Pro is free, with i2 Standard as a paid licence for multi-session analysis. RaceLab is a subscription suite. Track Attack is a free download with in-app upgrades. Verify the current rate on each product page before treating these figures as canonical.',
+      'Pricing varies widely across the six telemetry apps in this comparison. LAP is a subscription at €19.90 per month standard, €14.90 per month for the first 50 founding members, with a 30-day free trial and no free tier. Garage61 has a free tier plus paid premium. MoTeC i2 Pro is free, with i2 Standard as a paid licence for multi-session analysis. RaceLab is a subscription suite. Track Attack is a free download with in-app upgrades. Verify the current rate on each product page before treating these figures as canonical.',
   },
   {
     question: 'Can I use the same telemetry app for sim and real-world driving?',
@@ -62,7 +62,7 @@ export const PILLAR_3_FAQS: ReadonlyArray<Faq> = [
   {
     question: 'Is there a free telemetry app I can try first?',
     answer:
-      'Yes, two options stand out. Garage61 has a free tier covering basic lap analysis on iRacing — a casual sim racer who has never opened a telemetry tool can start there without a subscription commitment. MoTeC i2 Pro is also free and is the most powerful free tier in the comparison, though the learning curve is steep. LAP itself offers a 14-day trial with no card required, which fits readers who want to assess the cross-platform surface before subscribing.',
+      'Yes, two options stand out. Garage61 has a free tier covering basic lap analysis on iRacing — a casual sim racer who has never opened a telemetry tool can start there without a subscription commitment. MoTeC i2 Pro is also free and is the most powerful free tier in the comparison, though the learning curve is steep. LAP itself offers a 30-day free trial with no card required, which fits readers who want to assess the cross-platform surface before subscribing.',
   },
 ];
 

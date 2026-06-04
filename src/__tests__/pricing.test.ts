@@ -4,190 +4,173 @@ import Pricing from '../pages/pricing.astro';
 
 const render = () => AstroContainer.create().then((c) => c.renderToString(Pricing));
 
-test('T057: /pricing renders a single <main> landmark', async () => {
+test('/pricing renders a single <main> landmark', async () => {
   // Every Astro page needs exactly one <main> for axe's landmark
-  // rule and for the skip-link target. The shell ships with a
-  // minimal body that T058 (tier card) + T059 (what's included) +
-  // T060-T062 + T061 (FAQ) will populate.
+  // rule and for the skip-link target.
   const html = await render();
   const mainMatches = html.match(/<main[\s>]/g) ?? [];
   expect(mainMatches.length).toBe(1);
 });
 
-test('T057: /pricing renders an <h1> with the locked shell heading', async () => {
-  // The shell ships a deliberately minimal H1 that names the
-  // page's premise — "One tier. Clear price." — before T058
-  // drops the full tier card with prices. Locking the exact string
-  // keeps the shell from drifting away from doctrine §8 "Single
-  // tier. €15/month." positioning while subsequent tasks land.
+test('/pricing renders an <h1> with the membership premise heading', async () => {
+  // The June-8 model is ONE membership at ONE price. The H1 states
+  // exactly that premise — "One membership. One price." — before the
+  // PricingCard drops the figures. Locking the exact string keeps the
+  // page from drifting off the single-membership doctrine.
   const html = await render();
-  expect(html).toMatch(/<h1[^>]*>[\s\S]*One tier\. Clear price\.[\s\S]*<\/h1>/);
+  expect(html).toMatch(/<h1[^>]*>[\s\S]*One membership\. One price\.[\s\S]*<\/h1>/);
 });
 
-test('T057: title includes "LAP" branding (BaseLayout integration)', async () => {
-  // Pattern: "<Page> — LAP" matches the homepage and /how-it-works
-  // title shape. Locking "LAP" here catches accidental
-  // BaseLayout-bypass during later edits.
+test('title includes "LAP" branding (BaseLayout integration)', async () => {
+  // The page title flows through BaseLayout. Locking "LAP" here
+  // catches accidental BaseLayout-bypass during later edits.
   const html = await render();
   expect(html).toMatch(/<title>[^<]*LAP[^<]*<\/title>/);
 });
 
-test('T057: meta description carries the €15 price anchor', async () => {
-  // 01-STRATEGIC-DOCTRINE.md §10 bullet 3: "€15/month core tier
-  // — price does not move up during the 6 months." The SERP
-  // snippet for /pricing must show the price to filter out
-  // price-averse visitors before they bounce. Lock the number.
+test('meta description carries the standard €19.90 price anchor', async () => {
+  // The SERP snippet for /pricing must show the price to set
+  // expectations before the click. The standard monthly price is
+  // €19.90 — lock the number so the description never drifts off the
+  // June-8 pricing canon.
   const html = await render();
   const descMatch = html.match(/<meta\s+name="description"\s+content="([^"]+)"/);
   expect(descMatch).not.toBeNull();
-  expect(descMatch![1]).toMatch(/€15/);
+  expect(descMatch![1]).toMatch(/€19\.90/);
 });
 
-test('T057: meta description names the 14-day trial', async () => {
-  // Doctrine §8: "Trial: 14-day full-feature free trial." The
-  // trial is the single most-clicked path from pricing; the
+test('meta description carries the €14.90 founding-member price', async () => {
+  // The first 50 founding members lock €14.90/mo. The discounted
+  // anchor is the second most-clicked hook from a pricing SERP result,
+  // so the description must signal it.
+  const html = await render();
+  const descMatch = html.match(/<meta\s+name="description"\s+content="([^"]+)"/);
+  expect(descMatch).not.toBeNull();
+  expect(descMatch![1]).toMatch(/€14\.90/);
+});
+
+test('meta description names the 30-day free trial', async () => {
+  // The trial is the single most-clicked path from pricing; the
   // description must signal it so a SERP click arrives with the
-  // right expectation.
+  // right expectation. The new trial is 30 days (no card until it ends).
   const html = await render();
   const descMatch = html.match(/<meta\s+name="description"\s+content="([^"]+)"/);
   expect(descMatch).not.toBeNull();
-  expect(descMatch![1].toLowerCase()).toMatch(/14[- ]?day/);
+  expect(descMatch![1].toLowerCase()).toMatch(/30[- ]?day/);
 });
 
-test('T069: <title> carries the "sim racing coaching price" target keyword', async () => {
-  // Sprint T069 targets "sim racing coaching price" for /pricing.
-  // Putting the exact noun phrase in the <title> is the single
-  // strongest ranking signal. The loop rules forbid keyword soup
-  // — the phrasing "Sim racing coaching price — LAP" reads as a
-  // natural SERP title rather than an SEO artifact.
+test('title names the page as the LAP membership pricing page', async () => {
+  // The <title> is the strongest on-page ranking and SERP signal. The
+  // June-8 page positions itself around the single membership rather
+  // than a keyword phrase — assert the title reads as a natural pricing
+  // title that names both "membership" and "pricing".
   const html = await render();
   const titleMatch = html.match(/<title>([^<]+)<\/title>/);
   expect(titleMatch).not.toBeNull();
-  expect(titleMatch![1].toLowerCase()).toContain('sim racing coaching price');
+  const title = titleMatch![1].toLowerCase();
+  expect(title).toContain('membership');
+  expect(title).toContain('pricing');
 });
 
-test('T069: meta description carries the "sim racing coaching" noun phrase', async () => {
-  // Description is the SERP snippet below the title. Leading with
-  // (or prominently featuring) the target noun phrase rewards the
-  // query match and tells the reader within the first few words
-  // that they are on the right page. The exact tail "price" is in
-  // the title; the description naturally carries "sim racing
-  // coaching" near the €15 anchor.
-  const html = await render();
-  const descMatch = html.match(/<meta\s+name="description"\s+content="([^"]+)"/);
-  expect(descMatch).not.toBeNull();
-  expect(descMatch![1].toLowerCase()).toContain('sim racing coaching');
-});
-
-test('T057: copy stays doctrine-aligned — no AI-coach / LLM / generative', async () => {
+test('copy stays doctrine-aligned — no AI-coach / LLM / generative', async () => {
   const html = await render();
   expect(html.toLowerCase()).not.toMatch(/\bai coach\b/);
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
   expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
 });
 
-test('T058: the tier card is mounted on /pricing below the header', async () => {
-  // Integration check: the PricingTierCard ships the €15/€150
-  // prices + trial badge + CTAs. Its mount on /pricing is what
-  // makes this page do its job — without it, the shell from T057
-  // is just text. Match the tier card's unique wiring (the
-  // ?plan=monthly CTA href) rather than price strings, since the
-  // shell's subhead already contains "14-day free trial" + price
-  // anchors and would false-pass a content-only check.
+test('the PricingCard is mounted on /pricing with the trial CTA → /register', async () => {
+  // Integration check: the PricingCard ships the membership prices +
+  // trial badge + the single primary CTA. Its mount on /pricing is what
+  // makes the page do its job. The June-8 CTA is one button —
+  // "Start 30-day free trial" → /register (no ?plan=monthly/yearly,
+  // since there is one monthly-only membership).
   const html = await render();
-  expect(html).toMatch(/<a[^>]+href="\/register\?plan=monthly"/);
-  expect(html).toMatch(/<a[^>]+href="\/register\?plan=yearly"/);
+  expect(html).toMatch(/<a[^>]+href="\/register"[\s\S]*?Start 30-day free trial[\s\S]*?<\/a>/);
+  // No legacy multi-plan query-string CTAs survive.
+  expect(html).not.toMatch(/\/register\?plan=/);
 });
 
-test('T059: the "What\'s included" checklist is mounted after the tier card', async () => {
-  // Integration check: the 12-bullet checklist lands below the
-  // tier card. Ordering matters — the reader sees price first,
-  // then the full inventory, which matches the mental sequence
-  // "is this affordable?" → "is it enough?"
+test('the PricingCard carries the founding and standard monthly prices', async () => {
+  // The card is the page's core: it must show €14.90/mo for founding
+  // members and the €19.90/mo standard rate, plus the 30-day trial.
   const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*What(?:'|&#39;|&apos;|&rsquo;)s included/);
-  const tierIdx = html.indexOf('Full LAP access');
-  const includedIdx = html.search(/What(?:'|&#39;|&apos;|&rsquo;)s included/);
-  expect(tierIdx).toBeGreaterThan(-1);
-  expect(includedIdx).toBeGreaterThan(tierIdx);
+  expect(html).toMatch(/€14\.90/);
+  expect(html).toMatch(/€19\.90/);
+  expect(html.toLowerCase()).toMatch(/30[- ]?day free trial/);
 });
 
-test('T060: the founder-waitlist offer is mounted after the checklist', async () => {
-  // Integration check: grandfathered-rate offer lands below the
-  // inventory. Reader arc: price → what's included → "and if you
-  // signed up early, it's €3 cheaper." Reversing the order would
-  // make the offer a banner the trial-ready visitor has to scroll
-  // past to reach the inventory.
+test('the "Everything in your membership" section is mounted after the card', async () => {
+  // Integration check: the full feature inventory lands below the
+  // pricing card. Ordering matters — the reader sees price first, then
+  // the full inventory: "is this affordable?" → "is it enough?".
+  // The new model has no per-tier gating, so the heading is
+  // "Everything in your membership" rather than the old "What's included".
   const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*Signed up before launch/);
-  const includedIdx = html.search(/What(?:'|&#39;|&apos;|&rsquo;)s included/);
-  const founderIdx = html.indexOf('Signed up before launch');
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Everything in your membership[\s\S]*<\/h2>/);
+  const cardIdx = html.indexOf('Membership'); // PricingCard heading "<name> Membership"
+  const includedIdx = html.indexOf('Everything in your membership');
+  expect(cardIdx).toBeGreaterThan(-1);
+  expect(includedIdx).toBeGreaterThan(cardIdx);
+});
+
+test('the founding-50 callout is mounted after the feature inventory', async () => {
+  // Integration check: the founding-member offer lands below the
+  // inventory. Reader arc: price → what's included → "and if you're one
+  // of the first 50, it's €5/mo cheaper, locked for life."
+  const html = await render();
+  expect(html).toMatch(/Founding\s+50/);
+  expect(html).toMatch(/locked while you stay a member/);
+  const includedIdx = html.indexOf('Everything in your membership');
+  const foundingIdx = html.indexOf('locked while you stay a member');
   expect(includedIdx).toBeGreaterThan(-1);
-  expect(founderIdx).toBeGreaterThan(includedIdx);
+  expect(foundingIdx).toBeGreaterThan(includedIdx);
 });
 
-test('T061: the FAQ accordion is mounted after the founder offer', async () => {
-  // Integration check: FAQ lands at the bottom of the page's
-  // decision arc. Reader has seen price → inventory → founder
-  // offer, and arrives at "what about X?" objections. The
-  // <details>/<summary> accordion shows the questions as
-  // scannable summaries with answers hidden behind a click —
-  // no JS required.
+test('the FAQ section is mounted after the founding offer', async () => {
+  // Integration check: FAQ lands at the bottom of the page's decision
+  // arc. The <details>/<summary> accordion shows questions as scannable
+  // summaries with answers hidden behind a click — no JS required.
   const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*Common questions/);
-  const founderIdx = html.indexOf('Signed up before launch');
-  const faqIdx = html.indexOf('Common questions');
-  expect(founderIdx).toBeGreaterThan(-1);
-  expect(faqIdx).toBeGreaterThan(founderIdx);
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*Frequently asked questions[\s\S]*<\/h2>/);
+  expect(html).toMatch(/<details/);
+  const foundingIdx = html.indexOf('locked while you stay a member');
+  const faqIdx = html.indexOf('Frequently asked questions');
+  expect(foundingIdx).toBeGreaterThan(-1);
+  expect(faqIdx).toBeGreaterThan(foundingIdx);
 });
 
-test('T062: the B2B teaser lands after the FAQ', async () => {
-  // Integration check: B2B teaser is the last section before
-  // the page-close CTA (T063+). Reader arc: price → inventory →
-  // founder offer → objections → "and if you're a school,
-  // here's your door." Doctrine §8 B2B is "door open", not a
-  // primary call — placement at the bottom respects that.
+test('/pricing links to /refund-policy', async () => {
+  // Integration check: the refund policy is one click away from the
+  // pricing page, under a named link on its own route.
   const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*Running a racing academy/);
-  const faqIdx = html.indexOf('Common questions');
-  const b2bIdx = html.indexOf('Running a racing academy');
-  expect(faqIdx).toBeGreaterThan(-1);
-  expect(b2bIdx).toBeGreaterThan(faqIdx);
+  expect(html).toMatch(/<a[^>]+href="\/refund-policy"[\s\S]*?refund policy[\s\S]*?<\/a>/);
 });
 
-test('T064: the coach value-anchor lands after the B2B teaser', async () => {
-  // Integration check: value-anchor sits at the bottom of the
-  // decision arc, framing LAP's price against the only other
-  // option a serious sim racer might be considering — booking
-  // hours with a human coach. Doctrine §7 Bet #3 makes this the
-  // primary competitive price frame; showing it at the close
-  // leaves the reader with the math, not the category doubt.
+test('/pricing emits AggregateOffer JSON-LD in EUR spanning 14.90–19.90', async () => {
+  // The pricing page ships Product/AggregateOffer structured data so the
+  // two offers (founding + standard) are eligible for rich results.
+  // lowPrice 14.90, highPrice 19.90, EUR, offerCount 2 — and it must
+  // stay in lockstep with the rendered card.
   const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*A year of LAP is one hour with a human coach/);
-  const b2bIdx = html.indexOf('Running a racing academy');
-  const valueIdx = html.indexOf('A year of LAP is one hour with a human coach');
-  expect(b2bIdx).toBeGreaterThan(-1);
-  expect(valueIdx).toBeGreaterThan(b2bIdx);
-});
+  const ldMatches = [
+    ...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g),
+  ].map((m) => JSON.parse(m[1]));
 
-test('T065: /pricing links to /refund-policy', async () => {
-  // Integration check: the refund policy is one click away from
-  // the pricing page. Shipping a dedicated /refund-policy route
-  // (not a site-footer inline snippet) matches how readers expect
-  // to find legal/policy content — under a named link, on its
-  // own page.
-  const html = await render();
-  expect(html).toMatch(/<a[^>]+href="\/refund-policy"[^>]*>[\s\S]*Refund policy[\s\S]*<\/a>/);
-});
-
-test('T066: /pricing exposes a "Contact sales" mailto to sales@lap-coach.racing', async () => {
-  // Sprint T066 accepts "email form or Calendly". A mailto is the
-  // cheapest honest option today — zero external dependency, works
-  // on every mail client, no spam-form infrastructure to maintain.
-  // T204 names sales@lap-coach.racing as the canonical B2B inbox;
-  // mailto-with-subject pre-fills "Sales inquiry" for triage.
-  const html = await render();
-  expect(html).toMatch(
-    /<a[^>]+href="mailto:sales@lap-coach\.racing[^"]*"[^>]*>[\s\S]*Contact sales[\s\S]*<\/a>/,
+  const aggregate = ldMatches.find(
+    (ld) => ld['@type'] === 'Product' && ld.offers?.['@type'] === 'AggregateOffer',
   );
+  expect(aggregate).toBeDefined();
+  expect(aggregate.offers.priceCurrency).toBe('EUR');
+  expect(aggregate.offers.lowPrice).toBe('14.90');
+  expect(aggregate.offers.highPrice).toBe('19.90');
+  expect(aggregate.offers.offerCount).toBe(2);
+});
+
+test('/pricing exposes no legacy B2B "Contact sales" mailto', async () => {
+  // The June-8 model removed the B2B / per-seat teaser entirely. Assert
+  // the legacy sales mailto is gone so it cannot creep back in.
+  const html = await render();
+  expect(html).not.toMatch(/mailto:sales@lap-coach\.racing/);
+  expect(html.toLowerCase()).not.toContain('contact sales');
 });

@@ -2,10 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, test } from 'vitest';
 
-const GLOBAL_CSS = readFileSync(
-  resolve(process.cwd(), 'src/styles/global.css'),
-  'utf8',
-);
+const GLOBAL_CSS = readFileSync(resolve(process.cwd(), 'src/styles/global.css'), 'utf8');
 
 // Utility: extract the body of a CSS rule by selector. Returns null if the
 // rule isn't found. We do this because regex-matching the whole rule with
@@ -103,9 +100,7 @@ describe('V2 March visual utilities — section containers', () => {
     const body = ruleBody(GLOBAL_CSS, '.grid-lap');
     expect(body).not.toBeNull();
     expect(body).toMatch(/display\s*:\s*grid/);
-    expect(body).toMatch(
-      /grid-template-columns\s*:\s*repeat\(var\(--grid-columns\),\s*1fr\)/,
-    );
+    expect(body).toMatch(/grid-template-columns\s*:\s*repeat\(var\(--grid-columns\),\s*1fr\)/);
     expect(body).toMatch(/gap\s*:\s*var\(--grid-gutter\)/);
     expect(body).toMatch(/padding-inline\s*:\s*var\(--grid-margin\)/);
   });
@@ -121,30 +116,36 @@ describe('V2 March visual utilities — section containers', () => {
   });
 });
 
-describe('V2 March visual effects — text-shimmer', () => {
-  test('@keyframes text-shimmer is declared', () => {
-    expect(GLOBAL_CSS).toMatch(/@keyframes\s+text-shimmer\s*\{/);
+describe('V2 March visual effects — text-shimmer (static gold gradient)', () => {
+  // Minimal-motion doctrine: the former infinite background-position sweep
+  // was removed. `.text-shimmer` is now a STATIC gold gradient clipped to
+  // text — no @keyframes, no animation.
+  test('@keyframes text-shimmer is NOT declared (animation removed)', () => {
+    expect(GLOBAL_CSS).not.toMatch(/@keyframes\s+text-shimmer\b/);
   });
-  test('animates background-position from 100% 50% → -100% 50%', () => {
-    // Match across the keyframe block (multiline) — use [\s\S] not . so
-    // the dot-doesn't-match-newline default doesn't break us.
-    expect(GLOBAL_CSS).toMatch(
-      /@keyframes\s+text-shimmer\s*\{[\s\S]*?100%\s+50%[\s\S]*?-100%\s+50%[\s\S]*?\}/,
-    );
-  });
-  test('.text-shimmer applies background-clip: text + transparent color', () => {
+  test('.text-shimmer is a static gradient clipped to text (transparent fill)', () => {
     const body = ruleBody(GLOBAL_CSS, '.text-shimmer');
     expect(body).not.toBeNull();
+    // Static gold gradient as the text fill.
+    expect(body).toMatch(/background\s*:\s*linear-gradient\(/);
     expect(body).toMatch(/background-clip\s*:\s*text/);
     expect(body).toMatch(/-webkit-background-clip\s*:\s*text/);
     expect(body).toMatch(/color\s*:\s*transparent/);
-    expect(body).toMatch(/animation\s*:\s*text-shimmer\s+6s/);
+    // Gold tint sourced from the brand token, not a raw hex.
+    expect(body).toMatch(/var\(--color-pit-orange/);
+  });
+  test('.text-shimmer carries NO infinite animation', () => {
+    const body = ruleBody(GLOBAL_CSS, '.text-shimmer');
+    expect(body).not.toBeNull();
+    expect(body).not.toMatch(/animation/);
   });
 });
 
 describe('V2 March visual effects — beam-card', () => {
   test('@keyframes beam-spin is declared and rotates 360deg', () => {
-    expect(GLOBAL_CSS).toMatch(/@keyframes\s+beam-spin\s*\{[\s\S]*?to\s*\{\s*transform\s*:\s*rotate\(360deg\)\s*;?\s*\}\s*\}/);
+    expect(GLOBAL_CSS).toMatch(
+      /@keyframes\s+beam-spin\s*\{[\s\S]*?to\s*\{\s*transform\s*:\s*rotate\(360deg\)\s*;?\s*\}\s*\}/,
+    );
   });
   test('.beam-card creates positioned overflow-hidden container', () => {
     const body = ruleBody(GLOBAL_CSS, '.beam-card');
@@ -176,24 +177,18 @@ describe('V2 March visual effects — beam-card', () => {
   });
 });
 
-describe('V2 March visual effects — radio-bar', () => {
-  test('@keyframes radio-wave animates height 3px → 12px → 3px', () => {
-    expect(GLOBAL_CSS).toMatch(
-      /@keyframes\s+radio-wave\s*\{[\s\S]*?0%[\s\S]*?100%[\s\S]*?height\s*:\s*3px[\s\S]*?50%[\s\S]*?height\s*:\s*12px[\s\S]*?\}/,
-    );
+describe('V2 March visual effects — looping animations removed (minimal-motion)', () => {
+  // The radio-wave waveform and marquee-scroll strip were infinite ambient
+  // loops. Minimal-motion doctrine removed both keyframe sets and the
+  // .radio-bar utility entirely. Guard against regressions reintroducing them.
+  test('@keyframes radio-wave is gone', () => {
+    expect(GLOBAL_CSS).not.toMatch(/@keyframes\s+radio-wave\b/);
   });
-  test('.radio-bar applies the radio-wave animation', () => {
-    const body = ruleBody(GLOBAL_CSS, '.radio-bar');
-    expect(body).not.toBeNull();
-    expect(body).toMatch(/animation\s*:\s*radio-wave\s+0\.8s\s+ease-in-out\s+infinite/);
+  test('.radio-bar utility is gone', () => {
+    expect(ruleBody(GLOBAL_CSS, '.radio-bar')).toBeNull();
   });
-});
-
-describe('V2 March visual effects — marquee-scroll keyframes', () => {
-  test('@keyframes marquee-scroll translates from 0 → -50%', () => {
-    expect(GLOBAL_CSS).toMatch(
-      /@keyframes\s+marquee-scroll\s*\{[\s\S]*?from\s*\{\s*transform\s*:\s*translateX\(0\)\s*;?\s*\}[\s\S]*?to\s*\{\s*transform\s*:\s*translateX\(-50%\)\s*;?\s*\}\s*\}/,
-    );
+  test('@keyframes marquee-scroll is gone', () => {
+    expect(GLOBAL_CSS).not.toMatch(/@keyframes\s+marquee-scroll\b/);
   });
 });
 

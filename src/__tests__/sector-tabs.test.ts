@@ -3,18 +3,18 @@ import { describe, expect, test } from 'vitest';
 import SectorTabs from '../components/chrome/SectorTabs.astro';
 
 const render = (currentPath: string) =>
-  AstroContainer.create().then((c) =>
-    c.renderToString(SectorTabs, { props: { currentPath } }),
-  );
+  AstroContainer.create().then((c) => c.renderToString(SectorTabs, { props: { currentPath } }));
 
 describe('SectorTabs · variant C', () => {
   test('renders all 5 primary nav links', async () => {
     const html = await render('/');
-    expect(html).toMatch(/href="\/pricing"/);
+    expect(html).toMatch(/href="\/product"/);
     expect(html).toMatch(/href="\/how-it-works"/);
+    expect(html).toMatch(/href="\/pricing"/);
     expect(html).toMatch(/href="\/demo"/);
     expect(html).toMatch(/href="\/blog"/);
-    expect(html).toMatch(/href="\/for-schools"/);
+    // Schools removed from the June-8 nav — assert it is gone.
+    expect(html).not.toMatch(/href="\/for-schools"/);
   });
 
   test('uses <nav role="navigation" aria-label="Primary"> as root', async () => {
@@ -33,10 +33,11 @@ describe('SectorTabs · variant C', () => {
     expect(html).toMatch(/class="[^"]*font-telemetry[^"]*"[^>]*>\s*HOW/);
   });
 
-  test('does NOT render single-letter sector codes (P/H/D/B/S)', async () => {
+  test('does NOT render single-letter sector codes (P/H/D/B)', async () => {
     const html = await render('/');
-    expect(html).not.toMatch(/<span[^>]*>\s*P\s*<\/span>/);
-    expect(html).not.toMatch(/<span[^>]*>\s*H\s*<\/span>/);
+    for (const code of ['P', 'H', 'D', 'B']) {
+      expect(html).not.toMatch(new RegExp(`<span[^>]*>\\s*${code}\\s*</span>`));
+    }
   });
 
   test('active link gets data-active="true"', async () => {

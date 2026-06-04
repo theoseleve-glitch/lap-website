@@ -25,12 +25,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 
-const POST_PATH = join(
-  process.cwd(),
-  'docs',
-  'blog-posts',
-  'designing-coaching-drivers-follow.md',
-);
+const POST_PATH = join(process.cwd(), 'docs', 'blog-posts', 'designing-coaching-drivers-follow.md');
 
 const loadPost = (): string => readFileSync(POST_PATH, 'utf8');
 
@@ -152,7 +147,7 @@ describe('T183: Designing Coaching That Drivers Actually Follow — blog post dr
     // The post IS the founder voice on Pillar 4's framework.
     // Linking the cluster article is non-negotiable.
     const post = loadPost();
-    expect(post).toMatch(/\]\(\/blog\/driver\-development\-plan\)/);
+    expect(post).toMatch(/\]\(\/blog\/driver-development-plan\)/);
   });
 
   test('post links to ≥1 OTHER sibling pillar (cluster reach beyond Pillar 4)', () => {

@@ -1,45 +1,212 @@
 ---
-// Phase 4 wiring · 7 rooms in canonical order. The retired components
-// (HeroManifest, SimFirst, PremiumLayer, PitStop) are deleted as part
-// of this task. home-pins.ts attaches GSAP scroll-pins on desktop +
-// motion-allowed only.
+// Home — June-8 marketing rebuild. Static-only, no client JS, minimal motion
+// (hover/focus transitions only). All product visuals are <PlaceholderMedia>
+// labelled "Preview" — the product is pre-launch. Pricing canon is the single
+// membership (€19.90/mo · €14.90/mo first-50 · 30-day free trial). Sections in
+// the order set by the design spec (2026-06-04-marketing-june8-rebuild-design).
 import BaseLayout from '../layouts/BaseLayout.astro';
-import StartGrid from '../components/rooms/StartGrid.astro';
-import SessionProof from '../components/rooms/SessionProof.astro';
-import ThePain from '../components/rooms/ThePain.astro';
-import Versus from '../components/rooms/Versus.astro';
-import Pipeline from '../components/rooms/Pipeline.astro';
-import Garage from '../components/rooms/Garage.astro';
-import Podium from '../components/rooms/Podium.astro';
-import MarqueeStrip from '../components/ui/MarqueeStrip.astro';
+import CtaButton from '../components/ui/CtaButton.astro';
+import PlaceholderMedia from '../components/ui/PlaceholderMedia.astro';
+import { MEMBERSHIP } from '../data/membership';
+import ValueStrip from '../components/home/ValueStrip.astro';
+import SessionProofCards from '../components/home/SessionProofCards.astro';
+import EcosystemSplit from '../components/home/EcosystemSplit.astro';
+import TheLoop from '../components/home/TheLoop.astro';
+
+const TITLE = 'LAP — coaching for every lap';
+const DESCRIPTION =
+  'LAP is the cross-platform Driver OS — every sim and real session becomes a coaching plan you can execute. Rule-based coaching, not a chat box. 30-day free trial.';
 ---
 
-<BaseLayout title="LAP — Every lap, one step better.">
+<BaseLayout title={TITLE} description={DESCRIPTION}>
   <main id="main-content">
-    <StartGrid />
-    <MarqueeStrip
-      items={[
-        'TELEMETRY',
-        'LAP ANALYSIS',
-        'CORNER COACHING',
-        'PERFORMANCE SCORING',
-        'SESSION DEBRIEF',
-        'DATA ENGINEERING',
-        'TRACK MAPPING',
-      ]}
-      speed={35}
-    />
-    <div data-after-hero></div>
-    <SessionProof />
-    <ThePain />
-    <Versus />
-    <Pipeline />
-    <Garage />
-    <Podium />
+    <!-- 1 · Hero -->
+    <section class="px-grid-margin mx-auto w-full max-w-6xl py-20 md:py-28">
+      <p class="font-telemetry text-pit-orange">The cross-platform Driver OS</p>
+      <h1 class="font-monument text-h1 text-chalk mt-5 max-w-4xl text-balance">
+        They time laps. We coach drivers.
+      </h1>
+      <p class="font-body text-body text-steel prose-max mt-6">
+        Every sim and real session becomes a plan you can execute — sector deltas, a four-pillar
+        score, and the corners to fix next, all in one place.
+      </p>
+      <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">
+          {MEMBERSHIP.ctaText}
+        </CtaButton>
+        <CtaButton href="/how-it-works" variant="secondary">See how it works</CtaButton>
+      </div>
+      <p class="font-body text-caption text-steel mt-5">
+        30-day free trial · no card charged until it ends · cancel anytime.
+      </p>
+    </section>
+
+    <!-- 2 · Value strip -->
+    <section
+      class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-16 md:py-20"
+    >
+      <h2 class="font-monument text-h3 text-chalk mb-8">From session to plan, in four steps</h2>
+      <ValueStrip />
+    </section>
+
+    <!-- 3 · Session proof -->
+    <section
+      class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-20 md:py-28"
+    >
+      <p class="font-telemetry text-pit-orange">After every session</p>
+      <h2 class="font-monument text-h2 text-chalk mt-4 max-w-3xl text-balance">
+        A score, a debrief, and a line that goes up
+      </h2>
+      <p class="font-body text-body text-steel prose-max mt-5">
+        LAP reads the lap the way an engineer would — losses in
+        <span class="text-safety-red">red</span>, fixes in
+        <span class="text-acid-green">green</span>, every number final and traceable to the data.
+      </p>
+
+      <div class="mt-10">
+        <SessionProofCards />
+      </div>
+
+      <div class="mt-6">
+        <PlaceholderMedia
+          label="Session report — speed trace, sector deltas, 4-pillar score"
+          aspect="16/9"
+        />
+      </div>
+    </section>
+
+    <!-- 4 · Problem → LAP ecosystem -->
+    <section
+      class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-20 md:py-28"
+    >
+      <p class="font-telemetry text-pit-orange">The problem</p>
+      <h2 class="font-monument text-h2 text-chalk mt-4 max-w-3xl text-balance">
+        Your data is everywhere. Your progress is nowhere.
+      </h2>
+      <p class="font-body text-body text-steel prose-max mt-5">
+        Most drivers stitch together half a dozen apps and still can't say what to fix. LAP replaces
+        the stack with one ecosystem.
+      </p>
+
+      <div class="mt-10">
+        <EcosystemSplit />
+      </div>
+    </section>
+
+    <!-- 5 · "They time laps. We coach drivers." statement -->
+    <section
+      class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-24 md:py-32"
+    >
+      <p class="font-telemetry text-pit-orange">Our position</p>
+      <p class="font-monument text-h2 text-chalk mt-5 max-w-4xl text-balance">
+        They time laps. <span class="text-pit-orange">We coach drivers.</span>
+      </p>
+      <p class="font-body text-body text-steel prose-max mt-6">
+        A stopwatch tells you the lap was slow. LAP tells you which corner cost you, why, and what
+        to do about it before the next session. Rule-based coaching, not a chat box — every
+        instruction traces to your telemetry.
+      </p>
+    </section>
+
+    <!-- 6 · The loop -->
+    <section
+      class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-20 md:py-28"
+    >
+      <p class="font-telemetry text-pit-orange">The loop</p>
+      <h2 class="font-monument text-h2 text-chalk mt-4 max-w-3xl text-balance">
+        Capture · Analyze · Plan · Improve
+      </h2>
+      <p class="font-body text-body text-steel prose-max mt-5">
+        The same loop a race engineer runs, automated for you and repeatable every session.
+      </p>
+
+      <div class="mt-10">
+        <TheLoop />
+      </div>
+
+      <div class="mt-6">
+        <PlaceholderMedia
+          label="Coaching plan — prioritised drills from your weak corners"
+          aspect="16/9"
+        />
+      </div>
+    </section>
+
+    <!-- 7 · Pricing teaser -->
+    <section
+      class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-20 md:py-28"
+    >
+      <div
+        class="beam-card rounded-2 border-pit-orange/40 bg-concrete flex flex-col gap-6 border p-8 md:flex-row md:items-center md:justify-between"
+      >
+        <div class="flex flex-col gap-3">
+          <p class="font-telemetry text-pit-orange">One membership</p>
+          <p class="font-monument text-h3 text-chalk leading-tight">
+            {MEMBERSHIP.standardMonthly}<span class="font-body text-h5 text-steel">/mo</span>
+            <span class="font-body text-h5 text-steel"> · </span>
+            {MEMBERSHIP.foundingMonthly}<span class="font-body text-h5 text-steel">/mo</span>
+            <span class="font-body text-h5 text-steel">
+              for the first {MEMBERSHIP.foundingLimit} founding members</span
+            >
+          </p>
+          <p class="font-body text-caption text-steel">
+            {MEMBERSHIP.trialDays}-day free trial · no card until it ends · monthly only · cancel
+            anytime.
+          </p>
+        </div>
+        <div class="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center md:flex-col">
+          <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">{MEMBERSHIP.ctaText}</CtaButton>
+          <a
+            href="/pricing"
+            class="text-caption text-chalk hover:text-pit-orange focus-visible:outline-chalk inline-flex items-center justify-center font-mono tracking-wide uppercase transition"
+          >
+            See full pricing →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 · Close — founder note + reserved beta slots + final CTA -->
+    <section
+      class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-20 md:py-28"
+    >
+      <div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
+        <div class="flex flex-col gap-5">
+          <p class="font-telemetry text-pit-orange">From the team</p>
+          <h2 class="font-monument text-h3 text-chalk text-balance">
+            We built LAP because timing screens never told us how to get faster.
+          </h2>
+          <p class="font-body text-body text-steel prose-max">
+            LAP is pre-launch and built by drivers who were tired of guessing. We are opening
+            memberships for June 8 and welcoming the first cohort of beta drivers in July — their
+            words will go here, unedited, once they have run it.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          {
+            [1, 2, 3].map(() => (
+              <figure class="rounded-2 border-steel/25 bg-concrete/60 flex flex-col gap-3 border border-dashed p-6">
+                <figcaption class="font-telemetry text-steel">BETA SLOT · July 2026</figcaption>
+                <p class="font-body text-caption text-steel/70">
+                  Reserved for a founding beta driver. Real words, real results — no fabricated
+                  quotes.
+                </p>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="border-steel/10 mt-14 flex flex-col items-start gap-4 border-t pt-10">
+        <h2 class="font-monument text-h2 text-chalk text-balance">
+          Turn your next session into a plan.
+        </h2>
+        <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">{MEMBERSHIP.ctaText}</CtaButton>
+        <p class="font-body text-caption text-steel">
+          30-day free trial · no card until it ends · {MEMBERSHIP.currencyNote}.
+        </p>
+      </div>
+    </section>
   </main>
 </BaseLayout>
-
-<script>
-  import '../scripts/sector-progress';
-  import '../scripts/home-pins';
-</script>

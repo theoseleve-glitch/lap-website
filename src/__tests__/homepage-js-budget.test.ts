@@ -3,9 +3,14 @@ import { resolve } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { expect, test } from 'vitest';
 
-// Homepage JS budget contract, per T037 / CLAUDE.md "Total JS per
-// page <150KB gzip" (this locks the tighter homepage-specific 100KB
-// target from the sprint task).
+// Homepage JS budget contract, per CLAUDE.md "Total JS per page <150KB
+// gzip". After the June-8 rebuild the homepage is static-only: the GSAP
+// scroll-pins, the StartGrid hero-motion chunk, sector-progress/tick-up/
+// magnetic-cursor and the whole rooms layer are gone. The only script
+// the browser fetches on first load is the global BaseLayout analytics
+// bundle (Sentry + PostHog cookieless + marketing-events). So the real
+// budget headroom is enormous — the assertion below mainly guards
+// against a regression that reintroduces a heavy per-page bundle.
 //
 // The test parses dist/index.html for the <script src=...> refs the
 // browser will actually fetch on first load, gzips each file (zlib
@@ -16,7 +21,7 @@ import { expect, test } from 'vitest';
 
 const DIST_DIR = resolve(process.cwd(), 'dist');
 const INDEX_HTML = resolve(DIST_DIR, 'index.html');
-const JS_BUDGET_BYTES = 100_000; // T037 sprint target, gzip level 9
+const JS_BUDGET_BYTES = 150_000; // CLAUDE.md per-page budget, gzip level 9
 
 function homepageJsFiles(): string[] {
   if (!existsSync(INDEX_HTML)) {
@@ -36,7 +41,7 @@ function gzipBytes(distRelPath: string): number {
   return gzipSync(raw, { level: 9 }).length;
 }
 
-test('T037: homepage ships <100 kB of gzipped JS on first load', () => {
+test('homepage ships <150 kB of gzipped JS on first load', () => {
   const scripts = homepageJsFiles();
   expect(scripts.length).toBeGreaterThan(0);
 
@@ -52,14 +57,23 @@ test('T037: homepage ships <100 kB of gzipped JS on first load', () => {
   expect(total, message).toBeLessThan(JS_BUDGET_BYTES);
 });
 
-test('T037: homepage bundles at least the StartGrid + BaseLayout chunks', () => {
-  // Sanity check on the parser: the index.html should reference the
-  // StartGrid animation script (Phase 3 / T01 — same hero-motion JS that
-  // T027's Hero used to import) and the BaseLayout script (which holds
-  // the PostHog / Sentry client bridge). If either disappears from the
-  // script refs, something upstream has changed the rendering posture
-  // and the budget measurement would be silently incomplete.
+test('homepage ships only the global BaseLayout analytics bundle (no per-page JS)', () => {
+  // Sanity check on the parser AND on the rendering posture. The June-8
+  // homepage is static — the only first-load script ref must be the
+  // global BaseLayout bundle (PostHog / Sentry / marketing-events). If
+  // that disappears, the budget measurement above is silently empty; if
+  // a per-page chunk reappears, the page is no longer JS-free.
   const scripts = homepageJsFiles();
-  expect(scripts.some((s) => /StartGrid\.astro/.test(s))).toBe(true);
+
+  // The global analytics bundle is present (so the budget isn't measuring nothing).
   expect(scripts.some((s) => /BaseLayout\.astro/.test(s))).toBe(true);
+
+  // No per-page homepage JS: the retired rooms / motion scripts must not
+  // reappear in the first-load script refs.
+  const removedChunks =
+    /(StartGrid|SessionProof|ThePain|Versus|Pipeline|Garage|Podium|FiveRedLights|SectorRibbon|home-pins|gsap-loader|sector-progress|tick-up|magnetic-cursor|hero-motion)/;
+  expect(scripts.some((s) => removedChunks.test(s))).toBe(false);
+
+  // The homepage now ships a single first-load script: the BaseLayout bundle.
+  expect(scripts.length).toBe(1);
 });

@@ -1,16 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// T065 — refund policy. Doctrine-aligned: the 14-day full-feature
-// free trial (01-STRATEGIC-DOCTRINE.md §8) is the practical refund
-// policy for most users; this page covers what happens after the
-// trial + statutory EU rights + the grandfathered-rate durability
-// (§10 bullet 5). No overclaim ("always refund") and no user-hostile
-// absolutes ("no refunds ever") — a reachable contact closes the gap.
+// T065 — refund policy. Doctrine-aligned: the 30-day full-feature
+// free trial is the practical refund policy for most users; this page
+// covers what happens after the trial + statutory EU rights. No
+// overclaim ("always refund") and no user-hostile absolutes ("no
+// refunds ever") — a reachable contact closes the gap.
 
 const TITLE = 'Refund policy — LAP';
 const DESCRIPTION =
-  'The 14-day free trial handles most refund cases. After the trial, cancel anytime from the dashboard; incorrect charges get investigated by email.';
+  'The 30-day free trial handles most refund cases. After the trial, cancel anytime from the dashboard; incorrect charges get investigated by email.';
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
@@ -21,7 +20,7 @@ const DESCRIPTION =
         Refund policy.
       </h1>
       <p class="text-steel text-body mt-6">
-        The 14-day full-feature free trial is how we handle refunds by default. If you decide LAP
+        The 30-day full-feature free trial is how we handle refunds by default. If you decide LAP
         isn&rsquo;t for you, cancel during the trial and nothing is charged. This page covers what
         happens after.
       </p>
@@ -36,8 +35,9 @@ const DESCRIPTION =
           Trial
         </h2>
         <p class="mt-4">
-          The 14-day trial needs only your email. No credit card is stored, no subscription starts.
-          If you cancel during the trial, nothing is charged and you owe nothing.
+          The 30-day trial needs only your email. No card is charged until the trial ends, and no
+          subscription starts before then. If you cancel during the trial, nothing is charged and
+          you owe nothing.
         </p>
       </section>
 
@@ -49,9 +49,9 @@ const DESCRIPTION =
           Cancellation
         </h2>
         <p class="mt-4">
-          Cancel a paid plan anytime from the dashboard. The plan runs until the end of the current
-          billing period — monthly plans run to the end of the month, yearly plans run to the end of
-          the paid year. Your data remains exportable for 30 days after the plan ends.
+          Cancel anytime from the dashboard. The membership is billed monthly and runs until the end
+          of the current billing month. Your data remains exportable for 30 days after the
+          membership ends.
         </p>
       </section>
 
@@ -63,9 +63,9 @@ const DESCRIPTION =
           Refunds on paid periods
         </h2>
         <p class="mt-4">
-          Paid months and years that have started are not automatically refunded. If you were
-          incorrectly charged — double-billing, a plan you did not authorise, a technical failure
-          preventing you from using the product — email
+          Paid months that have started are not automatically refunded. If you were incorrectly
+          charged — double-billing, a plan you did not authorise, a technical failure preventing you
+          from using the product — email
           <a
             href="mailto:support@lap-coach.racing"
             class="text-chalk hover:text-acid-green underline underline-offset-4 transition"
@@ -85,8 +85,9 @@ const DESCRIPTION =
         </h2>
         <p class="mt-4">
           EU consumers retain their statutory 14-day right of withdrawal for distance-sold digital
-          services. The trial period satisfies this right by default. To invoke withdrawal after a
-          paid charge, email
+          services. The 30-day free trial satisfies this right by default — no card is charged until
+          the trial ends, so the statutory withdrawal window passes before any payment is taken. To
+          invoke withdrawal after a paid charge, email
           <a
             href="mailto:support@lap-coach.racing"
             class="text-chalk hover:text-acid-green underline underline-offset-4 transition"
@@ -94,19 +95,6 @@ const DESCRIPTION =
             support@lap-coach.racing
           </a>
           within 14 days of the first paid charge.
-        </p>
-      </section>
-
-      <section aria-labelledby="refund-grandfathered-heading">
-        <h2
-          id="refund-grandfathered-heading"
-          class="font-display text-h3 text-chalk tracking-display text-balance"
-        >
-          Grandfathered waitlist
-        </h2>
-        <p class="mt-4">
-          Waitlist members on the grandfathered €12 / month rate keep those terms for 12 months from
-          the first paid month, regardless of any policy or pricing change.
         </p>
       </section>
     </div>

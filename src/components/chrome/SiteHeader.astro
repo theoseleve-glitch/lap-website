@@ -1,32 +1,21 @@
 ---
 import LapWordmark from './LapWordmark.astro';
 import SectorTabs from './SectorTabs.astro';
-import SectorRibbon from './SectorRibbon.astro';
 
 interface Props {
   currentPath?: string;
 }
 
 const { currentPath = Astro.url.pathname } = Astro.props;
-const PRIMARY_CTA = {
-  text: 'Start trial',
-  href: '/register',
-};
-// Sign-in pair retrieved from the V2 marketing header
-// (lap_web/lap-website/src/components/site/SiteHeader.tsx). The V2 site
-// shipped both a quiet "Sign in" text link AND the gold signup CTA; the
-// Phase 4 Astro port initially dropped the Sign in and only kept the CTA.
+
+// One membership, one entry point. The trial starts in the webapp signup flow.
+const PRIMARY_CTA = { text: 'Start free trial', href: '/register' };
 const LOGIN_HREF = '/login';
-
-const isHome = currentPath === '/';
 ---
-
-{isHome && <SectorRibbon />}
 
 <header
   role="banner"
-  class="sticky z-nav border-b border-pit-orange/20 bg-asphalt/85 px-grid-margin py-3 backdrop-blur-md before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-pit-orange/50 before:to-transparent"
-  style={isHome ? 'top: 28px;' : 'top: 0;'}
+  class="z-nav border-pit-orange/20 bg-asphalt/85 px-grid-margin before:via-pit-orange/50 sticky top-0 border-b py-3 backdrop-blur-md before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:to-transparent"
 >
   <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
     <LapWordmark />
@@ -39,7 +28,7 @@ const isHome = currentPath === '/';
       <a
         href={LOGIN_HREF}
         data-header-login
-        class="text-steel hover:text-chalk focus-visible:outline-pit-orange font-mono hidden items-center justify-center px-3 py-2 text-caption font-medium tracking-wide uppercase transition md:inline-flex"
+        class="text-steel hover:text-chalk focus-visible:outline-pit-orange text-caption hidden items-center justify-center px-3 py-2 font-mono font-medium tracking-wide uppercase transition md:inline-flex"
       >
         Sign in
       </a>
@@ -47,7 +36,7 @@ const isHome = currentPath === '/';
         href={PRIMARY_CTA.href}
         rel="noopener"
         data-header-cta
-        class="bg-pit-orange-deep text-asphalt hover:bg-pit-orange-deep/90 focus-visible:outline-pit-orange font-mono inline-flex items-center justify-center px-4 py-2 text-caption font-medium tracking-wide uppercase transition"
+        class="cta-nowrap bg-pit-orange-deep text-asphalt hover:bg-pit-orange-deep/90 focus-visible:outline-pit-orange text-caption inline-flex items-center justify-center px-4 py-2 font-mono font-medium tracking-wide uppercase transition"
       >
         {PRIMARY_CTA.text}
       </a>

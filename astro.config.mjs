@@ -5,6 +5,19 @@ import robotsTxt from 'astro-robots-txt';
 
 export default defineConfig({
   site: 'https://lap-coach.racing',
+  // June-8 rebuild: consolidated IA. Removed pages 301 to the nearest surface
+  // so inbound links keep working. (No B2B, no future-dated landings, one /product.)
+  redirects: {
+    '/for-schools': '/pricing',
+    '/launch': '/',
+    '/v1': '/',
+    '/product/desktop': '/product',
+    '/product/mobile': '/product',
+    '/product/ios': '/product',
+    '/product/bridge': '/product',
+    '/product/coaching': '/product',
+    '/product/driver-profile': '/product',
+  },
   integrations: [sitemap(), robotsTxt()],
   experimental: {
     fonts: [

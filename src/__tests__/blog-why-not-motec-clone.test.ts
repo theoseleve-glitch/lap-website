@@ -146,10 +146,9 @@ describe('T181: Why I am Building LAP (Not Another MoTeC Clone) — blog post dr
     // overclaim. Same asymmetry as Pillar 4 §5 (LAP-automation
     // section).
     const post = loadPost().toLowerCase();
-    expect(
-      post,
-      'post must spell out the language-model negation explicitly',
-    ).toMatch(/\blanguage[-\s]model/);
+    expect(post, 'post must spell out the language-model negation explicitly').toMatch(
+      /\blanguage[-\s]model/,
+    );
   });
 
   test('post links to /blog/best-sim-racing-telemetry-app (Pillar 3 mandatory)', () => {
@@ -157,7 +156,7 @@ describe('T181: Why I am Building LAP (Not Another MoTeC Clone) — blog post dr
     // comparison article is where the comparison universe
     // lives. Lock the link.
     const post = loadPost();
-    expect(post).toMatch(/\]\(\/blog\/best\-sim\-racing\-telemetry\-app\)/);
+    expect(post).toMatch(/\]\(\/blog\/best-sim-racing-telemetry-app\)/);
   });
 
   test('post links to ≥1 OTHER sibling pillar (cluster reach beyond Pillar 3)', () => {

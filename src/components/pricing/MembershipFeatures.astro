@@ -1,0 +1,21 @@
+---
+import { MEMBERSHIP_FEATURES } from '../../data/membership';
+---
+
+<div class="grid gap-6 sm:grid-cols-3">
+  {
+    MEMBERSHIP_FEATURES.map((group) => (
+      <div class="rounded-2 border border-steel/15 bg-concrete/40 p-5">
+        <h3 class="font-telemetry text-pit-orange mb-3">{group.heading}</h3>
+        <ul class="space-y-2">
+          {group.items.map((item) => (
+            <li class="font-body text-caption text-chalk flex gap-2">
+              <span class="text-acid-green" aria-hidden="true">✓</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>

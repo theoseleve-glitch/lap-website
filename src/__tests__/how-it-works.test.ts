@@ -1,174 +1,172 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { expect, test } from 'vitest';
 import HowItWorks from '../pages/how-it-works.astro';
+import { MEMBERSHIP } from '../data/membership';
 
 const render = () => AstroContainer.create().then((c) => c.renderToString(HowItWorks));
 
-test('T042: /how-it-works renders a single <main> landmark', async () => {
+test('/how-it-works renders a single <main> landmark', async () => {
   // Every Astro page is wrapped by BaseLayout; the shell's own job
   // is to provide the <main> landmark (screen-reader skip target and
   // axe root container). Failing to emit exactly one <main> would
-  // surface as an a11y regression when T055's e2e axe runs.
+  // surface as an a11y regression.
   const html = await render();
   const mainMatches = html.match(/<main[\s>]/g) ?? [];
   expect(mainMatches.length).toBe(1);
 });
 
-test('T043: /how-it-works renders the locked hero H1 verbatim', async () => {
-  // T043 sprint task specifies this exact H1 string: "The whole
-  // driver improvement loop, in one place." The H1 is the page-level
-  // equivalent of the homepage's T023 headline — any copy drift
-  // here fractures the category framing ("loop") that T045-T048
-  // build on.
+test('/how-it-works renders the hero H1 verbatim', async () => {
+  // June-8 rebuild H1: "Capture, analyze, plan, improve — one loop."
+  // The H1 is the page-level equivalent of the homepage headline —
+  // any copy drift here fractures the category framing ("loop") that
+  // the four step-sections build on.
   const html = await render();
   expect(html).toMatch(
-    /<h1[^>]*>[\s\S]*The whole driver improvement loop, in one place[\s\S]*<\/h1>/,
+    /<h1[^>]*>[\s\S]*Capture, analyze, plan, improve\s*—\s*one loop\.[\s\S]*<\/h1>/,
   );
 });
 
-test('T043: hero subhead names the four-step loop (capture, brain, plan, improve)', async () => {
-  // The subhead previews the sprint-mapped sections T045 (Capture)
-  // → T046 (Brain) → T047 (Plan) → T048 (Improve). Locking the
-  // four step-words at the HTML surface means any future copy
-  // edit that silently drops one of them fails CI — the four-step
-  // loop IS the page's narrative scaffold.
+test('hero copy names the four-step loop (capture, analyze, plan, improve)', async () => {
+  // The hero + steps preview the four-step loop. Locking the four
+  // step-words at the HTML surface means any future copy edit that
+  // silently drops one of them fails CI — the four-step loop IS the
+  // page's narrative scaffold.
   const html = await render();
   const lower = html.toLowerCase();
   expect(lower).toMatch(/\bcapture\b/);
-  expect(lower).toMatch(/\bbrain\b/);
+  expect(lower).toMatch(/\banalyze\b/);
   expect(lower).toMatch(/\bplan\b/);
   expect(lower).toMatch(/\bimprove\b/);
 });
 
-test('T042: /how-it-works copy stays doctrine-aligned — no AI-coach / LLM / generative', async () => {
+test('/how-it-works copy stays doctrine-aligned — no AI-coach / LLM / generative', async () => {
   const html = await render();
   expect(html.toLowerCase()).not.toMatch(/\bai coach\b/);
   expect(html.toLowerCase()).not.toMatch(/\bllm\b/);
   expect(html.toLowerCase()).not.toMatch(/\bgenerative\b/);
 });
 
-test('T042: /how-it-works title includes "LAP" branding (BaseLayout integration)', async () => {
-  // Ensures BaseLayout is the chosen wrapper — the page-title format
-  // "<Page> — LAP" mirrors the homepage ("LAP — Every lap, one step
-  // better.") so the site's SERP appearance stays consistent.
+test('/how-it-works title includes "LAP" branding (BaseLayout integration)', async () => {
+  // Ensures BaseLayout is the chosen wrapper and the page title carries
+  // the brand so the site's SERP appearance stays consistent.
   const html = await render();
   expect(html).toMatch(/<title>[^<]*LAP[^<]*<\/title>/);
 });
 
-test('T054: <title> carries the "sim racing coaching platform" target keyword', async () => {
-  // Sprint T054 targets the long-tail keyword "sim racing coaching
-  // platform how it works" for this page. Putting the core noun
-  // phrase in the <title> gives the single strongest ranking
-  // signal. The phrasing stays natural — the loop rules forbid
-  // keyword soup ("human-quality professional prose, not SEO
-  // keyword soup").
+test('<title> carries the "sim racing coaching" target keyword', async () => {
+  // The page targets the long-tail "sim racing coaching loop / how it
+  // works" query. Putting the core noun phrase in the <title> gives the
+  // single strongest ranking signal. The phrasing stays natural — no
+  // SEO keyword soup.
   const html = await render();
   const titleMatch = html.match(/<title>([^<]+)<\/title>/);
   expect(titleMatch).not.toBeNull();
-  expect(titleMatch![1].toLowerCase()).toContain('sim racing coaching platform');
+  expect(titleMatch![1].toLowerCase()).toContain('sim racing coaching');
 });
 
-test('T054: meta description carries the target keyword and stays readable', async () => {
-  // The description shows on SERP below the title. Leading with
-  // the target keyword rewards the query match and tells the
-  // reader within the first few words that they are in the right
-  // place. No comma-delimited keyword list — the description
-  // must read as a sentence.
+test('meta description leads with the four-step framing and stays readable', async () => {
+  // The description shows on SERP below the title. It paraphrases the
+  // four-step loop the page lays out, telling the reader within the
+  // first few words they are in the right place. No comma-delimited
+  // keyword list — the description must read as a sentence.
   const html = await render();
   const descMatch = html.match(/<meta\s+name="description"\s+content="([^"]+)"/);
   expect(descMatch).not.toBeNull();
-  expect(descMatch![1].toLowerCase()).toContain('sim racing coaching platform');
+  const desc = descMatch![1].toLowerCase();
+  expect(desc).toContain('how lap works');
+  // Each of the four loop steps is named in the description sentence.
+  expect(desc).toContain('capture');
+  expect(desc).toContain('analyze');
+  expect(desc).toContain('plan');
+  expect(desc).toContain('improve');
 });
 
-test('T044: the annotated SVG diagram is mounted on the page', async () => {
-  // Integration check: the HowItWorksDiagram component (SVG + text
-  // alt) ships below the hero. T044 moves the four-step framing
-  // from abstract words (hero subhead) to a visual representation —
-  // this test catches accidental unmounting.
+test('the annotated SVG diagram is mounted on the page', async () => {
+  // Integration check: the HowItWorksDiagram component (SVG + text alt)
+  // ships on the page. The diagram moves the four-step framing from
+  // abstract words to a visual representation — this test catches
+  // accidental unmounting.
   const html = await render();
   expect(html).toMatch(/<figure[^>]+role="img"/);
   expect(html).toMatch(/<svg[^>]+viewBox=/);
+  // The figcaption carries the text alternative for the loop.
+  expect(html).toContain('The four-step loop');
 });
 
-test('T045: the "Capture" section is mounted after the diagram', async () => {
-  // Integration check: the first of four loop-step sections
-  // (T045-T048) renders below the diagram. Ordering locked so the
-  // page flow stays hero → diagram → capture → ... matching the
-  // reader's mental model established by the diagram's clockwise
-  // arrows.
+test('the four loop steps render in order (capture → analyze → plan → improve)', async () => {
+  // Integration check: the four loop-step sections render as an ordered
+  // list with the step names in clockwise order, matching the reader's
+  // mental model established by the diagram's arrows. Ordering locked so
+  // the coaching loop only makes sense in sequence.
   const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*Capture every session, sim or real[\s\S]*<\/h2>/);
-  const diagramIdx = html.indexOf('The four-step loop');
-  const captureIdx = html.indexOf('Capture every session, sim or real');
-  expect(diagramIdx).toBeGreaterThan(-1);
-  expect(captureIdx).toBeGreaterThan(diagramIdx);
-});
+  expect(html).toMatch(/<h3[^>]*>[\s\S]*Capture a session[\s\S]*<\/h3>/);
+  expect(html).toMatch(/<h3[^>]*>[\s\S]*Analyze with the pipeline[\s\S]*<\/h3>/);
+  expect(html).toMatch(/<h3[^>]*>[\s\S]*Get your plan[\s\S]*<\/h3>/);
+  expect(html).toMatch(/<h3[^>]*>[\s\S]*Improve next time[\s\S]*<\/h3>/);
 
-test('T046: the "Brain" section lands after Capture (step 02 follows 01)', async () => {
-  // Integration check: the Brain section (step 02) follows Capture
-  // (step 01), mirroring the clockwise arrow in the T044 diagram.
-  // Ordering matters — the coaching loop only makes sense in
-  // sequence.
-  const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*The brain lives on the server[\s\S]*<\/h2>/);
-  const captureIdx = html.indexOf('Capture every session, sim or real');
-  const brainIdx = html.indexOf('The brain lives on the server');
+  const captureIdx = html.indexOf('Capture a session');
+  const analyzeIdx = html.indexOf('Analyze with the pipeline');
+  const planIdx = html.indexOf('Get your plan');
+  const improveIdx = html.indexOf('Improve next time');
+
   expect(captureIdx).toBeGreaterThan(-1);
-  expect(brainIdx).toBeGreaterThan(captureIdx);
-});
-
-test('T047: the "Plan" section lands after Brain (step 03 follows 02)', async () => {
-  // Integration check: the next-session plan section follows the
-  // Brain section. Reader arc: brain analyses → plan emits.
-  const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*A plan sized to the next session[\s\S]*<\/h2>/);
-  const brainIdx = html.indexOf('The brain lives on the server');
-  const planIdx = html.indexOf('A plan sized to the next session');
-  expect(brainIdx).toBeGreaterThan(-1);
-  expect(planIdx).toBeGreaterThan(brainIdx);
-});
-
-test('T048: the "Improve" section lands after Plan — four-step loop complete', async () => {
-  // Integration check: Improve (step 04) is the last of the four
-  // loop-step sections. With this in place the page walks the reader
-  // through all four steps T043's hero subhead names, in the same
-  // clockwise order as the T044 diagram.
-  const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*Every target either hits or misses[\s\S]*<\/h2>/);
-  const planIdx = html.indexOf('A plan sized to the next session');
-  const improveIdx = html.indexOf('Every target either hits or misses');
-  expect(planIdx).toBeGreaterThan(-1);
+  expect(analyzeIdx).toBeGreaterThan(captureIdx);
+  expect(planIdx).toBeGreaterThan(analyzeIdx);
   expect(improveIdx).toBeGreaterThan(planIdx);
 });
 
-test('T049: the "honesty" section (today vs Year 2) lands after Improve', async () => {
-  // Integration check: honesty disclosure lands after the four-step
+test('the "honesty" section (launch vs roadmap) lands after the loop steps', async () => {
+  // Integration check: the honesty disclosure lands after the four-step
   // loop, so a reader who has just consumed the full capability arc
-  // (T045-T048) arrives at "here is what actually ships today vs
-  // what is roadmap." Placing honesty before the loop sections
-  // would read as apologetic; after them, it reads as grounded.
+  // arrives at "here is what ships at launch vs what is still roadmap."
+  // Placing honesty before the loop sections would read as apologetic;
+  // after them, it reads as grounded.
   const html = await render();
-  expect(html).toMatch(/<h2[^>]*>[\s\S]*What ships today, and what is still roadmap[\s\S]*<\/h2>/);
-  const improveIdx = html.indexOf('Every target either hits or misses');
-  const honestyIdx = html.indexOf('What ships today, and what is still roadmap');
+  expect(html).toMatch(/<h2[^>]*>[\s\S]*What ships at launch[\s\S]*<\/h2>/);
+  const improveIdx = html.indexOf('Improve next time');
+  const honestyIdx = html.indexOf('What ships at launch');
   expect(improveIdx).toBeGreaterThan(-1);
   expect(honestyIdx).toBeGreaterThan(improveIdx);
 });
 
-test('T052: /how-it-works closes with the shared trial CTA (href + rel locked)', async () => {
-  // Integration check: the page ends with the same T025/T034 trial
-  // contract. Reusing the FinalCta component (rather than a new
-  // /how-it-works-specific CTA) keeps the href + rel=noopener
-  // wiring in exactly one component — any future CTA-contract edit
-  // propagates site-wide instead of drifting between pages.
+test('the honesty section states the June-8 one-membership / full-access framing', async () => {
+  // The honesty section must reflect the June-8 reality: ONE membership
+  // with full access at launch — no free tier, no per-tier gating.
   const html = await render();
+  const honestyIdx = html.indexOf('What ships at launch');
+  const after = html.slice(honestyIdx);
+  expect(after.toLowerCase()).toContain('one membership');
+  expect(after.toLowerCase()).toContain('full access');
+});
+
+test('/how-it-works closes with the shared 30-day trial CTA (href + rel locked)', async () => {
+  // Integration check: the page ends with the same trial contract used
+  // site-wide. Reusing the CtaButton component keeps the href +
+  // rel=noopener wiring in exactly one place — any future CTA-contract
+  // edit propagates site-wide instead of drifting between pages.
+  const html = await render();
+  expect(MEMBERSHIP.ctaText).toBe('Start 30-day free trial');
+  expect(MEMBERSHIP.ctaHref).toBe('/register');
   expect(html).toMatch(
-    /<a[^>]+href="\/register"[^>]+rel="noopener"[^>]*>[\s\S]*Start 14-day trial[\s\S]*<\/a>/,
+    /<a[^>]+href="\/register"[^>]+rel="noopener"[^>]*>[\s\S]*Start 30-day free trial[\s\S]*<\/a>/,
   );
-  // Ordering: CTA appears after the honesty section so the reader
-  // closes with "here's what today gives you" → "start the trial".
-  const honestyIdx = html.indexOf('What ships today, and what is still roadmap');
-  const ctaIdx = html.indexOf('Start 14-day trial');
+  // Ordering: CTA appears after the honesty section so the reader closes
+  // with "here's what launch gives you" → "start the trial".
+  const honestyIdx = html.indexOf('What ships at launch');
+  const ctaIdx = html.indexOf('Start 30-day free trial');
   expect(honestyIdx).toBeGreaterThan(-1);
   expect(ctaIdx).toBeGreaterThan(honestyIdx);
+});
+
+test('the closing CTA states the correct June-8 pricing figures', async () => {
+  // Pricing figures must be present and correct: €19.90 standard,
+  // €14.90 founding (first 50), 30-day trial — sourced from the
+  // single-source-of-truth MEMBERSHIP record.
+  const html = await render();
+  expect(MEMBERSHIP.standardMonthly).toBe('€19.90');
+  expect(MEMBERSHIP.foundingMonthly).toBe('€14.90');
+  expect(html).toContain('€19.90');
+  expect(html).toContain('€14.90');
+  expect(html).toContain('30-day free');
+  expect(html).toContain(String(MEMBERSHIP.foundingLimit));
 });

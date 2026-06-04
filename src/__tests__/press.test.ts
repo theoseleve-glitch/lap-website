@@ -30,18 +30,12 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import Press from '../pages/press.astro';
 
-const render = () =>
-  AstroContainer.create().then((c) => c.renderToString(Press));
+const render = () => AstroContainer.create().then((c) => c.renderToString(Press));
 
 const SOURCE_PATH = join(process.cwd(), 'src', 'pages', 'press.astro');
 const loadSource = (): string => readFileSync(SOURCE_PATH, 'utf8');
 
-const LOGO_SVG_PATH = join(
-  process.cwd(),
-  'public',
-  'press',
-  'lap-wordmark.svg',
-);
+const LOGO_SVG_PATH = join(process.cwd(), 'public', 'press', 'lap-wordmark.svg');
 
 describe('T207: /press shell renders', () => {
   test('renders a single <main> landmark', async () => {
@@ -80,9 +74,7 @@ describe('T207: BaseLayout integration', () => {
 
   test('meta description names press/journalist/media audience', async () => {
     const html = await render();
-    const descMatch = html.match(
-      /<meta\s+name="description"\s+content="([^"]+)"/,
-    );
+    const descMatch = html.match(/<meta\s+name="description"\s+content="([^"]+)"/);
     expect(descMatch).not.toBeNull();
     expect(descMatch![1].toLowerCase()).toMatch(/press|journalist|media/);
   });
@@ -91,9 +83,7 @@ describe('T207: BaseLayout integration', () => {
 describe('T207: facts section', () => {
   test('facts section is labelled landmark with paired H2', async () => {
     const html = await render();
-    const sectionMatch = html.match(
-      /<section[^>]+aria-labelledby="(press-facts[^"]+)"/,
-    );
+    const sectionMatch = html.match(/<section[^>]+aria-labelledby="(press-facts[^"]+)"/);
     expect(sectionMatch).not.toBeNull();
     const labelId = sectionMatch![1];
     expect(html).toMatch(new RegExp(`<h2[^>]+id="${labelId}"`));
@@ -104,9 +94,7 @@ describe('T207: facts section', () => {
     // beta, M3 public beta. Today is Month 1 (2026-04-26).
     // Honest stage description = "pre-launch".
     const html = await render();
-    expect(html.toLowerCase()).toMatch(
-      /\bpre[- ]launch\b|\bpublic beta\b|\bprivate beta\b/,
-    );
+    expect(html.toLowerCase()).toMatch(/\bpre[- ]launch\b|\bpublic beta\b|\bprivate beta\b/);
   });
 
   test('facts mention public-beta date 2026-07-23', async () => {
@@ -118,20 +106,29 @@ describe('T207: facts section', () => {
     expect(html).toMatch(/2026-07-23|July 23,?\s*2026|23 July 2026/);
   });
 
-  test('facts mention €15 consumer pricing tier', async () => {
-    // Doctrine §8 single tier. Press needs the price as a
-    // fact even when the page is doctrine-anchor-only.
+  test('facts mention the single-membership pricing', async () => {
+    // Doctrine §8 single membership. Press needs the price as
+    // a fact: €19.90/mo standard, €14.90/mo for the first 50
+    // founding members, 30-day free trial, monthly only, no
+    // free tier, no B2B.
     const html = await render();
-    expect(html).toMatch(/€15/);
+    expect(html).toMatch(/€19[.,]90/);
+    expect(html).toMatch(/€14[.,]90/);
+    expect(html.toLowerCase()).toMatch(/first 50 founding members/);
+    expect(html.toLowerCase()).toMatch(/30-day free trial/);
+    expect(html.toLowerCase()).toMatch(/monthly only/);
+    expect(html.toLowerCase()).toMatch(/no free tier/);
+    expect(html.toLowerCase()).toMatch(/no b2b/);
+    // No legacy figures from the retired tiered model.
+    expect(html).not.toMatch(/€15\b/);
+    expect(html).not.toMatch(/€150\b/);
   });
 });
 
 describe('T207: founder section', () => {
   test('founder section is labelled landmark with paired H2', async () => {
     const html = await render();
-    const sectionMatch = html.match(
-      /<section[^>]+aria-labelledby="(press-founder[^"]+)"/,
-    );
+    const sectionMatch = html.match(/<section[^>]+aria-labelledby="(press-founder[^"]+)"/);
     expect(sectionMatch).not.toBeNull();
     const labelId = sectionMatch![1];
     expect(html).toMatch(new RegExp(`<h2[^>]+id="${labelId}"`));
@@ -163,9 +160,7 @@ describe('T207: founder section', () => {
 describe('T207: logos section + downloadable asset', () => {
   test('logos section is labelled landmark with paired H2', async () => {
     const html = await render();
-    const sectionMatch = html.match(
-      /<section[^>]+aria-labelledby="(press-logos[^"]+)"/,
-    );
+    const sectionMatch = html.match(/<section[^>]+aria-labelledby="(press-logos[^"]+)"/);
     expect(sectionMatch).not.toBeNull();
     const labelId = sectionMatch![1];
     expect(html).toMatch(new RegExp(`<h2[^>]+id="${labelId}"`));
@@ -208,9 +203,7 @@ describe('T207: logos section + downloadable asset', () => {
 describe('T207: screenshots section (honest deferral)', () => {
   test('screenshots section is labelled landmark with paired H2', async () => {
     const html = await render();
-    const sectionMatch = html.match(
-      /<section[^>]+aria-labelledby="(press-screenshots[^"]+)"/,
-    );
+    const sectionMatch = html.match(/<section[^>]+aria-labelledby="(press-screenshots[^"]+)"/);
     expect(sectionMatch).not.toBeNull();
     const labelId = sectionMatch![1];
     expect(html).toMatch(new RegExp(`<h2[^>]+id="${labelId}"`));
@@ -244,9 +237,7 @@ describe('T207: press contact route', () => {
     // press@ alias is infrastructure work; the public site
     // ships the route with the existing inbox.
     const html = await render();
-    expect(html).toMatch(
-      /<a[^>]+href="mailto:sales@lap-coach\.racing[^"]*press[^"]*"/i,
-    );
+    expect(html).toMatch(/<a[^>]+href="mailto:sales@lap-coach\.racing[^"]*press[^"]*"/i);
   });
 });
 
@@ -276,8 +267,7 @@ describe('T207: carry-over locks', () => {
 
   test('source has no Astro client:* directives', () => {
     const src = loadSource();
-    const matches =
-      src.match(/\sclient:(load|idle|visible|only|media)\b/g) ?? [];
+    const matches = src.match(/\sclient:(load|idle|visible|only|media)\b/g) ?? [];
     expect(matches.length).toBe(0);
   });
 

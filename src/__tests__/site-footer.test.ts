@@ -2,24 +2,27 @@ import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, test } from 'vitest';
 import SiteFooter from '../components/chrome/SiteFooter.astro';
 
-const render = () =>
-  AstroContainer.create().then((c) => c.renderToString(SiteFooter, {}));
+const render = () => AstroContainer.create().then((c) => c.renderToString(SiteFooter, {}));
 
 describe('SiteFooter', () => {
   test('uses <footer role="contentinfo">', async () => {
     const html = await render();
     expect(html).toMatch(/<footer[^>]+role="contentinfo"/);
   });
-  test('Product column: links to /pricing, /how-it-works, /demo, /v1', async () => {
+  test('Product column: links to /product, /how-it-works, /pricing, /demo', async () => {
     const html = await render();
-    expect(html).toMatch(/href="\/pricing"/);
+    expect(html).toMatch(/href="\/product"/);
     expect(html).toMatch(/href="\/how-it-works"/);
+    expect(html).toMatch(/href="\/pricing"/);
     expect(html).toMatch(/href="\/demo"/);
-    expect(html).toMatch(/href="\/v1"/);
   });
-  test('Company column: /for-schools, /press, /blog', async () => {
+  test('does not link to removed pages (/v1, /for-schools)', async () => {
     const html = await render();
-    expect(html).toMatch(/href="\/for-schools"/);
+    expect(html).not.toMatch(/href="\/v1"/);
+    expect(html).not.toMatch(/href="\/for-schools"/);
+  });
+  test('Company column: /press, /blog', async () => {
+    const html = await render();
     expect(html).toMatch(/href="\/press"/);
     expect(html).toMatch(/href="\/blog"/);
   });

@@ -1,73 +1,145 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PricingTierCard from '../components/PricingTierCard.astro';
-import PricingIncluded from '../components/PricingIncluded.astro';
-import PricingFounderOffer from '../components/PricingFounderOffer.astro';
-import PricingFaq from '../components/PricingFaq.astro';
-import PricingB2bTeaser from '../components/PricingB2bTeaser.astro';
-import PricingValueAnchor from '../components/PricingValueAnchor.astro';
+import PricingCard from '../components/pricing/PricingCard.astro';
+import MembershipFeatures from '../components/pricing/MembershipFeatures.astro';
+import FoundingFifty from '../components/pricing/FoundingFifty.astro';
+import FaqList from '../components/pricing/FaqList.astro';
+import { MEMBERSHIP, MEMBERSHIP_FAQ } from '../data/membership';
 
-// T057 — shell for the /pricing page. The homepage T034 FinalCta
-// (and its /how-it-works mirror via T052) links to /pricing via
-// "See full pricing →"; shipping this shell means that link
-// resolves to a real page instead of 404ing. T058 lands the tier
-// card with €15/mo + €150/yr prices; T059 is the "what's included"
-// checklist; T060 is the founder-waitlist offer; T061 the FAQ;
-// T062 the B2B teaser; T063 wires the checkout CTA; T064 the
-// value-anchor comparison vs human coaches; T065-T070 cover the
-// refund link, contact sales, currency, perf, SEO, and e2e.
-
-// T069 — SEO meta tuned for the long-tail keyword "sim racing
-// coaching price". Title leads with the exact noun phrase so SERP
-// snippets carry the match near the click. Description pairs the
-// phrase with the concrete anchors (€15 / €150 / 14-day trial) so
-// a visitor who clicked on the price query arrives with the answer
-// already visible. Loop rule enforced: natural prose, not keyword
-// soup.
-const TITLE = 'Sim racing coaching price — LAP';
+const TITLE = 'Pricing — one LAP membership';
 const DESCRIPTION =
-  'One tier, clear price: €15 a month or €150 a year for sim racing coaching. 14-day full-feature trial, no card at signup. Cancel anytime.';
+  'One membership — €19.90/mo, €14.90/mo for the first 50 founding members, 30-day free trial.';
+
+// Numeric forms for structured data — schema.org prices are bare decimals,
+// no currency symbol. Derived from the canon so they can never drift.
+const standardPrice = MEMBERSHIP.standardMonthly.replace(/[^\d.]/g, '');
+const foundingPrice = MEMBERSHIP.foundingMonthly.replace(/[^\d.]/g, '');
+
+// Product / AggregateOffer JSON-LD. Two offers (founding + standard) →
+// lowPrice 14.90, highPrice 19.90, offerCount 2 — matches the webapp.
+// No yearly card, no B2B, no value-anchor, no free tier.
+const productJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: `${MEMBERSHIP.name} Membership`,
+  description:
+    'A single membership unlocking the full LAP driver-development product: unlimited session analysis, race strategy, coaching plans, live monitoring, reports and logger auto-sync. 30-day free trial, monthly only.',
+  brand: { '@type': 'Brand', name: 'LAP' },
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'EUR',
+    lowPrice: foundingPrice,
+    highPrice: standardPrice,
+    offerCount: 2,
+    offers: [
+      {
+        '@type': 'Offer',
+        name: `Founding ${MEMBERSHIP.foundingLimit}`,
+        price: foundingPrice,
+        priceCurrency: 'EUR',
+        description: `€${foundingPrice}/mo for the first ${MEMBERSHIP.foundingLimit} founding members, locked while the membership stays active.`,
+        url: new URL(MEMBERSHIP.ctaHref, Astro.site ?? 'https://lap-coach.racing/').toString(),
+      },
+      {
+        '@type': 'Offer',
+        name: 'Standard membership',
+        price: standardPrice,
+        priceCurrency: 'EUR',
+        description: `€${standardPrice}/mo standard membership with a ${MEMBERSHIP.trialDays}-day free trial.`,
+        url: new URL(MEMBERSHIP.ctaHref, Astro.site ?? 'https://lap-coach.racing/').toString(),
+      },
+    ],
+  },
+};
+
+// FAQPage JSON-LD mirrors the on-page FAQ so the answers are eligible for
+// rich results and stay in lockstep with the rendered <FaqList />.
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: MEMBERSHIP_FAQ.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
-  <main class="px-grid-margin mx-auto w-full max-w-6xl py-24 sm:py-32">
-    <header class="max-w-prose">
-      <p class="text-steel text-caption tracking-wide uppercase">Pricing</p>
-      <h1 class="font-display text-h1 text-chalk tracking-display mt-4 text-balance">
-        One tier. Clear price.
-      </h1>
-      <p class="text-steel text-body mt-6">
-        A single monthly or yearly plan with a 14-day free trial. Cancel anytime from the dashboard.
-      </p>
-    </header>
+  <main>
+    <!-- Hero -->
+    <section class="py-20 md:py-28">
+      <div class="px-grid-margin mx-auto max-w-6xl">
+        <div class="prose-max">
+          <p class="font-telemetry text-pit-orange">Pricing</p>
+          <h1 class="font-monument text-h1 text-chalk mt-4 text-balance">
+            One membership. One price.
+          </h1>
+          <p class="font-body text-body text-steel mt-6">
+            No tiers, no add-ons, no free tier to outgrow. Everything LAP does is in one membership
+            — {MEMBERSHIP.standardMonthly}/mo, or {MEMBERSHIP.foundingMonthly}/mo for the first {
+              MEMBERSHIP.foundingLimit
+            } founding members. Start with a
+            {MEMBERSHIP.trialDays}-day free trial; no card is charged until it ends.
+          </p>
+        </div>
 
-    <PricingTierCard />
-    <PricingIncluded />
-    <PricingFounderOffer />
-    <PricingFaq />
-    <PricingB2bTeaser />
-    <PricingValueAnchor />
+        <div class="mt-12">
+          <PricingCard />
+        </div>
+      </div>
+    </section>
 
-    <footer
-      class="px-grid-margin text-steel/80 text-caption mx-auto mt-16 flex w-full max-w-6xl justify-center gap-6 pt-8 font-mono tracking-wide sm:mt-24"
-    >
-      <a
-        href="/refund-policy"
-        class="hover:text-chalk focus-visible:outline-chalk underline underline-offset-4 transition"
-      >
-        Refund policy
-      </a>
-      <a
-        href="mailto:sales@lap-coach.racing?subject=Sales%20inquiry"
-        class="hover:text-chalk focus-visible:outline-chalk underline underline-offset-4 transition"
-      >
-        Contact sales
-      </a>
-    </footer>
+    <!-- Everything in your membership -->
+    <section class="border-steel/10 border-t py-20 md:py-28">
+      <div class="px-grid-margin mx-auto max-w-6xl">
+        <h2 class="font-monument text-h3 text-chalk text-balance">Everything in your membership</h2>
+        <p class="font-body text-body text-steel prose-max mt-4">
+          Every member gets full access — nothing is held back behind a higher tier.
+        </p>
+        <div class="mt-10">
+          <MembershipFeatures />
+        </div>
+      </div>
+    </section>
+
+    <!-- Founding 50 callout -->
+    <section class="border-steel/10 border-t py-20 md:py-28">
+      <div class="px-grid-margin mx-auto max-w-6xl">
+        <FoundingFifty />
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="border-steel/10 border-t py-20 md:py-28">
+      <div class="px-grid-margin mx-auto max-w-6xl">
+        <h2 class="font-monument text-h3 text-chalk text-balance">Frequently asked questions</h2>
+        <div class="mt-10 max-w-3xl">
+          <FaqList />
+        </div>
+
+        <p class="font-body text-caption text-steel mt-10">
+          Cancel during the {MEMBERSHIP.trialDays}-day trial and you are never charged. For how
+          refunds work after that, see our
+          <a
+            href="/refund-policy"
+            class="text-chalk hover:text-pit-orange focus-visible:outline-pit-orange underline underline-offset-4 transition-colors"
+          >
+            refund policy</a
+          >.
+        </p>
+      </div>
+    </section>
   </main>
-</BaseLayout>
 
-<script>
-  import { capturePricingViewed } from '../scripts/marketing-events';
-  capturePricingViewed();
-</script>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(productJsonLd)} />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <script>
+    // Funnel analytics — fire `pricing_viewed` on every /pricing page load.
+    // Page-view event only (not motion); mirrors the welcome-page
+    // waitlist_confirmed wiring.
+    import { capturePricingViewed } from '../scripts/marketing-events';
+    capturePricingViewed();
+  </script>
+</BaseLayout>

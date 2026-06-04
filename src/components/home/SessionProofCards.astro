@@ -1,0 +1,73 @@
+---
+// Session proof — three static cards (Your score / Your debrief / Your
+// progression). Numbers are rendered final (no count-up). Semantic colour
+// hints: acid-green for fixes/gains, safety-red for losses. Static only.
+---
+
+<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+  <article class="beam-card flex flex-col gap-4 rounded-2 border border-steel/15 bg-concrete p-6">
+    <p class="font-telemetry text-steel">Your score</p>
+    <p class="font-monument text-h2 text-chalk leading-none tabular-nums">
+      82<span class="font-body text-h5 text-steel">/100</span>
+    </p>
+    <dl class="font-body text-caption text-steel flex flex-col gap-1">
+      <div class="flex items-center justify-between">
+        <dt>Pace</dt>
+        <dd class="text-chalk tabular-nums">88</dd>
+      </div>
+      <div class="flex items-center justify-between">
+        <dt>Consistency</dt>
+        <dd class="text-chalk tabular-nums">79</dd>
+      </div>
+      <div class="flex items-center justify-between">
+        <dt>Execution</dt>
+        <dd class="text-chalk tabular-nums">84</dd>
+      </div>
+      <div class="flex items-center justify-between">
+        <dt>Robustness</dt>
+        <dd class="text-chalk tabular-nums">77</dd>
+      </div>
+    </dl>
+  </article>
+
+  <article class="beam-card flex flex-col gap-4 rounded-2 border border-steel/15 bg-concrete p-6">
+    <p class="font-telemetry text-steel">Your debrief</p>
+    <ul class="font-body text-caption flex flex-col gap-3">
+      <li class="flex items-baseline justify-between gap-3">
+        <span class="text-chalk">Turn 4 — late apex</span>
+        <span class="text-safety-red tabular-nums">−0.31s</span>
+      </li>
+      <li class="flex items-baseline justify-between gap-3">
+        <span class="text-chalk">Turn 9 — early throttle</span>
+        <span class="text-safety-red tabular-nums">−0.22s</span>
+      </li>
+      <li class="flex items-baseline justify-between gap-3">
+        <span class="text-chalk">Sector 2 — braking fixed</span>
+        <span class="text-acid-green tabular-nums">+0.18s</span>
+      </li>
+    </ul>
+    <p class="font-body text-tiny text-steel/80">
+      Ranked by time recoverable, not by severity guesswork.
+    </p>
+  </article>
+
+  <article class="beam-card flex flex-col gap-4 rounded-2 border border-steel/15 bg-concrete p-6">
+    <p class="font-telemetry text-steel">Your progression</p>
+    <p class="font-monument text-h2 text-acid-green leading-none tabular-nums">
+      +1.4s
+    </p>
+    <p class="font-body text-caption text-steel">
+      Best lap over your last 6 sessions at this track.
+    </p>
+    <ul class="font-body text-tiny text-steel/80 flex flex-col gap-1">
+      <li class="flex items-center justify-between">
+        <span>Session 1</span>
+        <span class="text-steel tabular-nums">1:42.6</span>
+      </li>
+      <li class="flex items-center justify-between">
+        <span>Session 6</span>
+        <span class="text-acid-green tabular-nums">1:41.2</span>
+      </li>
+    </ul>
+  </article>
+</div>

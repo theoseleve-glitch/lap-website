@@ -1,0 +1,62 @@
+---
+/**
+ * BroadcastReveal — one-shot scroll-reveal wrapper for the cinematic redesign.
+ *
+ * Wrap any below-the-fold section in this to have it fade/rise/scale in ONCE as
+ * it enters the viewport (driven by src/scripts/reveal.ts). Fail-open: elements
+ * are only hidden once the controller adds `.reveal-ready` to <html>, so no-JS
+ * and reduced-motion leave content fully visible. Do NOT use above the fold —
+ * the hero uses the existing `data-hero-animate` stagger instead.
+ */
+interface Props {
+  /** Entrance style. rise = translateY, scale = zoom-in, fade = opacity only. */
+  variant?: 'rise' | 'scale' | 'fade';
+  /** Rendered wrapper tag. */
+  as?: 'div' | 'section' | 'article' | 'aside' | 'header' | 'footer' | 'li';
+  /** Stagger delay in ms (for sequential reveals within a section). */
+  delay?: number;
+  class?: string;
+}
+
+const {
+  variant = 'rise',
+  as: Tag = 'div',
+  delay = 0,
+  class: className = '',
+} = Astro.props;
+
+const style = delay ? `--reveal-delay:${delay}ms` : undefined;
+---
+
+<Tag data-reveal={variant} style={style} class:list={[className]}><slot /></Tag>
+
+<style is:global>
+  /* Hidden state applies ONLY under .reveal-ready (added by reveal.ts when
+     motion is allowed). No-JS / reduced-motion => never armed => fully visible. */
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity var(--duration-reveal) var(--ease-reveal),
+      transform var(--duration-reveal) var(--ease-reveal);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+  .reveal-ready [data-reveal='scale'] {
+    transform: scale(0.96);
+  }
+  .reveal-ready [data-reveal='fade'] {
+    transform: none;
+  }
+  .reveal-ready [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>

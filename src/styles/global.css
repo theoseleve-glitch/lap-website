@@ -13,6 +13,12 @@
   --color-concrete: #141414;
   --color-chalk: #f0ede5;
   --color-steel: #949494;
+  /* Cinematic atmosphere base (2026-06 redesign) — lifted off pure #000 so
+     full-bleed hero/CTA zones get depth without losing the asphalt identity.
+     Exposed as utilities (bg-graphite / text-graphite) so components stay
+     hex-free per repo rule. */
+  --color-graphite: #0a0b0d;
+  --color-graphite-2: #101216;
 
   /* Accents */
   --color-acid-green: #22c55e;
@@ -178,6 +184,17 @@
   --bg-grid: linear-gradient(rgba(240, 237, 229, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(240, 237, 229, 0.06) 1px, transparent 1px);
 
+  /* ── Cinematic / broadcast graphics (2026-06 redesign) ──────────────────────
+     Annotation chips + section reveals. bcast-pos/neg track the semantic
+     accents so a brand-colour change propagates. Glows use rgba of the gold
+     (#c9a84c) and acid-green (#22c55e) values already in @theme. */
+  --bcast-pos: var(--color-acid-green); /* gains / faster */
+  --bcast-neg: var(--color-safety-red); /* time lost */
+  --bcast-glow-gold: radial-gradient(60% 60% at 50% 0%, rgba(201, 168, 76, 0.10), transparent 70%);
+  --bcast-glow-green: radial-gradient(50% 50% at 80% 20%, rgba(34, 197, 94, 0.08), transparent 70%);
+  --duration-reveal: 720ms; /* one-shot section reveal */
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+
   /* Chart palette — series colours used by Phase-3 telemetry sculptures and
      pricing-graph illustrations. Verbatim from V2 src/styles/tokens.css. */
   --chart-series-1: #22c55e;
@@ -282,6 +299,14 @@ html {
 .tabular-nums {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+}
+
+/* `.bcast-figure` — broadcast-graphic numerals (deltas, lap times, speeds).
+ * Mono + tabular so figures read as an instrument cluster and never jitter. */
+.bcast-figure {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--ls-medium);
 }
 
 .cta-nowrap {

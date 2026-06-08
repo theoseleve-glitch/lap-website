@@ -21,6 +21,7 @@
 // rename is a free move.
 
 import posthog from 'posthog-js';
+import { postMarketingEvents } from './marketing-collector';
 
 export type DownloadPlatform = 'windows' | 'macos' | 'android' | 'ios';
 
@@ -33,4 +34,5 @@ export interface DownloadClickedProps {
 
 export function captureDownloadClicked(props: DownloadClickedProps): void {
   posthog.capture('download_clicked', { ...props });
+  postMarketingEvents([{ event: 'download_clicked', properties: { ...props } }]);
 }

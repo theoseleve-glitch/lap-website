@@ -22,6 +22,7 @@
 // window.location.pathname at click time via signupSourceFromPathname.
 
 import posthog from 'posthog-js';
+import { postMarketingEvents, postMarketingPageview } from './marketing-collector';
 
 export type SignupSource =
   | 'homepage'
@@ -47,14 +48,17 @@ export function signupSourceFromPathname(pathname: string): SignupSource {
 
 export function captureSignupClicked(source: SignupSource): void {
   posthog.capture('signup_clicked', { source });
+  postMarketingEvents([{ event: 'signup_clicked', properties: { source } }]);
 }
 
 export function captureDemoViewed(source: DemoSource): void {
   posthog.capture('demo_viewed', { source });
+  postMarketingEvents([{ event: 'demo_viewed', properties: { source } }]);
 }
 
 export function capturePricingViewed(): void {
   posthog.capture('pricing_viewed');
+  postMarketingEvents([{ event: 'pricing_viewed' }]);
 }
 
 // Global delegated click listener: catches clicks on any anchor
@@ -77,4 +81,5 @@ export function bindSignupClickListener(doc: Document, win: Window): void {
 
 if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   bindSignupClickListener(document, window);
+  postMarketingPageview();
 }

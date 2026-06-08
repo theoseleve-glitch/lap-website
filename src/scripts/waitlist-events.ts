@@ -19,16 +19,19 @@
 // inbox placement is worth investigating.
 
 import posthog from 'posthog-js';
+import { postMarketingEvents } from './marketing-collector';
 
 export function captureWaitlistSubmittedFromUrl(search: string): boolean {
   const params = new URLSearchParams(search);
   if (params.get('status') !== 'submitted') return false;
   posthog.capture('waitlist_submitted');
+  postMarketingEvents([{ event: 'waitlist_submitted' }]);
   return true;
 }
 
 export function captureWaitlistConfirmed(): void {
   posthog.capture('waitlist_confirmed');
+  postMarketingEvents([{ event: 'waitlist_confirmed' }]);
 }
 
 // Side-effect for /waitlist: when the script is imported in the

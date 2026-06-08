@@ -1,0 +1,179 @@
+---
+/**
+ * MobileNav — hamburger + full-screen panel for < md viewports (the desktop
+ * SectorTabs are hidden there, so without this mobile visitors had no nav).
+ * Progressive enhancement: a tiny inline script toggles the panel. With no JS
+ * the button is inert and the panel stays hidden, while the header CTA remains
+ * reachable. Routes mirror SectorTabs (source of truth for nav order).
+ */
+const TABS = [
+  { label: 'Product', href: '/product' },
+  { label: 'How it works', href: '/how-it-works' },
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Demo', href: '/demo' },
+  { label: 'Blog', href: '/blog' },
+];
+const currentPath = Astro.url.pathname;
+const isCurrent = (href: string): boolean =>
+  href !== '/' && currentPath.startsWith(href);
+---
+
+<div class="mobile-nav md:hidden">
+  <button
+    type="button"
+    class="mobile-nav__toggle"
+    aria-controls="mobile-nav-panel"
+    aria-expanded="false"
+    aria-label="Open menu"
+    data-mobile-nav-toggle
+  >
+    <span class="mobile-nav__bars" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </span>
+  </button>
+
+  <div
+    id="mobile-nav-panel"
+    class="mobile-nav__panel"
+    data-mobile-nav-panel
+    hidden
+  >
+    <button
+      type="button"
+      class="mobile-nav__close"
+      aria-label="Close menu"
+      data-mobile-nav-close
+    >
+      <span aria-hidden="true">✕</span>
+    </button>
+    <nav aria-label="Mobile" class="mobile-nav__list">
+      {
+        TABS.map((tab) => (
+          <a
+            href={tab.href}
+            class="mobile-nav__link"
+            aria-current={isCurrent(tab.href) ? 'page' : undefined}
+          >
+            {tab.label}
+          </a>
+        ))
+      }
+      <a href="/login" class="mobile-nav__link mobile-nav__link--muted">Sign in</a>
+    </nav>
+    <a href="/register" rel="noopener" class="mobile-nav__cta">
+      Start 30-day free trial
+    </a>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const toggle = document.querySelector('[data-mobile-nav-toggle]');
+    const panel = document.querySelector('[data-mobile-nav-panel]');
+    if (!toggle || !panel) return;
+    const closeBtn = panel.querySelector('[data-mobile-nav-close]');
+    const setOpen = (open) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      panel.hidden = !open;
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+    };
+    toggle.addEventListener('click', () =>
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true'),
+    );
+    closeBtn && closeBtn.addEventListener('click', () => setOpen(false));
+    panel.addEventListener('click', (e) => {
+      if (e.target && e.target.tagName === 'A') setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    });
+  })();
+</script>
+
+<style>
+  .mobile-nav__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-min);
+    height: var(--touch-min);
+    background: transparent;
+    border: 1px solid var(--border-color-default);
+    border-radius: var(--radius-2);
+    color: var(--color-chalk);
+  }
+  .mobile-nav__bars {
+    display: grid;
+    gap: 4px;
+    width: 20px;
+  }
+  .mobile-nav__bars span {
+    display: block;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+  .mobile-nav__panel {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-overlay);
+    background: var(--color-asphalt);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-3);
+    padding: var(--space-6) var(--grid-margin);
+  }
+  .mobile-nav__panel[hidden] {
+    display: none;
+  }
+  .mobile-nav__close {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--grid-margin);
+    width: var(--touch-min);
+    height: var(--touch-min);
+    background: transparent;
+    border: 1px solid var(--border-color-default);
+    border-radius: var(--radius-2);
+    color: var(--color-chalk);
+    font-size: 1.1rem;
+  }
+  .mobile-nav__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .mobile-nav__link {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--ls-display);
+    color: var(--color-chalk);
+    text-decoration: none;
+  }
+  .mobile-nav__link--muted {
+    color: var(--color-steel);
+    font-size: var(--text-h5);
+  }
+  .mobile-nav__link[aria-current='page'] {
+    color: var(--color-pit-orange);
+  }
+  .mobile-nav__cta {
+    margin-top: var(--space-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--touch-min);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-pit-orange-deep);
+    color: var(--color-asphalt);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    text-decoration: none;
+    border-radius: var(--radius-2);
+  }
+</style>

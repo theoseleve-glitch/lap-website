@@ -1,0 +1,105 @@
+---
+/**
+ * StickyCtaBar — bottom-fixed primary CTA for < md viewports, revealed after the
+ * hero scrolls out so the next step stays in the thumb zone on long pages.
+ * Hidden by default; an inline observer shows it once `[data-hero-sentinel]`
+ * leaves the viewport (falls back to a scroll threshold on pages without one).
+ * Respects the bottom safe-area inset.
+ */
+import { HERO } from '../../data/marketing-copy';
+---
+
+<div class="sticky-cta md:hidden" data-sticky-cta hidden>
+  <a
+    href={HERO.primaryHref}
+    rel="noopener"
+    class="sticky-cta__btn"
+    data-sticky-cta-link
+  >
+    {HERO.primaryCta}
+  </a>
+  <span class="sticky-cta__trust">No card to start · cancel anytime</span>
+</div>
+
+<script is:inline>
+  (() => {
+    const bar = document.querySelector('[data-sticky-cta]');
+    if (!bar) return;
+    const sentinel = document.querySelector('[data-hero-sentinel]');
+    const show = () => {
+      bar.hidden = false;
+    };
+    const hide = () => {
+      bar.hidden = true;
+    };
+    if (sentinel && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) hide();
+            else show();
+          }
+        },
+        { threshold: 0 },
+      );
+      io.observe(sentinel);
+    } else {
+      const onScroll = () => {
+        if (window.scrollY > 600) show();
+        else hide();
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+    const link = bar.querySelector('[data-sticky-cta-link]');
+    link &&
+      link.addEventListener('click', () => {
+        if (window.posthog && window.posthog.capture) {
+          window.posthog.capture('sticky_cta_click');
+        }
+      });
+  })();
+</script>
+
+<style>
+  .sticky-cta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-nav);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0.6rem var(--grid-margin) calc(0.6rem + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--color-asphalt) 92%, transparent);
+    border-top: 1px solid var(--border-color-default);
+    backdrop-filter: blur(8px);
+  }
+  .sticky-cta[hidden] {
+    display: none;
+  }
+  .sticky-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: var(--touch-min);
+    background: var(--color-pit-orange-deep);
+    color: var(--color-asphalt);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    font-size: var(--text-caption);
+    text-decoration: none;
+    border-radius: var(--radius-2);
+  }
+  .sticky-cta__trust {
+    font-family: var(--font-mono);
+    font-size: var(--text-tiny);
+    color: var(--color-steel);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-medium);
+  }
+</style>

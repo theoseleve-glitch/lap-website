@@ -153,7 +153,11 @@ test('/how-it-works closes with the shared 30-day trial CTA (href + rel locked)'
   // Ordering: CTA appears after the honesty section so the reader closes
   // with "here's what launch gives you" → "start the trial".
   const honestyIdx = html.indexOf('What ships at launch');
-  const ctaIdx = html.indexOf('Start 30-day free trial');
+  // lastIndexOf, not indexOf: the global MobileNav + StickyCtaBar (chrome)
+  // also carry the trial CTA, so the FIRST match is now in the top nav. The
+  // page's closing trial CTA is the last occurrence — that's what must follow
+  // the honesty section.
+  const ctaIdx = html.lastIndexOf('Start 30-day free trial');
   expect(honestyIdx).toBeGreaterThan(-1);
   expect(ctaIdx).toBeGreaterThan(honestyIdx);
 });

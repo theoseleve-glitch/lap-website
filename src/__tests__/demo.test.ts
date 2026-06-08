@@ -90,7 +90,10 @@ test('trial CTA renders after the walkthrough placeholder', async () => {
   // fails — the visitor should see the artefact they came for before the ask.
   const html = await render();
   const walkthroughIdx = html.search(/The walkthrough/i);
-  const ctaIdx = html.indexOf('Start 30-day free trial');
+  // lastIndexOf, not indexOf: the global MobileNav + StickyCtaBar chrome also
+  // carry the trial CTA (first match is the top nav now). The page's own
+  // closing CTA is the last occurrence — that's what must follow the walkthrough.
+  const ctaIdx = html.lastIndexOf('Start 30-day free trial');
   expect(walkthroughIdx).toBeGreaterThan(-1);
   expect(ctaIdx).toBeGreaterThan(walkthroughIdx);
 });

@@ -1,6 +1,7 @@
 ---
 import LapWordmark from './LapWordmark.astro';
 import SectorTabs from './SectorTabs.astro';
+import MobileNav from './MobileNav.astro';
 
 interface Props {
   currentPath?: string;
@@ -40,6 +41,7 @@ const LOGIN_HREF = '/login';
       >
         {PRIMARY_CTA.text}
       </a>
+      <MobileNav />
     </div>
   </div>
 </header>

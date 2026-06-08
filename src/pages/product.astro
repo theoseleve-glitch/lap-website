@@ -4,6 +4,8 @@ import CtaButton from '../components/ui/CtaButton.astro';
 import PlaceholderMedia from '../components/ui/PlaceholderMedia.astro';
 import GenerativeAtmosphere from '../components/cinematic/GenerativeAtmosphere.astro';
 import BroadcastReveal from '../components/cinematic/BroadcastReveal.astro';
+import ProductShowcase from '../components/cinematic/ProductShowcase.astro';
+import cockpitTrackmap from '../assets/cockpit-trackmap.jpg';
 import { MEMBERSHIP } from '../data/membership';
 
 // Consolidated /product page (June-8 rebuild), cinematic re-skin (2026-06-08).
@@ -128,9 +130,28 @@ const SECTIONS: readonly Section[] = [
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
   <main>
-    <!-- Intro — cinematic atmosphere + in-page jump nav -->
+    <!-- Intro — layered cockpit photo + atmosphere + in-page jump nav -->
     <section class="product-hero">
-      <GenerativeAtmosphere seed={311} intensity="hero" />
+      <div class="product-hero__bg" data-parallax data-parallax-speed="0.2">
+        <img
+          src={cockpitTrackmap.src}
+          width={cockpitTrackmap.width}
+          height={cockpitTrackmap.height}
+          alt=""
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          class="product-hero__photo"
+        />
+        <div class="product-hero__scrim"></div>
+        <GenerativeAtmosphere
+          seed={311}
+          intensity="hero"
+          transparent
+          animate
+          class="product-hero__atmos"
+        />
+      </div>
       <div class="product-hero__inner px-grid-margin mx-auto w-full max-w-6xl">
         <p class="font-telemetry text-pit-orange">Product</p>
         <h1 class="font-monument text-h1 text-chalk mt-4 text-balance">What LAP does.</h1>
@@ -191,11 +212,17 @@ const SECTIONS: readonly Section[] = [
               </ul>
             </div>
             <div>
-              <PlaceholderMedia
-                label={section.media.label}
-                caption={section.media.caption}
-                aspect="16/9"
-              />
+              {
+                section.id === 'analysis' ? (
+                  <ProductShowcase />
+                ) : (
+                  <PlaceholderMedia
+                    label={section.media.label}
+                    caption={section.media.caption}
+                    aspect="16/9"
+                  />
+                )
+              }
             </div>
           </BroadcastReveal>
         </section>
@@ -230,6 +257,39 @@ const SECTIONS: readonly Section[] = [
       overflow: hidden;
       padding-block: clamp(4rem, 9vw, 7rem);
     }
+    .product-hero__bg {
+      position: absolute;
+      top: -10%;
+      left: 0;
+      right: 0;
+      height: 120%;
+      z-index: 0;
+      will-change: transform;
+    }
+    .product-hero__photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .product-hero__scrim {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          90deg,
+          var(--color-asphalt) 0%,
+          rgba(0, 0, 0, 0.85) 42%,
+          rgba(0, 0, 0, 0.6) 78%,
+          rgba(0, 0, 0, 0.7) 100%
+        ),
+        linear-gradient(0deg, var(--color-asphalt) 4%, transparent 46%);
+    }
+    .product-hero__atmos {
+      mix-blend-mode: screen;
+    }
     .product-hero__inner {
       position: relative;
       z-index: 1;
@@ -247,4 +307,8 @@ const SECTIONS: readonly Section[] = [
       z-index: 1;
     }
   </style>
+
+  <script>
+    import '../scripts/parallax';
+  </script>
 </BaseLayout>

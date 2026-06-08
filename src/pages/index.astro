@@ -8,6 +8,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaButton from '../components/ui/CtaButton.astro';
 import { MEMBERSHIP } from '../data/membership';
 import { HERO } from '../data/marketing-copy';
+import heroCockpit from '../assets/hero-cockpit.jpg';
 import GenerativeAtmosphere from '../components/cinematic/GenerativeAtmosphere.astro';
 import BroadcastReveal from '../components/cinematic/BroadcastReveal.astro';
 import FoundingSpots from '../components/pricing/FoundingSpots.astro';
@@ -26,9 +27,28 @@ const foundingClaimed = Number(import.meta.env.PUBLIC_FOUNDING_CLAIMED);
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
   <main id="main-content">
-    <!-- 1 · Hero — cinematic telemetry atmosphere -->
+    <!-- 1 · Hero — layered cockpit photo + telemetry draw-in + parallax -->
     <section class="hero-room" data-hero-sentinel>
-      <GenerativeAtmosphere seed={1207} intensity="hero" />
+      <div class="hero-bg" data-parallax data-parallax-speed="0.28">
+        <img
+          src={heroCockpit.src}
+          width={heroCockpit.width}
+          height={heroCockpit.height}
+          alt=""
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          class="hero-photo"
+        />
+        <div class="hero-scrim"></div>
+        <GenerativeAtmosphere
+          seed={1207}
+          intensity="hero"
+          transparent
+          animate
+          class="hero-atmos"
+        />
+      </div>
       <div class="hero-inner px-grid-margin mx-auto w-full max-w-6xl">
         <p class="font-telemetry text-pit-orange" data-hero-animate>{HERO.eyebrow}</p>
         <h1 class="hero-headline font-monument text-shimmer mt-5 text-balance" data-hero-animate>
@@ -216,9 +236,43 @@ const foundingClaimed = Number(import.meta.env.PUBLIC_FOUNDING_CLAIMED);
       position: relative;
       display: flex;
       align-items: center;
-      min-height: min(88vh, 760px);
+      min-height: min(92vh, 840px);
       overflow: hidden;
       padding-block: var(--space-10);
+    }
+    .hero-bg {
+      position: absolute;
+      top: -12%;
+      left: 0;
+      right: 0;
+      height: 124%;
+      z-index: 0;
+      will-change: transform;
+    }
+    .hero-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 62% center;
+    }
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          90deg,
+          var(--color-asphalt) 0%,
+          rgba(0, 0, 0, 0.82) 36%,
+          rgba(0, 0, 0, 0.5) 68%,
+          rgba(0, 0, 0, 0.62) 100%
+        ),
+        linear-gradient(0deg, var(--color-asphalt) 3%, transparent 42%),
+        radial-gradient(80% 60% at 16% 42%, rgba(0, 0, 0, 0.5), transparent 70%);
+    }
+    .hero-atmos {
+      mix-blend-mode: screen;
     }
     .hero-inner {
       position: relative;
@@ -256,5 +310,6 @@ const foundingClaimed = Number(import.meta.env.PUBLIC_FOUNDING_CLAIMED);
 
   <script>
     import '../scripts/hero-motion';
+    import '../scripts/parallax';
   </script>
 </BaseLayout>

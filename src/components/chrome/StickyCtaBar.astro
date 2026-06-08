@@ -9,7 +9,7 @@
 import { HERO } from '../../data/marketing-copy';
 ---
 
-<div class="sticky-cta md:hidden" data-sticky-cta hidden>
+<div class="sticky-cta" data-sticky-cta hidden>
   <a
     href={HERO.primaryHref}
     rel="noopener"
@@ -62,13 +62,16 @@ import { HERO } from '../../data/marketing-copy';
 </script>
 
 <style>
+  /* Mobile-only: hidden by default; the inline script removes [hidden] once the
+     hero scrolls out. Responsive gating lives here (not Tailwind md:hidden) so a
+     scoped display rule can't lose the cascade to a utility class. */
   .sticky-cta {
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: var(--z-nav);
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     gap: 2px;
@@ -77,8 +80,10 @@ import { HERO } from '../../data/marketing-copy';
     border-top: 1px solid var(--border-color-default);
     backdrop-filter: blur(8px);
   }
-  .sticky-cta[hidden] {
-    display: none;
+  @media (max-width: 767px) {
+    .sticky-cta:not([hidden]) {
+      display: flex;
+    }
   }
   .sticky-cta__btn {
     display: inline-flex;

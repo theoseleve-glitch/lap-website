@@ -8,6 +8,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaButton from '../components/ui/CtaButton.astro';
 import PlaceholderMedia from '../components/ui/PlaceholderMedia.astro';
 import { MEMBERSHIP } from '../data/membership';
+import { HERO } from '../data/marketing-copy';
+import GenerativeAtmosphere from '../components/cinematic/GenerativeAtmosphere.astro';
 import ValueStrip from '../components/home/ValueStrip.astro';
 import SessionProofCards from '../components/home/SessionProofCards.astro';
 import EcosystemSplit from '../components/home/EcosystemSplit.astro';
@@ -20,25 +22,23 @@ const DESCRIPTION =
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
   <main id="main-content">
-    <!-- 1 · Hero -->
-    <section class="px-grid-margin mx-auto w-full max-w-6xl py-20 md:py-28">
-      <p class="font-telemetry text-pit-orange">The cross-platform Driver OS</p>
-      <h1 class="font-monument text-h1 text-chalk mt-5 max-w-4xl text-balance">
-        They time laps. We coach drivers.
-      </h1>
-      <p class="font-body text-body text-steel prose-max mt-6">
-        Every sim and real session becomes a plan you can execute — sector deltas, a four-pillar
-        score, and the corners to fix next, all in one place.
-      </p>
-      <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">
-          {MEMBERSHIP.ctaText}
-        </CtaButton>
-        <CtaButton href="/how-it-works" variant="secondary">See how it works</CtaButton>
+    <!-- 1 · Hero — cinematic, generative telemetry atmosphere -->
+    <section class="hero-room" data-hero-sentinel>
+      <GenerativeAtmosphere seed={1207} intensity="hero" />
+      <div class="hero-inner px-grid-margin mx-auto w-full max-w-6xl">
+        <p class="font-telemetry text-pit-orange" data-hero-animate>{HERO.eyebrow}</p>
+        <h1 class="hero-headline font-monument text-shimmer mt-5 text-balance" data-hero-animate>
+          {HERO.headline}
+        </h1>
+        <p class="font-body text-body text-steel prose-max mt-6" data-hero-animate>
+          {HERO.subhead}
+        </p>
+        <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center" data-hero-animate>
+          <CtaButton href={HERO.primaryHref} variant="primary">{HERO.primaryCta}</CtaButton>
+          <CtaButton href={HERO.secondaryHref} variant="secondary">{HERO.secondaryCta}</CtaButton>
+        </div>
+        <p class="font-telemetry text-steel mt-6" data-hero-animate>{HERO.trust}</p>
       </div>
-      <p class="font-body text-caption text-steel mt-5">
-        30-day free trial · no card charged until it ends · cancel anytime.
-      </p>
     </section>
 
     <!-- 2 · Value strip -->
@@ -209,4 +209,35 @@ const DESCRIPTION =
       </div>
     </section>
   </main>
+
+  <style>
+    .hero-room {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: min(88vh, 760px);
+      overflow: hidden;
+      padding-block: var(--space-10);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .hero-headline {
+      font-size: clamp(2.75rem, 8vw, 6.5rem);
+      line-height: 0.95;
+      letter-spacing: var(--ls-display);
+      max-width: 18ch;
+    }
+    @media (max-width: 640px) {
+      .hero-room {
+        min-height: auto;
+        padding-block: var(--space-8);
+      }
+    }
+  </style>
+
+  <script>
+    import '../scripts/hero-motion';
+  </script>
 </BaseLayout>

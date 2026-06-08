@@ -12,9 +12,9 @@ const BAR = join(
 const load = (): string => readFileSync(BAR, 'utf8');
 
 describe('StickyCtaBar', () => {
-  test('shows only below md and is hidden by default', () => {
+  test('is mobile-only (max-width media query) and hidden by default', () => {
     const src = load();
-    expect(src).toMatch(/md:hidden/);
+    expect(src).toMatch(/max-width:\s*767px/);
     expect(src).toMatch(/data-sticky-cta/);
     expect(src).toMatch(/hidden/);
   });

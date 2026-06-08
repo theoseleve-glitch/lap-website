@@ -1,15 +1,16 @@
 ---
-// Home — June-8 marketing rebuild. Static-only, no client JS, minimal motion
-// (hover/focus transitions only). All product visuals are <PlaceholderMedia>
-// labelled "Preview" — the product is pre-launch. Pricing canon is the single
-// membership (€19.90/mo · €14.90/mo first-50 · 30-day free trial). Sections in
-// the order set by the design spec (2026-06-04-marketing-june8-rebuild-design).
+// Home — cinematic redesign (2026-06-08). The hero sits on a seeded SVG
+// telemetry atmosphere; below-fold sections reveal once via BroadcastReveal.
+// Static-first, minimal one-shot motion. Pricing canon = single membership
+// (€19.90/mo · €14.90/mo first-50 · 30-day trial). Claim-safe copy only —
+// rule-based coaching, never an AI-coach/LLM claim.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaButton from '../components/ui/CtaButton.astro';
-import PlaceholderMedia from '../components/ui/PlaceholderMedia.astro';
 import { MEMBERSHIP } from '../data/membership';
 import { HERO } from '../data/marketing-copy';
 import GenerativeAtmosphere from '../components/cinematic/GenerativeAtmosphere.astro';
+import BroadcastReveal from '../components/cinematic/BroadcastReveal.astro';
+import FoundingSpots from '../components/pricing/FoundingSpots.astro';
 import ValueStrip from '../components/home/ValueStrip.astro';
 import SessionProofCards from '../components/home/SessionProofCards.astro';
 import EcosystemSplit from '../components/home/EcosystemSplit.astro';
@@ -18,11 +19,14 @@ import TheLoop from '../components/home/TheLoop.astro';
 const TITLE = 'LAP — coaching for every lap';
 const DESCRIPTION =
   'LAP is the cross-platform Driver OS — every sim and real session becomes a coaching plan you can execute. Rule-based coaching, not a chat box. 30-day free trial.';
+
+// Genuine founding-50 scarcity, only if a real count is configured (else static).
+const foundingClaimed = Number(import.meta.env.PUBLIC_FOUNDING_CLAIMED);
 ---
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
   <main id="main-content">
-    <!-- 1 · Hero — cinematic, generative telemetry atmosphere -->
+    <!-- 1 · Hero — cinematic telemetry atmosphere -->
     <section class="hero-room" data-hero-sentinel>
       <GenerativeAtmosphere seed={1207} intensity="hero" />
       <div class="hero-inner px-grid-margin mx-auto w-full max-w-6xl">
@@ -42,15 +46,17 @@ const DESCRIPTION =
     </section>
 
     <!-- 2 · Value strip -->
-    <section
+    <BroadcastReveal
+      as="section"
       class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-16 md:py-20"
     >
       <h2 class="font-monument text-h3 text-chalk mb-8">From session to plan, in four steps</h2>
       <ValueStrip />
-    </section>
+    </BroadcastReveal>
 
     <!-- 3 · Session proof -->
-    <section
+    <BroadcastReveal
+      as="section"
       class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-20 md:py-28"
     >
       <p class="font-telemetry text-pit-orange">After every session</p>
@@ -66,17 +72,11 @@ const DESCRIPTION =
       <div class="mt-10">
         <SessionProofCards />
       </div>
-
-      <div class="mt-6">
-        <PlaceholderMedia
-          label="Session report — speed trace, sector deltas, 4-pillar score"
-          aspect="16/9"
-        />
-      </div>
-    </section>
+    </BroadcastReveal>
 
     <!-- 4 · Problem → LAP ecosystem -->
-    <section
+    <BroadcastReveal
+      as="section"
       class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-20 md:py-28"
     >
       <p class="font-telemetry text-pit-orange">The problem</p>
@@ -91,10 +91,11 @@ const DESCRIPTION =
       <div class="mt-10">
         <EcosystemSplit />
       </div>
-    </section>
+    </BroadcastReveal>
 
     <!-- 5 · "They time laps. We coach drivers." statement -->
-    <section
+    <BroadcastReveal
+      as="section"
       class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-24 md:py-32"
     >
       <p class="font-telemetry text-pit-orange">Our position</p>
@@ -106,10 +107,11 @@ const DESCRIPTION =
         to do about it before the next session. Rule-based coaching, not a chat box — every
         instruction traces to your telemetry.
       </p>
-    </section>
+    </BroadcastReveal>
 
     <!-- 6 · The loop -->
-    <section
+    <BroadcastReveal
+      as="section"
       class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-20 md:py-28"
     >
       <p class="font-telemetry text-pit-orange">The loop</p>
@@ -123,17 +125,11 @@ const DESCRIPTION =
       <div class="mt-10">
         <TheLoop />
       </div>
-
-      <div class="mt-6">
-        <PlaceholderMedia
-          label="Coaching plan — prioritised drills from your weak corners"
-          aspect="16/9"
-        />
-      </div>
-    </section>
+    </BroadcastReveal>
 
     <!-- 7 · Pricing teaser -->
-    <section
+    <BroadcastReveal
+      as="section"
       class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-20 md:py-28"
     >
       <div
@@ -149,6 +145,7 @@ const DESCRIPTION =
               for the first {MEMBERSHIP.foundingLimit} founding members</span
             >
           </p>
+          <FoundingSpots claimed={foundingClaimed} />
           <p class="font-body text-caption text-steel">
             {MEMBERSHIP.trialDays}-day free trial · no card until it ends · monthly only · cancel
             anytime.
@@ -164,10 +161,11 @@ const DESCRIPTION =
           </a>
         </div>
       </div>
-    </section>
+    </BroadcastReveal>
 
     <!-- 8 · Close — founder note + reserved beta slots + final CTA -->
-    <section
+    <BroadcastReveal
+      as="section"
       class="border-steel/10 px-grid-margin mx-auto w-full max-w-6xl border-t py-20 md:py-28"
     >
       <div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
@@ -198,16 +196,19 @@ const DESCRIPTION =
         </div>
       </div>
 
-      <div class="border-steel/10 mt-14 flex flex-col items-start gap-4 border-t pt-10">
-        <h2 class="font-monument text-h2 text-chalk text-balance">
-          Turn your next session into a plan.
-        </h2>
-        <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">{MEMBERSHIP.ctaText}</CtaButton>
-        <p class="font-body text-caption text-steel">
-          30-day free trial · no card until it ends · {MEMBERSHIP.currencyNote}.
-        </p>
+      <div class="final-cta mt-14">
+        <GenerativeAtmosphere seed={733} intensity="ambient" />
+        <div class="final-cta__inner">
+          <h2 class="font-monument text-h2 text-chalk text-balance">
+            Turn your next session into a plan.
+          </h2>
+          <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">{MEMBERSHIP.ctaText}</CtaButton>
+          <p class="font-body text-caption text-steel">
+            30-day free trial · no card until it ends · {MEMBERSHIP.currencyNote}.
+          </p>
+        </div>
       </div>
-    </section>
+    </BroadcastReveal>
   </main>
 
   <style>
@@ -228,6 +229,22 @@ const DESCRIPTION =
       line-height: 0.95;
       letter-spacing: var(--ls-display);
       max-width: 18ch;
+    }
+    /* Atmospheric final-CTA panel — the cinematic close. */
+    .final-cta {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-4);
+      border: 1px solid var(--border-color-default);
+      padding: clamp(2rem, 5vw, 4rem);
+    }
+    .final-cta__inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
     }
     @media (max-width: 640px) {
       .hero-room {

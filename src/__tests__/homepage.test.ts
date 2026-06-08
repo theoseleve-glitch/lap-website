@@ -7,10 +7,13 @@ const render = () => AstroContainer.create().then((c) => c.renderToString(Home))
 
 // --- Doctrine-locked copy ---------------------------------------------------
 
-test('homepage carries the June-8 position headline verbatim', async () => {
+test('homepage hero states the outcome-led headline', async () => {
   const html = await render();
-  // The home <h1> states the brand position. Rule-based coaching, not timing.
-  expect(html).toContain('They time laps. We coach drivers.');
+  // Cinematic redesign hero <h1>. The "They time laps / we coach drivers" brand
+  // position now lives in the §5 position statement further down the page.
+  // (Split assertions: the apostrophe is HTML-encoded in the rendered output.)
+  expect(html).toContain('Find the seconds');
+  expect(html).toContain('leaving on track');
 });
 
 test('forbids retired headline / pricing figures', async () => {
@@ -29,7 +32,7 @@ test('font-monument H1 is present', async () => {
 
 test('hero subhead pitches every session becoming an executable plan', async () => {
   const html = await render();
-  expect(html).toContain('Every sim and real session becomes a plan you can execute');
+  expect(html).toContain('corner-by-corner plan you can execute');
 });
 
 test('forbids AI / LLM / generative vocabulary (ADR-004 §4)', async () => {

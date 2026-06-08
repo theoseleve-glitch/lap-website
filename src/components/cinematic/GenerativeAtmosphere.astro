@@ -1,0 +1,108 @@
+---
+/**
+ * GenerativeAtmosphere — the cinematic backdrop. A server-rendered SVG telemetry
+ * field (graphite gradient + faint instrument grid + seeded speed traces + a
+ * racing-line accent). Static by default (best for LCP + reduced-motion).
+ * Absolutely positioned, aria-hidden, pointer-events:none — sits behind content.
+ */
+import { tracePath, racingLinePath } from '../../scripts/atmosphere';
+
+interface Props {
+  /** Seed for the trace geometry — vary per section for distinct fields. */
+  seed?: number;
+  /** hero = denser + dual glow; ambient = lighter (below-fold perf). */
+  intensity?: 'hero' | 'ambient';
+  class?: string;
+}
+
+const { seed = 1207, intensity = 'ambient', class: className = '' } = Astro.props;
+
+const W = 1200;
+const H = 600;
+const seeds =
+  intensity === 'hero'
+    ? [seed, seed + 11, seed + 23, seed + 37]
+    : [seed, seed + 17];
+const traces = seeds.map((s, i) => ({
+  d: tracePath(s, W, H, 14),
+  stroke: i % 2 === 0 ? 'var(--color-pit-orange)' : 'var(--color-acid-green)',
+  opacity: Math.max(0.04, 0.1 - i * 0.015),
+  extra: i >= 2,
+}));
+const racing = racingLinePath(seed, W, H);
+---
+
+<div class:list={['gen-atmosphere', `is-${intensity}`, className]} aria-hidden="true">
+  <svg
+    class="gen-atmosphere__svg"
+    viewBox={`0 0 ${W} ${H}`}
+    preserveAspectRatio="xMidYMid slice"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {
+      traces.map((t) => (
+        <path
+          d={t.d}
+          fill="none"
+          stroke={t.stroke}
+          stroke-width="1.5"
+          stroke-opacity={t.opacity}
+          class:list={['gen-trace', t.extra ? 'gen-trace--extra' : '']}
+        />
+      ))
+    }
+    <path
+      d={racing}
+      fill="none"
+      stroke="var(--color-pit-orange)"
+      stroke-width="1"
+      stroke-opacity="0.08"
+      stroke-dasharray="4 6"
+      class="gen-trace gen-trace--extra"
+    />
+  </svg>
+</div>
+
+<style>
+  .gen-atmosphere {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background:
+      var(--bcast-glow-gold),
+      radial-gradient(
+        120% 100% at 50% 0%,
+        var(--color-graphite-2),
+        var(--color-graphite) 55%,
+        var(--color-asphalt) 100%
+      );
+  }
+  .gen-atmosphere.is-hero {
+    background:
+      var(--bcast-glow-gold),
+      var(--bcast-glow-green),
+      radial-gradient(
+        120% 120% at 50% -10%,
+        var(--color-graphite-2),
+        var(--color-graphite) 50%,
+        var(--color-asphalt) 100%
+      );
+  }
+  .gen-atmosphere__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--bg-grid);
+    background-size: 56px 56px;
+    opacity: 0.6;
+  }
+  /* Mobile: drop the secondary traces to keep the SVG cheap for LCP. */
+  @media (max-width: 640px) {
+    .gen-trace--extra {
+      display: none;
+    }
+  }
+</style>

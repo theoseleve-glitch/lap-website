@@ -1,0 +1,88 @@
+---
+/**
+ * AnnotationCallout — a broadcast-graphic chip overlaid on a ScreenshotFrame.
+ * Mono tabular numeral (the value) + an uppercase label, tone-coloured.
+ * Position it absolutely via `at` (top/left/right/bottom), or render inline.
+ */
+interface Props {
+  label: string;
+  value: string;
+  tone?: 'pos' | 'neg' | 'neutral';
+  /** Absolute position within a positioned parent, e.g. { top: '18%', left: '62%' }. */
+  at?: { top?: string; left?: string; right?: string; bottom?: string };
+  class?: string;
+}
+
+const { label, value, tone = 'neutral', at, class: className = '' } = Astro.props;
+
+const pos = at
+  ? Object.entries(at)
+      .map(([k, v]) => `${k}:${v}`)
+      .join(';')
+  : undefined;
+---
+
+<div
+  class:list={['bcast-callout', `tone-${tone}`, at ? 'is-positioned' : '', className]}
+  style={pos}
+  data-tone={tone}
+>
+  <span class="bcast-callout__dot" aria-hidden="true"></span>
+  <span class="bcast-callout__body">
+    <span class="bcast-callout__value bcast-figure">{value}</span>
+    <span class="bcast-callout__label">{label}</span>
+  </span>
+</div>
+
+<style>
+  .bcast-callout {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.7rem;
+    background: color-mix(in srgb, var(--color-asphalt) 78%, transparent);
+    border: 1px solid var(--border-color-default);
+    border-radius: var(--radius-2);
+    backdrop-filter: blur(6px);
+    box-shadow: var(--shadow-e2);
+  }
+  .bcast-callout.is-positioned {
+    position: absolute;
+  }
+  .bcast-callout__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-steel);
+    flex: none;
+  }
+  .tone-pos .bcast-callout__dot {
+    background: var(--bcast-pos);
+  }
+  .tone-neg .bcast-callout__dot {
+    background: var(--bcast-neg);
+  }
+  .bcast-callout__body {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  .bcast-callout__value {
+    font-size: var(--text-h6);
+    font-weight: 700;
+    color: var(--color-chalk);
+  }
+  .tone-pos .bcast-callout__value {
+    color: var(--bcast-pos);
+  }
+  .tone-neg .bcast-callout__value {
+    color: var(--bcast-neg);
+  }
+  .bcast-callout__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-tiny);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    color: var(--color-steel);
+  }
+</style>

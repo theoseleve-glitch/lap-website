@@ -1,0 +1,145 @@
+---
+/**
+ * ScreenshotFrame — frames a real product screenshot (or a synthetic recreation)
+ * like a broadcast graphic: optional browser/device chrome, gold glow, and an
+ * `annotations` slot for AnnotationCallout overlays. CLS-safe (explicit dims).
+ *
+ * `src` accepts an imported local asset (rendered via Astro <Image> → AVIF/WebP)
+ * or a plain URL string (rendered via <img>).
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  width?: number;
+  height?: number;
+  frame?: 'browser' | 'device' | 'bare';
+  glow?: boolean;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  width = 1280,
+  height = 800,
+  frame = 'browser',
+  glow = true,
+  class: className = '',
+} = Astro.props;
+
+const isLocal = typeof src !== 'string';
+---
+
+<figure
+  class:list={['shot', `shot--${frame}`, glow ? 'shot--glow' : '', className]}
+>
+  {
+    frame === 'browser' && (
+      <div class="shot__chrome" aria-hidden="true">
+        <span class="shot__dot" />
+        <span class="shot__dot" />
+        <span class="shot__dot" />
+        <span class="shot__bar" />
+      </div>
+    )
+  }
+  <div class="shot__media">
+    {
+      isLocal ? (
+        <Image
+          src={src as ImageMetadata}
+          alt={alt}
+          width={width}
+          height={height}
+          class="shot__img"
+          loading="lazy"
+        />
+      ) : (
+        <img
+          src={src as string}
+          alt={alt}
+          width={width}
+          height={height}
+          class="shot__img"
+          loading="lazy"
+          decoding="async"
+        />
+      )
+    }
+    <div class="shot__annotations"><slot name="annotations" /></div>
+  </div>
+</figure>
+
+<style>
+  .shot {
+    position: relative;
+    margin: 0;
+    border-radius: var(--radius-4);
+    overflow: hidden;
+    border: 1px solid var(--border-color-default);
+    background: var(--color-concrete);
+  }
+  .shot--glow {
+    box-shadow: var(--shadow-e4);
+  }
+  .shot--glow::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: var(--bcast-glow-gold);
+    opacity: 0.5;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+  .shot__chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.6rem 0.8rem;
+    background: var(--color-graphite-2);
+    border-bottom: 1px solid var(--border-color-muted);
+    position: relative;
+    z-index: 1;
+  }
+  .shot__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--color-steel);
+    opacity: 0.5;
+  }
+  .shot__bar {
+    flex: 1;
+    height: 10px;
+    margin-left: 8px;
+    border-radius: 999px;
+    background: var(--color-asphalt);
+    opacity: 0.5;
+  }
+  .shot__media {
+    position: relative;
+  }
+  .shot__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .shot__annotations {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  /* On small screens annotations reflow below the image instead of overlapping. */
+  @media (max-width: 640px) {
+    .shot__annotations {
+      position: static;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.75rem;
+    }
+  }
+</style>

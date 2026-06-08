@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import WaitlistForm from '../components/WaitlistForm.astro';
 import WaitlistCount from '../components/WaitlistCount.astro';
+import { MEMBERSHIP } from '../data/membership';
 
 // T091 — /waitlist route. Mounts the WaitlistForm so the route
 // referenced by T060 PricingFounderOffer ("Signed up before
@@ -16,8 +17,7 @@ import WaitlistCount from '../components/WaitlistCount.astro';
 // soup — these are the words a visitor in the founder-rate window
 // would search for, used because they describe the page.
 const TITLE = 'Join the LAP waitlist — LAP';
-const DESCRIPTION =
-  'Join the LAP waitlist for the public beta launch. Founder rate locked at €12 a month for 12 months — the offer survives any future pricing change. Email-only, GDPR-compliant.';
+const DESCRIPTION = `Join the LAP waitlist for the public beta launch. Launch invite first, plus a head start to claim a founding spot at ${MEMBERSHIP.foundingMonthly}/mo — €5 under the ${MEMBERSHIP.standardMonthly} standard, with a ${MEMBERSHIP.trialDays}-day free trial. Email-only, GDPR-compliant.`;
 
 // T102 — public waitlist count, optional. Read from build-time
 // env so the founder can publish the number once it crosses 100
@@ -37,9 +37,11 @@ const waitlistCount = Number.parseInt(rawCount ?? '0', 10);
         Join the LAP waitlist.
       </h1>
       <p class="text-steel text-body mt-6">
-        LAP opens public beta later this year. Waitlist members get the launch invite first, plus a
-        grandfathered <strong class="text-chalk font-medium">€12 a month for 12 months</strong>
-        from your first paid month — €3 under the standard rate, durable across any future pricing change.
+        LAP opens public beta soon. Waitlist members get the launch invite first, plus a head start
+        to claim one of the {MEMBERSHIP.foundingLimit} founding spots —
+        <strong class="text-chalk font-medium">{MEMBERSHIP.foundingMonthly} a month</strong>, €5
+        under the {MEMBERSHIP.standardMonthly} standard rate, with a {MEMBERSHIP.trialDays}-day free
+        trial.
       </p>
     </header>
 

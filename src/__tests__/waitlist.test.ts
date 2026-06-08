@@ -28,15 +28,15 @@ test('T091: title carries "LAP" (BaseLayout integration)', async () => {
   expect(html).toMatch(/<title>[^<]*LAP[^<]*<\/title>/);
 });
 
-test('T091: page lead names the €12 founder rate (T060 cross-page lock)', async () => {
-  // The waitlist exists because of T060's grandfathered rate
-  // (€12/month, 12 months, durable across pricing changes). If
-  // /waitlist doesn't name the offer, a visitor who landed here
-  // from /pricing's PricingFounderOffer ("Signed up before launch
-  // → €12 a month for 12 months") loses the scent. Locking €12 in
-  // the lead means the cross-page contract can't drift.
+test('/waitlist lead names the canonical founding rate (€14.90)', async () => {
+  // Corrected: the waitlist now points members at the canonical
+  // founding offer (€14.90/mo, first 50, 30-day trial) from
+  // src/data/membership.ts — NOT the retired €12/12-month
+  // grandfathered rate, which contradicted the June-8 pricing.
+  // Locking €14.90 keeps the cross-page pricing contract aligned.
   const html = await render();
-  expect(html).toMatch(/€12/);
+  expect(html).toMatch(/€14\.90/);
+  expect(html).not.toMatch(/€12/);
 });
 
 test('T091: WaitlistForm is mounted on /waitlist (form action present)', async () => {

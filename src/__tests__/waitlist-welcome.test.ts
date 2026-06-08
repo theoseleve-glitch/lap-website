@@ -28,13 +28,14 @@ test('T095: title carries "LAP" (BaseLayout integration)', async () => {
   expect(html).toMatch(/<title>[^<]*LAP[^<]*<\/title>/);
 });
 
-test('T095: page body names the €12 founder rate (cross-page lock with T060/T091)', async () => {
-  // If the welcome page drops the founder anchor, a visitor who
-  // joined the waitlist for the rate has no on-page confirmation
-  // they're locked in. Lock €12 here so the cross-page promise
-  // stays visible from form submission to confirmation.
+test('/waitlist/welcome names the canonical founding rate (€14.90)', async () => {
+  // Corrected to the June-8 canon: the welcome page confirms the
+  // founding offer (€14.90/mo, first 50, 30-day trial) — not the
+  // retired €12/12-month grandfathered rate. Keeps the waitlist
+  // surface aligned with src/data/membership.ts.
   const html = await render();
-  expect(html).toMatch(/€12/);
+  expect(html).toMatch(/€14\.90/);
+  expect(html).not.toMatch(/€12/);
 });
 
 test('T095: page sets noindex meta (no SERP traffic to a post-confirm page)', async () => {

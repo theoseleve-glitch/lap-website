@@ -2,18 +2,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaButton from '../components/ui/CtaButton.astro';
 import PlaceholderMedia from '../components/ui/PlaceholderMedia.astro';
+import GenerativeAtmosphere from '../components/cinematic/GenerativeAtmosphere.astro';
+import BroadcastReveal from '../components/cinematic/BroadcastReveal.astro';
 import { MEMBERSHIP } from '../data/membership';
 
-// Consolidated /product page (June-8 rebuild). Replaces the old six
-// /product/* pillars with one anchored page: intro + in-page jump nav
-// + 5 sections. Each section is a heading + honest body copy + a
-// feature bullet list + one PlaceholderMedia labelled with what the
-// real screenshot will show (no real captures exist yet — studio
-// media swaps in at step 3 with zero layout shift).
+// Consolidated /product page (June-8 rebuild), cinematic re-skin (2026-06-08).
+// One anchored page: intro + in-page jump nav + 5 sections. Each section is a
+// heading + honest body copy + a feature bullet list + one PlaceholderMedia
+// labelled with what the real screenshot will show (studio media swaps in at
+// step 3 with zero layout shift).
 //
-// Honest claims only: the product is pre-launch. No "available now"
-// badges; coaching is rule-based, not an LLM chat box. Static — no
-// client JS, no motion.
+// Honest claims only: the product is pre-launch. No "available now" badges;
+// coaching is rule-based, not an LLM chat box. Sections reveal once on scroll.
 
 const TITLE = 'Product — sim and real-world driver analysis & coaching | LAP';
 const DESCRIPTION =
@@ -128,38 +128,40 @@ const SECTIONS: readonly Section[] = [
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
   <main>
-    <!-- Intro -->
-    <section class="px-grid-margin mx-auto w-full max-w-6xl py-20 md:py-28">
-      <p class="font-telemetry text-pit-orange">Product</p>
-      <h1 class="font-monument text-h1 text-chalk mt-4 text-balance">What LAP does.</h1>
-      <p class="font-body text-body text-steel prose-max mt-6">
-        LAP turns every sim and real-world session into a development plan you can execute. It
-        scores each session, finds where you lost time corner by corner, and prescribes the drill to
-        fix it. The coaching is rule-based — not a chat box. Below are the five things LAP does, and
-        the kit it captures from. The product is pre-launch; every visual here is a labelled preview
-        of the real screen.
-      </p>
+    <!-- Intro — cinematic atmosphere + in-page jump nav -->
+    <section class="product-hero">
+      <GenerativeAtmosphere seed={311} intensity="hero" />
+      <div class="product-hero__inner px-grid-margin mx-auto w-full max-w-6xl">
+        <p class="font-telemetry text-pit-orange">Product</p>
+        <h1 class="font-monument text-h1 text-chalk mt-4 text-balance">What LAP does.</h1>
+        <p class="font-body text-body text-steel prose-max mt-6">
+          LAP turns every sim and real-world session into a development plan you can execute. It
+          scores each session, finds where you lost time corner by corner, and prescribes the drill
+          to fix it. The coaching is rule-based — not a chat box. Below are the five things LAP does,
+          and the kit it captures from. The product is pre-launch; every visual here is a labelled
+          preview of the real screen.
+        </p>
 
-      <!-- In-page jump nav -->
-      <nav aria-label="Product sections" class="mt-10">
-        <ul class="flex flex-wrap gap-x-3 gap-y-3">
-          {
-            NAV.map((item) => (
-              <li>
-                <a
-                  href={`#${item.id}`}
-                  class="font-telemetry text-steel hover:text-chalk hover:border-pit-orange/60 focus-visible:outline-pit-orange border-steel/30 rounded-2 inline-flex border px-3 py-2 transition"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
+        <nav aria-label="Product sections" class="mt-10">
+          <ul class="flex flex-wrap gap-x-3 gap-y-3">
+            {
+              NAV.map((item) => (
+                <li>
+                  <a
+                    href={`#${item.id}`}
+                    class="font-telemetry text-steel hover:text-chalk hover:border-pit-orange/60 focus-visible:outline-pit-orange border-steel/30 rounded-2 inline-flex border px-3 py-2 transition"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
     </section>
 
-    <!-- Five sections -->
+    <!-- Five sections — each reveals once on scroll -->
     {
       SECTIONS.map((section) => (
         <section
@@ -167,7 +169,7 @@ const SECTIONS: readonly Section[] = [
           aria-labelledby={`${section.id}-heading`}
           class="border-steel/10 scroll-mt-24 border-t"
         >
-          <div class="px-grid-margin mx-auto grid w-full max-w-6xl gap-10 py-20 md:grid-cols-2 md:items-center md:py-28">
+          <BroadcastReveal class="px-grid-margin mx-auto grid w-full max-w-6xl gap-10 py-20 md:grid-cols-2 md:items-center md:py-28">
             <div>
               <p class="font-telemetry text-pit-orange">{section.eyebrow}</p>
               <h2
@@ -195,25 +197,54 @@ const SECTIONS: readonly Section[] = [
                 aspect="16/9"
               />
             </div>
-          </div>
+          </BroadcastReveal>
         </section>
       ))
     }
 
-    <!-- Closing CTA -->
+    <!-- Closing CTA — atmospheric panel -->
     <section class="border-steel/10 border-t">
-      <div class="px-grid-margin mx-auto w-full max-w-6xl py-20 text-center md:py-28">
-        <h2 class="font-monument text-h2 text-chalk text-balance">See it on your own data.</h2>
-        <p class="font-body text-body text-steel prose-max mx-auto mt-5">
-          One membership, full access. {MEMBERSHIP.standardMonthly}/mo —
-          {MEMBERSHIP.foundingMonthly}/mo for the first {MEMBERSHIP.foundingLimit} founding members.
-          {MEMBERSHIP.trialDays}-day free trial, no card charged until it ends.
-        </p>
-        <div class="mt-8 flex justify-center">
-          <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">{MEMBERSHIP.ctaText}</CtaButton>
+      <div class="px-grid-margin mx-auto w-full max-w-6xl py-20 md:py-28">
+        <div class="product-cta">
+          <GenerativeAtmosphere seed={977} intensity="ambient" />
+          <div class="product-cta__inner">
+            <h2 class="font-monument text-h2 text-chalk text-balance">See it on your own data.</h2>
+            <p class="font-body text-body text-steel prose-max mx-auto mt-5">
+              One membership, full access. {MEMBERSHIP.standardMonthly}/mo —
+              {MEMBERSHIP.foundingMonthly}/mo for the first {MEMBERSHIP.foundingLimit} founding
+              members. {MEMBERSHIP.trialDays}-day free trial, no card charged until it ends.
+            </p>
+            <div class="mt-8 flex justify-center">
+              <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">{MEMBERSHIP.ctaText}</CtaButton>
+            </div>
+            <p class="font-telemetry text-steel/70 mt-4">{MEMBERSHIP.currencyNote}</p>
+          </div>
         </div>
-        <p class="font-telemetry text-steel/70 mt-4">{MEMBERSHIP.currencyNote}</p>
       </div>
     </section>
   </main>
+
+  <style>
+    .product-hero {
+      position: relative;
+      overflow: hidden;
+      padding-block: clamp(4rem, 9vw, 7rem);
+    }
+    .product-hero__inner {
+      position: relative;
+      z-index: 1;
+    }
+    .product-cta {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-4);
+      border: 1px solid var(--border-color-default);
+      padding: clamp(2rem, 5vw, 4rem);
+      text-align: center;
+    }
+    .product-cta__inner {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
 </BaseLayout>

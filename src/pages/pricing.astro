@@ -4,7 +4,11 @@ import PricingCard from '../components/pricing/PricingCard.astro';
 import MembershipFeatures from '../components/pricing/MembershipFeatures.astro';
 import FoundingFifty from '../components/pricing/FoundingFifty.astro';
 import FaqList from '../components/pricing/FaqList.astro';
+import FoundingSpots from '../components/pricing/FoundingSpots.astro';
+import GenerativeAtmosphere from '../components/cinematic/GenerativeAtmosphere.astro';
+import BroadcastReveal from '../components/cinematic/BroadcastReveal.astro';
 import { MEMBERSHIP, MEMBERSHIP_FAQ } from '../data/membership';
+import { VALUE_ANCHOR } from '../data/marketing-copy';
 
 const TITLE = 'Pricing — one LAP membership';
 const DESCRIPTION =
@@ -15,9 +19,12 @@ const DESCRIPTION =
 const standardPrice = MEMBERSHIP.standardMonthly.replace(/[^\d.]/g, '');
 const foundingPrice = MEMBERSHIP.foundingMonthly.replace(/[^\d.]/g, '');
 
+// Genuine founding-50 scarcity, only when a real count is configured.
+const foundingClaimed = Number(import.meta.env.PUBLIC_FOUNDING_CLAIMED);
+
 // Product / AggregateOffer JSON-LD. Two offers (founding + standard) →
 // lowPrice 14.90, highPrice 19.90, offerCount 2 — matches the webapp.
-// No yearly card, no B2B, no value-anchor, no free tier.
+// No yearly card, no B2B, no free tier.
 const productJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Product',
@@ -67,9 +74,10 @@ const faqJsonLd = {
 
 <BaseLayout title={TITLE} description={DESCRIPTION}>
   <main>
-    <!-- Hero -->
-    <section class="py-20 md:py-28">
-      <div class="px-grid-margin mx-auto max-w-6xl">
+    <!-- Hero — cinematic atmosphere + the single-membership card -->
+    <section class="pricing-hero">
+      <GenerativeAtmosphere seed={419} intensity="hero" />
+      <div class="pricing-hero__inner px-grid-margin mx-auto max-w-6xl">
         <div class="prose-max">
           <p class="font-telemetry text-pit-orange">Pricing</p>
           <h1 class="font-monument text-h1 text-chalk mt-4 text-balance">
@@ -82,16 +90,18 @@ const faqJsonLd = {
             } founding members. Start with a
             {MEMBERSHIP.trialDays}-day free trial; no card is charged until it ends.
           </p>
+          <p class="font-telemetry text-steel mt-5">{VALUE_ANCHOR}</p>
         </div>
 
-        <div class="mt-12">
+        <div class="mt-12 flex flex-col items-center gap-5">
+          <FoundingSpots claimed={foundingClaimed} />
           <PricingCard />
         </div>
       </div>
     </section>
 
     <!-- Everything in your membership -->
-    <section class="border-steel/10 border-t py-20 md:py-28">
+    <BroadcastReveal as="section" class="border-steel/10 border-t py-20 md:py-28">
       <div class="px-grid-margin mx-auto max-w-6xl">
         <h2 class="font-monument text-h3 text-chalk text-balance">Everything in your membership</h2>
         <p class="font-body text-body text-steel prose-max mt-4">
@@ -101,17 +111,17 @@ const faqJsonLd = {
           <MembershipFeatures />
         </div>
       </div>
-    </section>
+    </BroadcastReveal>
 
     <!-- Founding 50 callout -->
-    <section class="border-steel/10 border-t py-20 md:py-28">
+    <BroadcastReveal as="section" class="border-steel/10 border-t py-20 md:py-28">
       <div class="px-grid-margin mx-auto max-w-6xl">
         <FoundingFifty />
       </div>
-    </section>
+    </BroadcastReveal>
 
     <!-- FAQ -->
-    <section class="border-steel/10 border-t py-20 md:py-28">
+    <BroadcastReveal as="section" class="border-steel/10 border-t py-20 md:py-28">
       <div class="px-grid-margin mx-auto max-w-6xl">
         <h2 class="font-monument text-h3 text-chalk text-balance">Frequently asked questions</h2>
         <div class="mt-10 max-w-3xl">
@@ -129,7 +139,7 @@ const faqJsonLd = {
           >.
         </p>
       </div>
-    </section>
+    </BroadcastReveal>
   </main>
 
   <script is:inline type="application/ld+json" set:html={JSON.stringify(productJsonLd)} />
@@ -142,4 +152,16 @@ const faqJsonLd = {
     import { capturePricingViewed } from '../scripts/marketing-events';
     capturePricingViewed();
   </script>
+
+  <style>
+    .pricing-hero {
+      position: relative;
+      overflow: hidden;
+      padding-block: clamp(4rem, 9vw, 7rem);
+    }
+    .pricing-hero__inner {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
 </BaseLayout>

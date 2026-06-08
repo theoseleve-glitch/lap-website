@@ -11,6 +11,7 @@ import { HERO } from '../data/marketing-copy';
 import heroCockpit from '../assets/hero-cockpit.jpg';
 import GenerativeAtmosphere from '../components/cinematic/GenerativeAtmosphere.astro';
 import BroadcastReveal from '../components/cinematic/BroadcastReveal.astro';
+import ProductShowcase from '../components/cinematic/ProductShowcase.astro';
 import FoundingSpots from '../components/pricing/FoundingSpots.astro';
 import ValueStrip from '../components/home/ValueStrip.astro';
 import SessionProofCards from '../components/home/SessionProofCards.astro';
@@ -90,6 +91,9 @@ const foundingClaimed = Number(import.meta.env.PUBLIC_FOUNDING_CLAIMED);
       </p>
 
       <div class="mt-10">
+        <ProductShowcase />
+      </div>
+      <div class="mt-6">
         <SessionProofCards />
       </div>
     </BroadcastReveal>

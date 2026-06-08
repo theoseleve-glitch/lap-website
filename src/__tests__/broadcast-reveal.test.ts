@@ -31,15 +31,27 @@ describe('BroadcastReveal component', () => {
     expect(load(COMPONENT)).toMatch(/data-reveal=\{variant\}/);
   });
 
-  test('ships global reveal CSS keyed off .reveal-ready + .is-revealed', () => {
+  test('is a thin wrapper (reveal CSS now lives in global.css)', () => {
     const src = load(COMPONENT);
-    expect(src).toMatch(/is:global/);
-    expect(src).toMatch(/reveal-ready/);
-    expect(src).toMatch(/is-revealed/);
+    expect(src).toMatch(/<Tag/);
+    expect(src).not.toMatch(/is:global/);
+  });
+});
+
+describe('global reveal CSS (src/styles/global.css)', () => {
+  const globalCss = (): string =>
+    readFileSync(join(process.cwd(), 'src', 'styles', 'global.css'), 'utf8');
+
+  test('reveal CSS is global, keyed off .reveal-ready + .is-revealed', () => {
+    const src = globalCss();
+    expect(src).toMatch(/\.reveal-ready \[data-reveal\]/);
+    expect(src).toMatch(/\[data-reveal\]\.is-revealed/);
   });
 
-  test('honours reduced-motion (no hidden state)', () => {
-    expect(load(COMPONENT)).toMatch(/prefers-reduced-motion/);
+  test('honours reduced-motion (no hidden [data-reveal] state)', () => {
+    const src = globalCss();
+    expect(src).toMatch(/prefers-reduced-motion/);
+    expect(src).toMatch(/\[data-reveal\] \{[\s\S]*?opacity: 1 !important/);
   });
 });
 

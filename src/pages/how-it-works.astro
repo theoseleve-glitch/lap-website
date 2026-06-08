@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaButton from '../components/ui/CtaButton.astro';
 import HowItWorksDiagram from '../components/HowItWorksDiagram.astro';
+import GenerativeAtmosphere from '../components/cinematic/GenerativeAtmosphere.astro';
 import { MEMBERSHIP } from '../data/membership';
 
 // June-8 rebuild — /how-it-works. Static, token-only, no client JS, no motion.
@@ -118,7 +119,7 @@ const ROADMAP: readonly RoadmapItem[] = [
     </header>
 
     <!-- 4 numbered steps -->
-    <section aria-labelledby="steps-heading" class="mt-16 sm:mt-20">
+    <section aria-labelledby="steps-heading" data-reveal="rise" class="mt-16 sm:mt-20">
       <h2 id="steps-heading" class="sr-only">The four steps</h2>
       <ol
         class="rounded-2 border-steel/15 bg-steel/15 grid gap-px overflow-hidden border sm:grid-cols-2"
@@ -140,6 +141,7 @@ const ROADMAP: readonly RoadmapItem[] = [
     <!-- The loop, visualised (reused static diagram) + preview media -->
     <section
       aria-labelledby="loop-heading"
+      data-reveal="rise"
       class="border-steel/10 mt-16 border-t pt-16 sm:mt-20 sm:pt-20"
     >
       <h2 id="loop-heading" class="font-monument text-h2 text-chalk text-balance">
@@ -158,6 +160,7 @@ const ROADMAP: readonly RoadmapItem[] = [
     <!-- Today vs the roadmap (honesty) -->
     <section
       aria-labelledby="roadmap-heading"
+      data-reveal="rise"
       class="border-steel/10 mt-16 border-t pt-16 sm:mt-20 sm:pt-20"
     >
       <p class="font-telemetry text-steel">Today vs the roadmap</p>
@@ -212,25 +215,42 @@ const ROADMAP: readonly RoadmapItem[] = [
       </div>
     </section>
 
-    <!-- Final CTA -->
-    <section
-      aria-labelledby="cta-heading"
-      class="border-steel/10 mt-16 border-t pt-16 text-center sm:mt-20 sm:pt-20"
-    >
-      <h2 id="cta-heading" class="font-monument text-h2 text-chalk text-balance">
-        Run the loop on your own driving.
-      </h2>
-      <p class="font-body text-body text-steel mx-auto mt-4 max-w-prose">
-        One membership, full access. {MEMBERSHIP.standardMonthly}/mo — {
-          MEMBERSHIP.foundingMonthly
-        }/mo for the first {MEMBERSHIP.foundingLimit} founding members. {MEMBERSHIP.trialDays}-day
-        free trial, no card charged until it ends.
-      </p>
-      <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">{MEMBERSHIP.ctaText}</CtaButton>
-        <CtaButton href="/pricing" variant="secondary">See full pricing</CtaButton>
+    <!-- Final CTA — atmospheric panel -->
+    <section aria-labelledby="cta-heading" data-reveal="rise" class="mt-16 sm:mt-20">
+      <div class="hiw-cta">
+        <GenerativeAtmosphere seed={555} intensity="ambient" />
+        <div class="hiw-cta__inner">
+          <h2 id="cta-heading" class="font-monument text-h2 text-chalk text-balance">
+            Run the loop on your own driving.
+          </h2>
+          <p class="font-body text-body text-steel mx-auto mt-4 max-w-prose">
+            One membership, full access. {MEMBERSHIP.standardMonthly}/mo — {
+              MEMBERSHIP.foundingMonthly
+            }/mo for the first {MEMBERSHIP.foundingLimit} founding members. {MEMBERSHIP.trialDays}-day
+            free trial, no card charged until it ends.
+          </p>
+          <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <CtaButton href={MEMBERSHIP.ctaHref} variant="primary">{MEMBERSHIP.ctaText}</CtaButton>
+            <CtaButton href="/pricing" variant="secondary">See full pricing</CtaButton>
+          </div>
+          <p class="font-telemetry text-tiny text-steel/70 mt-6">{MEMBERSHIP.currencyNote}</p>
+        </div>
       </div>
-      <p class="font-telemetry text-tiny text-steel/70 mt-6">{MEMBERSHIP.currencyNote}</p>
     </section>
   </main>
+
+  <style>
+    .hiw-cta {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-4);
+      border: 1px solid var(--border-color-default);
+      padding: clamp(2rem, 5vw, 4rem);
+      text-align: center;
+    }
+    .hiw-cta__inner {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
 </BaseLayout>

@@ -30,33 +30,5 @@ const style = delay ? `--reveal-delay:${delay}ms` : undefined;
 
 <Tag data-reveal={variant} style={style} class:list={[className]}><slot /></Tag>
 
-<style is:global>
-  /* Hidden state applies ONLY under .reveal-ready (added by reveal.ts when
-     motion is allowed). No-JS / reduced-motion => never armed => fully visible. */
-  .reveal-ready [data-reveal] {
-    opacity: 0;
-    transform: translateY(24px);
-    transition:
-      opacity var(--duration-reveal) var(--ease-reveal),
-      transform var(--duration-reveal) var(--ease-reveal);
-    transition-delay: var(--reveal-delay, 0ms);
-    will-change: opacity, transform;
-  }
-  .reveal-ready [data-reveal='scale'] {
-    transform: scale(0.96);
-  }
-  .reveal-ready [data-reveal='fade'] {
-    transform: none;
-  }
-  .reveal-ready [data-reveal].is-revealed {
-    opacity: 1;
-    transform: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    [data-reveal] {
-      opacity: 1 !important;
-      transform: none !important;
-    }
-  }
-</style>
+{/* The reveal CSS now lives globally in src/styles/global.css (`[data-reveal]`),
+    so any page can use the attribute without this wrapper. */}

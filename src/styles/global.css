@@ -463,6 +463,38 @@ html {
   }
 }
 
+/* ── One-shot scroll reveals (2026-06 cinematic redesign) ─────────────────────
+ * Driven by src/scripts/reveal.ts (global, in BaseLayout). Elements are hidden
+ * ONLY under .reveal-ready — which reveal.ts adds when motion is allowed — so
+ * no-JS / reduced-motion leaves every [data-reveal] element fully visible.
+ * Use the `data-reveal` attribute on any below-the-fold element (or the
+ * BroadcastReveal wrapper). variants: rise (default) / scale / fade. */
+.reveal-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--duration-reveal) var(--ease-reveal),
+    transform var(--duration-reveal) var(--ease-reveal);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal-ready [data-reveal='scale'] {
+  transform: scale(0.96);
+}
+.reveal-ready [data-reveal='fade'] {
+  transform: none;
+}
+.reveal-ready [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* ── V2 March selection ──────────────────────────────────────────────────── */
 ::selection {
   background: var(--accent);

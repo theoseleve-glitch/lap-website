@@ -84,16 +84,16 @@ describe('T216: critical facts (locked from doctrine)', () => {
     expect(loadFile()).toMatch(/2026-07-23|July 23,?\s*2026|23 July 2026/);
   });
 
-  test('mentions €15 consumer pricing', () => {
-    expect(loadFile()).toMatch(/€15/);
+  test('mentions €19.90 consumer pricing', () => {
+    expect(loadFile()).toMatch(/€19\.90/);
   });
 
-  test('mentions €12 grandfathered founder rate', () => {
-    expect(loadFile()).toMatch(/€12/);
+  test('mentions €14.90 founding rate', () => {
+    expect(loadFile()).toMatch(/€14\.90/);
   });
 
-  test('mentions 14-day free trial', () => {
-    expect(loadFile().toLowerCase()).toMatch(/14[- ]day/);
+  test('mentions 30-day free trial', () => {
+    expect(loadFile().toLowerCase()).toMatch(/30[- ]day/);
   });
 
   test('mentions €10/seat B2B pricing (academy/programme angle)', () => {

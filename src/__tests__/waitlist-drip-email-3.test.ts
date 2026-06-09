@@ -48,34 +48,31 @@ describe('T099: drip email 3 — locked facts', () => {
     expect(hasReadable(html) || hasIso(html)).toBe(true);
   });
 
-  test('both bodies name the €12 founder rate', () => {
+  test('both bodies name the €14.90 founding rate', () => {
     // The closer email is the recipient's last regular touchpoint
-    // before the actual beta invite. Locking €12 here means a
-    // future copy edit cannot drop the rate from the cross-doc
-    // chain (form → confirmation email → welcome page → drip 1 →
-    // drip 3). One number, every surface.
+    // before the beta invite. Locking €14.90 keeps the rate aligned
+    // across the chain (form → confirmation → welcome → drip 1 → drip 3).
     const { html, text } = bodies(UNSUB_URL);
-    expect(text).toMatch(/€12/);
-    expect(html).toMatch(/€12/);
+    expect(text).toMatch(/€14\.90/);
+    expect(html).toMatch(/€14\.90/);
   });
 
-  test('both bodies name the 12-month duration of the founder rate', () => {
-    // €12 alone is meaningless — a one-week trial at €12 is a
-    // different offer to a year locked at €12. The duration carries
-    // the value, so it gets its own lock.
+  test('both bodies frame the founding-spot offer', () => {
+    // The founding rate is a "head start to claim one of the 50
+    // founding spots, locked while the membership stays active" —
+    // the framing carries the value, so it gets its own lock.
     const { html, text } = bodies(UNSUB_URL);
-    expect(text).toMatch(/12 months/);
-    expect(html).toMatch(/12 months/);
+    expect(text.toLowerCase()).toMatch(/founding/);
+    expect(html.toLowerCase()).toMatch(/founding/);
   });
 
-  test('both bodies name the €15 standard rate (comparison anchor)', () => {
-    // Doctrine §8: standard rate at launch is €15/month. Naming
-    // it in email 3 makes the founder discount concrete (€3 off
-    // for 12 months = €36 saved) instead of an abstract "founder
-    // rate" the recipient has to take on faith.
+  test('both bodies name the €19.90 standard rate (comparison anchor)', () => {
+    // June-8 canon: standard rate at launch is €19.90/month. Naming
+    // it makes the founding discount concrete (€5 off) instead of an
+    // abstract "founding rate" the recipient has to take on faith.
     const { html, text } = bodies(UNSUB_URL);
-    expect(text).toMatch(/€15/);
-    expect(html).toMatch(/€15/);
+    expect(text).toMatch(/€19\.90/);
+    expect(html).toMatch(/€19\.90/);
   });
 
   test('text body embeds the unsubscribe URL passed in', () => {

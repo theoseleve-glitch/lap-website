@@ -31,7 +31,7 @@ export function bodies(unsubscribeUrl: string): { html: string; text: string } {
     '',
     'YOUR FOUNDER RATE',
     '',
-    'The standard rate at launch is €15 a month. Your founder rate is €12 a month for the first 12 months from your first paid month, durable across any future pricing change. After your 14-day free trial the founder rate kicks in automatically — your account is flagged when beta opens, so you do not have to remember anything.',
+    'The standard rate at launch is €19.90 a month. As a waitlist member you get a head start to claim one of the 50 founding spots at €14.90 a month — €5 under standard, locked for as long as your membership stays active. Your 30-day free trial runs first, with no card charged until it ends; your account is flagged when beta opens, so you do not have to remember anything.',
     '',
     'WHAT YOU CAN DO TODAY',
     '',
@@ -59,7 +59,7 @@ export function bodies(unsubscribeUrl: string): { html: string; text: string } {
 
     <p style="margin-top: 24px;"><strong>Your founder rate</strong></p>
     <p>
-      The standard rate at launch is <strong>€15 a month</strong>. Your founder rate is <strong>€12 a month for the first 12 months</strong> from your first paid month, durable across any future pricing change. After your 14-day free trial the founder rate kicks in automatically — your account is flagged when beta opens, so you do not have to remember anything.
+      The standard rate at launch is <strong>€19.90 a month</strong>. As a waitlist member you get a head start to claim one of the 50 founding spots at <strong>€14.90 a month</strong> — €5 under standard, locked for as long as your membership stays active. Your 30-day free trial runs first, with no card charged until it ends; your account is flagged when beta opens, so you do not have to remember anything.
     </p>
 
     <p style="margin-top: 24px;"><strong>What you can do today</strong></p>

@@ -33,6 +33,6 @@ Most driver-development tooling sits inside one ecosystem — iRacing has its la
 
 The deliberate non-feature: no language-model coaching narrative anywhere in the product surface. Every prescription a driver receives traces to a written rule the team maintains in public — predicate, trigger, prescription, success criterion. That's the differentiator and the position is published openly in the doctrine, not buried in the marketing.
 
-Public beta opens 2026-07-23. €15 per month with a 14-day free trial; pre-launch waitlist signups grandfather to €12 per month for 12 months at lap-coach.racing/waitlist. Karting academies and racing programmes running ten or more drivers can ask about multi-seat pricing at lap-coach.racing/for-schools.
+Public beta opens 2026-07-23. €19.90 per month with a 30-day free trial, monthly only; pre-launch waitlist members get a head start to claim one of 50 founding spots at €14.90 per month at lap-coach.racing/waitlist. Karting academies and racing programmes running ten or more drivers can ask about multi-seat pricing at lap-coach.racing/for-schools.
 
 Open to questions in the comments — corners, rule structure, capture pipeline, what we're explicitly NOT building. Happy to talk specifics.

@@ -66,7 +66,7 @@ assert capability, only naming.
 
 | App | Primary surface | Pricing model class |
 |---|---|---|
-| **LAP** (us) | Sim + real-world capture; cross-platform driver profile | Subscription (€15/mo standard, €12/mo waitlist) |
+| **LAP** (us) | Sim + real-world capture; cross-platform driver profile | Subscription (€19.90/mo standard, €14.90/mo founding-50) |
 | **Garage61** | Sim telemetry + lap sharing; iRacing-heavy | Freemium |
 | **RaceLab** | Sim racing app suite incl. telemetry features | Freemium / one-time |
 | **MoTeC** | Professional motorsport data analysis (i2 Pro etc.) | One-time licence (paid) |

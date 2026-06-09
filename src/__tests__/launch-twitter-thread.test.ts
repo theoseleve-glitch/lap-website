@@ -101,16 +101,16 @@ describe('T215: thread CTA + critical facts', () => {
     expect(ctaPatterns.some((re) => re.test(md))).toBe(true);
   });
 
-  test('thread mentions €15 consumer pricing', () => {
-    expect(loadFile()).toMatch(/€15/);
+  test('thread mentions €19.90 consumer pricing', () => {
+    expect(loadFile()).toMatch(/€19\.90/);
   });
 
-  test('thread mentions €12 grandfathered founder rate', () => {
-    expect(loadFile()).toMatch(/€12/);
+  test('thread mentions €14.90 founding rate', () => {
+    expect(loadFile()).toMatch(/€14\.90/);
   });
 
-  test('thread mentions 14-day free trial', () => {
-    expect(loadFile().toLowerCase()).toMatch(/14[- ]day/);
+  test('thread mentions 30-day free trial', () => {
+    expect(loadFile().toLowerCase()).toMatch(/30[- ]day/);
   });
 
   test('thread mentions launch date 2026-07-23', () => {

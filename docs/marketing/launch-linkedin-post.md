@@ -14,6 +14,6 @@ Most driver-development tooling sits inside one ecosystem. iRacing has its layer
 
 For karting academies and racing programmes running ten or more drivers: there is a multi-seat tier from €10 per seat per month, finalised in conversation. The per-driver record extends to a roster, the rule library is the same one consumers use, and the coaching narrative survives whatever audit a parent or programme director runs against it. Details and the conversation route at lap-coach.racing/for-schools.
 
-For consumers: €15 per month after public beta with a 14-day free trial. Pre-launch waitlist signups grandfather to €12 per month for the first 12 months — that rate closes when public beta opens 2026-07-23. lap-coach.racing/waitlist.
+For consumers: €19.90 per month after public beta with a 30-day free trial — no card charged until it ends. Pre-launch waitlist signups get the launch invite first plus a head start to claim one of the 50 founding spots at €14.90 per month, €5 under standard and locked for as long as the membership stays active — those spots close once they're filled. lap-coach.racing/waitlist.
 
 Open to questions in the comments — corners, rule structure, what we're explicitly NOT building. The doctrine is published openly; the differentiator is on the page, not in the pitch.

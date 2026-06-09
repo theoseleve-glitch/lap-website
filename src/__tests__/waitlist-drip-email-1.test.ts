@@ -62,18 +62,17 @@ describe('T097: drip email 1 — locked facts', () => {
     expect(hasReadableDate || hasIsoDate).toBe(true);
   });
 
-  test('text body names the €12 founder rate (cross-doc lock with T060/T091/T095)', () => {
-    // Founder rate is the durable promise — every touchpoint that
-    // mentions pricing must name €12 so the cross-doc reader sees
-    // the same number from waitlist signup → confirmation email →
-    // welcome page → drip emails. One number, every surface.
+  test('text body names the €14.90 founding rate', () => {
+    // Founding rate is the canonical anchor — every touchpoint that
+    // mentions pricing must name €14.90 so the cross-doc reader sees
+    // the same number from waitlist → confirmation → welcome → drip.
     const { text } = bodies(UNSUB_URL);
-    expect(text).toMatch(/€12/);
+    expect(text).toMatch(/€14\.90/);
   });
 
-  test('html body names the €12 founder rate', () => {
+  test('html body names the €14.90 founding rate', () => {
     const { html } = bodies(UNSUB_URL);
-    expect(html).toMatch(/€12/);
+    expect(html).toMatch(/€14\.90/);
   });
 
   test('text body embeds the unsubscribe URL passed in', () => {

@@ -20,7 +20,7 @@ On launch day, the four substantial pieces all ship together:
 
 **Sim ↔ real bridge MVP.** Captures from iRacing, Assetto Corsa Competizione, and AMS2 share one driver record with on-track captures from a phone GPS or a RaceBox. The same diagnoses, the same rule library, both surfaces.
 
-**Stripe billing live.** €15 per month or €150 per year, with a 14-day free trial and no credit card asked at signup. Pre-launch waitlist signups grandfather to €12 per month for the first 12 months — €3 below standard, durable across any future pricing change.
+**Stripe billing live.** €19.90 per month, monthly only, with a 30-day free trial and no credit card asked at signup. The first 50 founding members lock €14.90 per month — €5 below standard — for as long as the membership stays active; pre-launch waitlist members get a head start to claim one of those spots.
 
 **Hand-curated coaching, in writing.** Every prescription a driver receives traces to a written rule the LAP coaching team maintains in public. Predicate, trigger, prescription, success criterion — all four components shipped, all four versionable, all four defensible to a parent or programme director who asks why a particular drill was chosen.
 
@@ -36,11 +36,11 @@ Some choices are easier to read in the negative. LAP does not generate coaching 
 
 ## Pricing and the founder rate
 
-A single consumer tier at €15 per month or €150 per year, with a 14-day free trial. Pre-launch waitlist signups grandfather to €12 per month for the first 12 months. Multi-seat pricing for racing schools and karting academies starts from €10 per seat per month for programmes of ten or more drivers, finalised in conversation with each operator. Every part of that paragraph is a commitment, including the three numbers and the trial length.
+A single consumer tier at €19.90 per month, monthly only, with a 30-day free trial — and €14.90 per month for the first 50 founding members, locked for as long as the membership stays active. Multi-seat pricing for racing schools and karting academies starts from €10 per seat per month for programmes of ten or more drivers, finalised in conversation with each operator. Every part of that paragraph is a commitment, including the numbers and the trial length.
 
 ## How to participate
 
-The most useful pre-launch action is to [join the waitlist](/waitlist). The grandfathered €12 rate closes when public beta opens, and the launch invite goes to waitlist members first. Racing schools and karting academies considering the programme rate can read [/for-schools](/for-schools) and write to sales for a quote. Press and media: the [/press](/press) page has the wordmark, founder context, and the press-release template; press inquiries route to the same inbox with a subject tag.
+The most useful pre-launch action is to [join the waitlist](/waitlist). Waitlist members get the launch invite first and a head start to claim one of the 50 founding spots at €14.90 per month. Racing schools and karting academies considering the programme rate can read [/for-schools](/for-schools) and write to sales for a quote. Press and media: the [/press](/press) page has the wordmark, founder context, and the press-release template; press inquiries route to the same inbox with a subject tag.
 
 ## What changes between now and 2026-07-23
 

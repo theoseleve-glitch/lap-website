@@ -28,7 +28,7 @@ Each diagnosis comes with a named drill and a measurable success criterion. e.g.
 
 ## Tweet 7 — Pricing
 
-€15/month after public beta with a 14-day free trial. Pre-launch waitlist signups grandfather to €12/month for 12 months — the rate closes when public beta opens 2026-07-23. /7
+€19.90/month after public beta with a 30-day free trial, monthly only. Pre-launch waitlist members get a head start to claim one of 50 founding spots at €14.90/month — €5 under standard — before public beta opens 2026-07-23. /7
 
 ## Tweet 8 — Waitlist CTA
 

@@ -114,9 +114,9 @@ describe('T208: word count band (concise PR)', () => {
 });
 
 describe('T208: critical facts (locked from doctrine + T207 facts)', () => {
-  test('mentions €15 consumer tier (doctrine §8)', () => {
+  test('mentions €19.90 consumer tier', () => {
     const md = loadTemplate();
-    expect(md).toMatch(/€15/);
+    expect(md).toMatch(/€19\.90/);
   });
 
   test('mentions €10 per seat B2B anchor (T205)', () => {
@@ -131,14 +131,14 @@ describe('T208: critical facts (locked from doctrine + T207 facts)', () => {
     );
   });
 
-  test('mentions 14-day free trial (doctrine §8)', () => {
+  test('mentions 30-day free trial', () => {
     const md = loadTemplate();
-    expect(md.toLowerCase()).toMatch(/14[- ]day/);
+    expect(md.toLowerCase()).toMatch(/30[- ]day/);
   });
 
-  test('mentions €12 grandfathered founder rate (doctrine §8)', () => {
+  test('mentions €14.90 founding rate', () => {
     const md = loadTemplate();
-    expect(md).toMatch(/€12/);
+    expect(md).toMatch(/€14\.90/);
   });
 });
 

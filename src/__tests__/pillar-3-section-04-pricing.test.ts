@@ -76,14 +76,14 @@ describe('T154: Pillar 3 Section 4 — pricing comparison', () => {
     expect(matched.length).toBeGreaterThanOrEqual(3);
   });
 
-  test('section references LAP subscription pricing (€15 or €12 monthly)', async () => {
-    // Doctrine §8 anchor: standard rate €15/mo, waitlist rate
-    // €12/mo. LAP's row in the pricing table must cite at
+  test('section references LAP subscription pricing (€19.90 or €14.90 monthly)', async () => {
+    // June-8 canon: standard rate €19.90/mo, founding-50 rate
+    // €14.90/mo. LAP's row in the pricing table must cite at
     // least one of these specific values — "subscription" with
     // no fee is too vague. Catches a draft that lists LAP's
     // pricing class without the actual fee.
     const section = loadSection();
-    expect(section).toMatch(/€\s*1[25]/);
+    expect(section).toMatch(/€\s*19\.90|€\s*14\.90/);
   });
 
   test('section contains internal link to /pricing', async () => {

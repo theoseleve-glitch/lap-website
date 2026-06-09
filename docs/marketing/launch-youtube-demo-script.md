@@ -30,6 +30,6 @@ Voice is founder-direct, not voice-of-god marketing. **Visual** cues describe wh
 
 ## Scene 5 — Launch and waitlist CTA (1:40–2:00)
 
-**Visual:** Wordmark on black returns. Three lines fade in stacked: "Public beta · 2026-07-23". "€15/month, 14-day trial". "Waitlist: €12/month for 12 months." Bottom card: "lap-coach.racing/waitlist".
+**Visual:** Wordmark on black returns. Three lines fade in stacked: "Public beta · 2026-07-23". "€19.90/month, 30-day trial". "Founding 50: €14.90/month." Bottom card: "lap-coach.racing/waitlist".
 
-**Narration:** "LAP enters public beta on 2026-07-23. Fifteen euros per month after launch with a 14-day free trial. Join the waitlist before then and your first twelve months are locked in at twelve euros. Link in the description below."
+**Narration:** "LAP enters public beta on 2026-07-23. Nineteen ninety per month after launch with a 30-day free trial. Join the waitlist for a head start to claim one of fifty founding spots at fourteen ninety a month. Link in the description below."

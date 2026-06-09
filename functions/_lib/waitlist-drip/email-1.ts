@@ -34,9 +34,9 @@ export function bodies(unsubscribeUrl: string): { html: string; text: string } {
     '',
     'Public beta opens 23 July 2026. Waitlist members get the invite first, before the public announcement.',
     '',
-    'YOUR FOUNDER RATE',
+    'YOUR FOUNDING RATE',
     '',
-    '€12 a month for the first 12 months from your first paid month, durable across any future pricing change. That is locked the moment beta opens for you.',
+    'A head start to claim one of the 50 founding spots: €14.90 a month — €5 under the €19.90 standard, locked for as long as your membership stays active — plus a 30-day free trial. The invite goes to waitlist members first.',
     '',
     'WHAT IS NEXT',
     '',
@@ -66,9 +66,9 @@ export function bodies(unsubscribeUrl: string): { html: string; text: string } {
       Public beta opens <strong>23 July 2026</strong>. Waitlist members get the invite first, before the public announcement.
     </p>
 
-    <p style="margin-top: 24px;"><strong>Your founder rate</strong></p>
+    <p style="margin-top: 24px;"><strong>Your founding rate</strong></p>
     <p>
-      <strong>€12 a month for the first 12 months</strong> from your first paid month, durable across any future pricing change. That is locked the moment beta opens for you.
+      A head start to claim one of the 50 founding spots: <strong>€14.90 a month</strong> — €5 under the €19.90 standard, locked for as long as your membership stays active — plus a 30-day free trial. The invite goes to waitlist members first.
     </p>
 
     <p style="margin-top: 24px;"><strong>What is next</strong></p>

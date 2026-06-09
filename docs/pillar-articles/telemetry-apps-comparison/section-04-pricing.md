@@ -14,7 +14,7 @@ notes flag the structural caveats.
 
 | App | Pricing model | Entry price | Free tier | Notes |
 |---|---|---|---|---|
-| LAP | Subscription | €15 / month | 14-day trial, no card required | Subscription includes the [desktop client](/product/desktop), the mobile app, and bridge access. €12 / month for closed-beta waitlist invitees, grandfathered for the lifetime of an unbroken subscription. See [/pricing](/pricing) for the canonical source. |
+| LAP | Subscription | €19.90 / month | 30-day trial, no card required | Monthly only, no annual. Subscription includes the [desktop client](/product/desktop), the mobile app, and bridge access. €14.90 / month for the first 50 founding members, locked for as long as the membership stays active. See [/pricing](/pricing) for the canonical source. |
 | Garage61 | Free + Premium subscription | Free for basic access | Yes | Premium tier rates evolve — verify on Garage61's current pricing page. |
 | RaceLab | Subscription suite | Verify current rate | Limited | Telemetry is one feature inside a broader app suite; the subscription buys the suite, not telemetry alone. |
 | MoTeC | Free tier + paid licence | i2 Pro free; i2 Standard paid licence | Yes (i2 Pro) | Hardware data loggers (ACL, ADL) are priced separately as motorsport equipment. |

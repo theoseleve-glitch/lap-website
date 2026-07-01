@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects
+# Launch: the pre-launch waitlist capture (/founding) retires — send it to the
+# live pricing/signup funnel. Existing waitlist confirm/unsubscribe API routes
+# (/api/waitlist/*) are unaffected (they are Pages Functions, not under /founding).
+/founding      /pricing   301
+/founding/*    /pricing   301

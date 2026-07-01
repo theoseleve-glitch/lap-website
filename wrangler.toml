@@ -9,16 +9,16 @@
 # (current functions/_lib/waitlist-token.ts uses Web Crypto only,
 # but the flag is cheap insurance against future imports).
 #
-# [[triggers]] crons fires the scheduled handler in
-# functions/_scheduled/waitlist-drip.ts daily at 14:00 UTC. Pages
-# picks up cron triggers via Advanced Mode at the deployed Worker
-# layer; the schedule field here is the source of truth for the
-# wrangler-driven deploy path.
+# NOTE (2026-07-01): the waitlist-drip cron ([[triggers]]) was removed. The
+# Cloudflare Pages git build (wrangler) rejects a `triggers` field in Pages
+# config ("does not support triggers"), which failed the build and blocked the
+# launch from being git-durable. The waitlist is retired at launch
+# (/founding → /pricing), so the daily drip cron is obsolete. The scheduled
+# handler functions/_scheduled/waitlist-drip.ts remains in the repo; re-add its
+# cron via the Cloudflare dashboard (Workers & Pages → lap-website → Settings)
+# if drip is ever needed again.
 
 name = "lap-website"
 pages_build_output_dir = "./dist"
 compatibility_date = "2025-04-01"
 compatibility_flags = ["nodejs_compat"]
-
-[[triggers]]
-crons = ["0 14 * * *"]
